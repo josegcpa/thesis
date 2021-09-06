@@ -1,0 +1,43 @@
+\RequirePackage{nag}
+\documentclass[a4paper]{scrbook}
+
+\input{config}
+\input{acronyms}
+
+\title{Computational studies of blood cells: morphology and evolution}
+\author{José Guilherme de Almeida}
+
+\pgfplotstableread[col sep=comma]{csv/gene-list.csv}\genes
+\pgfplotstableread[col sep=comma]{csv/individual-timepoint-distribution.csv}\ageDist
+\pgfplotstableread[col sep=tab]{csv/gene-site-list.tsv}\genesSites
+\pgfplotstableread[col sep=semicolon]{csv/blood-counts-ch.csv}\bloodCountsCH
+
+\KOMAoptions{twoside=false}
+
+\begin{document}
+    % \pgfplotsset{compat=1.17}
+    % Custom hyphenation rules need to be declared AFTER \begin{document}!
+    
+    \hyphenation{ge-nes}
+    
+    \maketitle
+    
+    \tableofcontents
+    
+    \frontmatter
+    
+    \input{acknowledgements}
+    
+    \input{abstract}
+    
+    \mainmatter
+    
+    \input{intro}
+    
+    \input{dynamics}
+    
+    \backmatter
+    
+    \printbibliography
+    
+\end{document}

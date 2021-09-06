@@ -1,0 +1,130 @@
+\chapter{The longitudinal dynamics and natural history of clonal haematopoiesis}
+
+\section{Introduction}
+
+\ac{ch} has been widely studied regarding its likely associations with specific blood indices, smoking history, chemotherapy, inflammation and age \cite{Dawoud2020-af,Coombs2017-ph,McKerrell2015-rl,Cai2018-yi,Bolton2020-ct}, and has been shown to be associated with an increased risk of cardiovascular disease and haematological cancer \cite{Jaiswal2014-rl,Genovese2014-eu, Young2016-du, Xie2014-np, Desai2018-pj, Midic2020-zh, Zink2017-zi, Acuna-Hidalgo2017-ng}. However, the study of the dynamics and evolution of \ac{ch} is still in its infancy - indeed, while it is now known that fitness advantages are gene- and site-dependent \cite{Watson2020-pz,Robertson2021-sw}, previous work on this topic have only been able to clarify either the average behaviour of clones or the clonal dynamics at an older age. While both sound relatively complimentary, apparent inconsistencies have arisen. Indeed, while \cite{Watson2020-pz} used the distribution of clone sizes to infer that \ac{dnmt3a} mutations can lead to some of the fastest growing clones, the work in \cite{Robertson2021-sw}, which uses longitudinal targeted sequencing, reaches different conclusions: \ac{dnmt3a} actually leads to some of the slowest growing clones in old age, a period during which mutations in splicing genes (particularly in \ac{u2af1} and \ac{sf3b1}). As such, there seems to be an apparent paradox - while the distribution of clone sizes would imply that \ac{dnmt3a} clones expand quickly over life, these fast dynamics are not observable during old age. 
+
+The work here presented contributes to this body of knowledge and, to some extent, resolves the aforementioned contradiction. Here, I have analysed data from longitudinal targeted sequencing for over 300 older individuals and confirm several of the findings presented by the previous by Robertson \textit{et al.} using longitudinal sequencing \cite{Robertson2021-sw}. Additionally, we are able to disentangle clone-specific (or "unknown-cause") effects from those attributable to specific genes and sites. This revealed that mutations in splicing genes, particularly in \ac{u2af1} and \ac{srsf2}-P95H, confer the greatest fitness advantage in older age, while mutations in \ac{dnmt3a} conferred a relatively small fitness advantage, similarly to \cite{Robertson2021-sw}. To complement this evolutionary snapshot of clonal dynamics during older age, I also used phylogenetic data from single-cell colonies derived for three of the individuals for which we had longitudinal targeted sequencing data and from four additional older individuals from a publication by Michell \textit{et al.} \cite{Mitchell2021-zl} and infer the phylodynamic trajectories for all expansions, with and without known drivers. Together with estimates from the longitudinal targeted sequencing data, this helped us clarify the apparent contradiction between \cite{Robertson2021-sw} and \cite{Watson2020-pz} - most clones decelerate through life, an effect that is likely to be motivated by competition driven by an oligoclonal \ac{hsc} population and affects lesser fit clones the most. Additionally, I use the fitness estimates from longitudinal targeted sequencing to establish associations between both selection in \ac{aml} and \ac{mds} and risk of \ac{aml} onset as calculated in \cite{Abelson2018-wh}.
+
+\subsection{Contribution}
+
+The work presented in this chapter is also available as a preprint in \cite{Fabre2021-uw}. Here, I performed the analysis of longitudinal data and generated all figures associated with it, as well as all of the analyses associated with phylodynamic estimation of growth coefficients and phylogenetic estimation of ages at onset.
+
+\section{Methodology}
+
+\subsection{Cohort composition}
+
+I worked exclusively with variant calls and, as such, will not go into detail about the variant calling process; nonetheless, for reference, these are available in . In regards to the cohort here studied, the data I used consisted of sequencing data for the 17 aforementioned genes across 385 individuals. Notably, 80 (20.8\%) of these individuals had no mutations on any of the genes under study and were disregarded. For each individual, blood was collected at between 2 and 5 timepoints (Table \ref{table:age-dist}) across a median period of 12.9 years (3.21-16.1) and 5 phases (Phase 1-5), with 96.4\% of all individuals having more than two timepoints. Each blood sample was sequenced for a panel of 56 genes at a median coverage of 1350X. Only 17 of these genes - as represented in \ref{table:genes-sites-modelling} - were used after assessing which ones were under positive selection \cite{Fabre2021-uw,Martincorena2017-ii}. For 13 individuals blood was collected at an additional phase - Phase 6 - for validation and for three of these individuals (IDs 2259, 3877 and 500) at timepoint 6 single-cell colonies were derived and sequenced (85 colonies for 2259, 93 colonies for 3877 and 92 colonies for 500). This latter process was used to build single-cell phylogenies, a process that will be detailed further ahead. The specific selection of these individuals was informed in a particular way - mutations in the spliceosome, due to their age-dependency, are of high interest and motivated the derivation and sequencing of 96 single-cell colonies for three individuals with large (>5\% VAF) spliceosome mutations. Particularly, the mutations of interest were \ac{sf3b1}-K666N, \ac{u2af1}-Q157R and \ac{srsf2}-P95H.
+
+\begin{table}
+\centering
+\caption{Distribution of individuals with a given number of timepoints.}
+\pgfplotstabletypeset[
+string type,
+columns/ntp/.style={
+    column name=Number of timepoints,
+    column type={C{.2\textwidth}}},
+columns/n/.style={
+    column name=Number of individuals,
+    column type={C{.2\textwidth}}},
+columns/p/.style={
+    column name=Proportion,
+    postproc cell content/.append code={\pgfkeysalso{@cell content/.add={}{\%}}},
+    column type={C{.2\textwidth}}},
+columns/cp/.style={
+    column name=Cumulative proportion,
+    postproc cell content/.append code={\pgfkeysalso{@cell content/.add={}{\%}}},
+    column type={C{.3\textwidth}}},
+every head row/.style={before row={\toprule},after row=\midrule},
+every last row/.style={after row={\toprule}},
+every odd row/.style={before row={\rowcolor[gray]{0.9}}}
+]\ageDist
+\label{table:age-dist}
+\end{table}
+
+\subsection{Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo}
+
+I assume that the VAF at each timepoint is a proxy for clone size in the bone marrow and assume that each mutation is monoclonal. Both these assumptions are supported by previous studies \cite{Miles2020-fz,Lee2020-yp,Hwang2018-tp} and allow us to model each clonal trajectory - the collection of VAF values for a single driver mutation in a single individual - as a time-dependent scaled sigmoid with an asymptotic value at 0.5. The reason why 0.5 rather than 1 is used is to accommodate the fact that most mutations are likely to be haploid. While phasing these mutations would be the ideal case scenario this is not possible using this targeted sequencing panel.
+
+As mentioned, each clonal trajectory is characterised by a time-dependent sigmoid curve. To parametrise it, I have, for mutation $j$ in individual $i$, four distinct parameters: $b_{gene_j}$ characterising the fitness advantage conferred by gene identity, $b_{site_j}$ characterising the fitness advantage conferred by site identity for non-truncating mutations in sites occurring in two or more individuals, $b_{unknown_{ij}}$ characterising the fraction of growth that depends on clone-specific factors and $u_{ij}$ which is an offset for the sigmoid curve to account for clones appearing at different times. As such, the expected proportion of mutant counts on site $i$ in individual $j$ at time $t$ is given by the following model: $p_{ij}(t)=sigmoid((b_{gene_j}+b_{site_j}+b_{unknown_{ij}})*t + u_{ij})*0.5$. In our case and to speed up convergence, $t$ is calculated as the age of each individual after subtracting the youngest age in the cohort. Given this proportion and a parameter $\beta$ that characterises technical overdispersion (whose inference will be detailed further ahead) I can parameterize the number of mutant counts on site $i$ in individual $j$ at time $t$ ($counts_{ij}(t)$) as following a Beta-binomial distribution or, in other words, following a binomial distribution where the probability parameter is Beta-distributed. I need only an $\beta$ for this Beta-binomial distribution, which I calculate as $\alpha_{ij}(t)=\frac{\alpha p_{ij}(t)}{1-p(t)}$. Finally, I use the coverage for site $i$ in individual $j$ at time $t$ $cov_{ij}(t)$ as the number of trials in the Beta-binomial distribution and, as such, $counts_{ij}(t) \sim BB(\alpha_{ij}(t),\beta,cov_{ij}(t))$.
+
+Using this model I fit each parameter through a \ac{mcmc} approach. I assume as priors for $b_{gene_j}$ and $b_{site_j}$ a normal distribution with mean 0 and standard deviation 0.1, for $b_{unknown_{ij}}$ a normal distribution with mean 0 and standard deviation 0.05 and for $u_{ij}$ a uniform distribution between -50 and 0. The prior for $\beta$ follows a truncated normal distribution (details about this below). For the sampling, I use \ac{hmc} as implemented in greta \cite{Golding2018-zp} with a number of leapfrog steps between 150 and 300. I draw 5000 samples and discard the initial 2500 samples, thus estimating the mean, median, credible intervals and \ac{hpdi} of each parameter using the last 2500 samples. As a quality-control step I calculate the probability of each true mutant count value under this model - $p(count_{ij}|b_{gene_j},b_{site_j},b_{unknown_{ij}},u_{ij},\beta,t)$ - and anything with a tail probability below 2.5\% is considered to be an outlier. Consequently, I discard all trajectories with outliers, using only those with no outliers for any subsequent analysis.
+
+\subsubsection{Preventing identifiability issues and reducing uninformed estimates.}
+
+To address possible identifiability issues in this model, when a gene has a single mutation (\ac{jak2} with V617F and \ac{idh2} with R140Q), the effect is considered to occur at the site level. To avoid estimating the dynamics of a site from a single individual, I only model sites explicitly when two or more individuals have a missense mutation on that site - I refer to these sites as “recurrent sites”. For all other sites where a single mutation is observed across the entire cohort their differential dynamics will be contained in the unknown cause effect. Ultimately, I consider a total of 17 genes and 39 recurrent sites (Table \ref{table:genes-sites-modelling}).
+
+\begin{table}
+\centering
+\caption{Summary of different effects in the model. “X” indicates the utilization of that specific effect (Truncating and Non-truncating) for each gene and in Sites I detail the sites that were explicitly modelled.}
+\pgfplotstabletypeset[
+string type,
+columns/g/.style={
+    column name=Gene,
+    postproc cell content/.style={@cell content=\textit{##1}},
+    column type={C{.1\textwidth}}},
+columns/t/.style={
+    column name=Truncating effect,
+    column type={C{.20\textwidth}}},
+columns/nt/.style={
+    column name=Non-truncating effect,
+    column type={C{.20\textwidth}}},
+columns/sites/.style={
+    column name=Explicitly modelled sites (absolute prevalence),
+    column type={C{.4\textwidth}}},
+every head row/.style={before row={\toprule},after row=\midrule},
+every last row/.style={after row={\toprule}},
+every odd row/.style={before row={\rowcolor[gray]{0.9}}}
+]\genesSites
+\label{table:genes-sites-modelling}
+\end{table}
+
+\subsubsection{Inferring the technical overdispersion of targeted sequencing using technical replicates}
+
+Two distinct data sources were used to assess the technical overdispersion which is then used to parametrise the Beta-binomial model as  and as described in the previous section:
+\begin{enumerate}
+    \item Between two and three different solutions of known \ac{vaf} concentrations (0, 0.005, 0.01, 0.02, 0.05) for 4 different genes (\ac{idh1}, \ac{jak2}, \ac{kras} and \textit{NRAS}) were sequenced at a median depth of 415x;
+    \item For 5 individuals, technical replicates were elaborated by sequencing two additional samples for these individuals at all timepoints. These individuals had at least one mutation across 15 different genes (\ac{asxl1}, \textit{BCOR}, \ac{cbl}, \ac{dnmt3a}, \textit{EZH2}, \textit{GNAS}, \ac{idh1}, \ac{jak2}, \textit{NOTCH1}, \textit{PHF6}, \ac{sf3b1}, \textit{SMC1A}, \ac{srsf2}, \ac{tet2}, \textit{ZRSR2}) with \ac{vaf} between 0 and 0.394. 
+\end{enumerate}
+
+For 1., I model the distribution over the expected \ac{vaf} as a beta distribution such that $VAF \sim Beta(\alpha,\beta)$, where $\alpha=\frac{p\alpha}{1-p}$ and $p$ is the observed \ac{vaf} and for 2. I adopt a model identical to the one described in the previous section using only gene growth effects. Here, I model $\beta \sim exp(r)$ with $r$ as a variable with no prior. I use an identical process as in the previous section - \ac{mcmc} with \ac{hmc} - with 400-500 leapfrog-steps as implemented in greta \cite{Golding2019-wh} to estimate the mean and standard deviation of  using both models for 1. and 2. in parallel. For this estimate I use 1,000 samples from the posterior distribution.
+
+\subsubsection{Determining the expected age at beginning of clone onset}
+
+HSC clones are considered to be growing according to a Wright-Fisher model. For an initial population of HSC $\frac{n}{2}$, we can consider two scenarios - that of a single exponential growth process where the time at which the cell first starts growing $t_0$ is described as $t_0 = \frac{log(1/n) - u}{b_{total}}$, or that of a two step growth process, where $t_{0}adjusted=t_0 + \frac{log(g/b_total)}{b_total}-\frac{1}{b_total}$, where $g$ is the number of generations per year. The latter scenario is the one chosen, due to its strong theoretical foundation and previous application to mathematical modelling of cancer evolution and corresponds to evolutionary dynamics under a Wright-Fisher model \cite{Beerenwinkel2015-xr}. The two regimes that describe it are an initial stochastic growth regime and, once the clone reaches a sufficient population size, a deterministic growth regime. The adjustment made to $t0$ in $t_0adjust$ can be interpreted as first estimating the age at which the clone reached the deterministic growth phase $t_0 + \frac{log(g/b_total)}{b_total}$ followed by subtracting the expected time for a clone to overcome its stochastic growth phase ($\frac{1}{b_total}$). For both $n$ and $g$ we use the estimates based on \cite{Lee-Six2018-lp} - $n=50,000$ and $g=2$. We validate this approach using simulations (details in the previous section) and test the approach against our serial \ac{vaf} data. We additionally verify that changes in $n$ and $g$ do not have a dramatic impact on age at onset estimates by considering a range of values ($n=\{10,000;50,000;100,000;200,000;600,000\}$ and $g=\{1;2;5;10;13;20\}$).
+
+\subsubsection{Validating the dynamic coefficient and age at onset inference with Wright-Fisher simulations}
+
+To validate the model specified in Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo, I simulate populations of HSC under a Wright-Fisher model \cite{Beerenwinkel_undated-up} over 1,300 generations and with 1,000 passenger and 50 driver sites. I use a constant passenger mutation rate of $2*10^{-6}$ and driver mutation rates between $1.0*10^{-10}$ and $4.0*10^{-9}$ per generation and fitness advantages between $0.001$ and $0.030$. I use a fixed population size of 200,000 HSC and assume that every year there are 13 cell divisions, in line with previous estimates \cite{Lee-Six2018-lp,Watson2020-pz}. Using these simulations - which allow us to know the true fitness advantage of each driver mutation - I can easily validate our methodology.
+
+Having the general parameters for the simulations, I first simulate the conditions under which our data were acquired - 3-5 targeted sequencing of driver mutations in older individuals sampled over a median of 13 years. To do so, I fit Gamma distributions to the observed coverage and observed age at first timepoint and truncate these at the minimum and maximum values for both coverage and age. After this, I follow a simple algorithm for each simulation:
+
+\begin{enumerate}
+    \item Sample an age from the age at first timepoint distribution;
+    \item Sample the number of subsequent timepoints (between 2 and 4) which are separated by approximately 3 years (40 generations);
+    \item Verify that a driver mutation is present in two or more timepoints;
+    \item Sample the coverage for each of these timepoints;
+    \item Using the technical overdispersion and the true allele frequency of the driver as $p$ to derive $\alpha = \frac{\beta p}{1-p}$ as in the previous subsection, sample assuming that the counts follow a Beta-binomial distribution such that $counts \sim BB(\alpha,\beta,cov)$;
+\end{enumerate}
+
+Using the aforementioned simulation settings and this sampling algorithm I derive a comprehensive set of simulated data that spans different mutation rates and fitness effects with a similar age and coverage distribution to the one observed in the real data.
+
+The inference of coefficients is done after transforming the generation at sampling into years (assuming that each year contains 13 generations) and using the model specified in Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo. The particular difference is that no site coefficient is present, with a single driver effect such that $driver\ effect \sim N(0,0.2)$, where the variance of the distribution (0.2) corresponds to that of the addition of two normal distributions with a variance of 0.1. As such, for this scenario, $p_{ij}(t)=sigmoid((driver\ effect+b_{unknown_{ij}})*t + u_{ij})*0.5$.
+
+To additionally probe the impact of the assumption of population size and generation time, I reproduce this analysis across two additional conditions - a population size of 50,000 HSC and 1 generation per year and a population size of 100,000 HSC and 5 generations per year.
+
+Finally, I calculated the coefficient of determination between the simulated and inferred coefficients to assess the validity of our estimates.
+
+\subsection{Analysing the impact of smoking history, sex, age and smoking experience on the clonal growth rate}
+
+The association between unknown-cause growth and age was calculated using the Pearson correlation considering all genes, both together and separately while controlling for multiple testing. For the association between unknown-cause growth and sex and smoking history, a multivariate regression was used, with unknown-cause growth as the dependent variable and sex and previous smoking experience as the covariates while controlling for age.
+
+\subsection{Phylogenetic and phylodynamic estimation of clonal trajectories from single-cell derived phylogenetic trees}
+
+Single-cell colonies were derived and sequenced for three individuals and their phylogenetic trees inferred as detailed in \cite{Fabre2021-uw}. Each tree was made ultrametric by iteratively extending branches until the distance between any two tips is no bigger than the distance between either tip and any third tip (also known as the three point condition) and scaled in such a way that they span the age of the individual, with an additional year accounting for gestational development. This is motivated by recent work by Abascal \textit{et al.} showing that mutation rates are constant through life \cite{Abascal_2021_gjvqfm} and, as such, mutations should accumulate linearly with age. In these trees, we define and detect expansions as either clades with one known driver mutation at their \ac{mrca} or as clades whose \ac{mrca} branch length is at least 10\% of the depth of the tree. This allows us to detect expansions with no known driver. 
+
+To determine the clonal trajectory of each expansion using the information contained in its corresponding clade - particularly, the distribution of times between coalescences - we use \ac{bnpr}, a method implemented in the \texttt{phylodyn} \cite{Lan2015-sw,Karcher2017-kt} package for \texttt{R}. \ac{bnpr} estimates effective population sizes on a grid of sampled points at resolution $\tau$ between the tips and the first observable coalescence of each tree (or clade). In effect, this approach seeks to estimate the posterior $P[f,\tau|g]\alpha P[g|f]P[f|\tau]P[\tau]$, where $f$ is the piecewise linear estimate in the \ac{eps} estimator $N_f(t)$ for a grid of points along the tree between $x_d$ and $x_D=t_2$ such that $N_f(t) = \sum^{D-1}_{d-1}exp(f)1_{(x_d,x_{d+1}]}$ and $g$ is the inferred genealogy (our phylogenetic tree or clade). In practical terms, the estimation process for $f$ is approximated using the integrated nested Laplacian approximation, with more concrete details in \cite{Lan2015-sw} (theoretical foundation) and \cite{Karcher2017-kt} (practical application and implementation). In other words, \ac{bnpr} estimates the \ac{eps} trajectory from the tips of a tree to its first coalescence, which can then be used to determine the clonal dynamics of specific expansions.
+
+
+
+We determine a range for the age at onset for each expansion as the span of the branch corresponding to the \ac{mrca}. 
