@@ -24,38 +24,60 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.3.1}Drift and the neutral theory (of cancer evolution)}{24}{subsection.1.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.2}Simulating evolution with the Wright-Fisher model}{25}{subsection.1.3.2}% 
+\contentsline {section}{\numberline {1.4}The dynamics of clonal haematopoiesis}{25}{section.1.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.3}The coalescent}{27}{subsection.1.3.3}% 
+\contentsline {section}{\numberline {1.5}The diagnostic and prognostic of myelodysplastic syndromes}{27}{section.1.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.4}The dynamics of clonal haematopoiesis}{28}{section.1.4}% 
+\contentsline {section}{\numberline {1.6}Machine-learning-based computer vision methods and their application in cytomorphology}{29}{section.1.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.5}The diagnostic and prognostic of myelodysplastic syndromes}{30}{section.1.5}% 
+\contentsline {section}{\numberline {1.7}The aims of this dissertation}{37}{section.1.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.6}Computer vision methods and their application in cytomorphology}{32}{section.1.6}% 
+\contentsline {chapter}{\numberline {2}Methods for inferring the evolutionary dynamics of haematopoietic clones}{38}{chapter.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.7}The aims of this dissertation}{36}{section.1.7}% 
+\contentsline {section}{\numberline {2.1}Introduction}{38}{section.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {2}The longitudinal dynamics and natural history of clonal haematopoiesis}{37}{chapter.2}% 
+\contentsline {subsection}{\numberline {2.1.1}Simulating evolution with the Wright-Fisher model}{38}{subsection.2.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.1}Introduction}{37}{section.2.1}% 
+\contentsline {subsection}{\numberline {2.1.2}The coalescent}{40}{subsection.2.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.1}Contribution}{38}{subsection.2.1.1}% 
+\contentsline {subsection}{\numberline {2.1.3}Contribution}{41}{subsection.2.1.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Methodology}{38}{section.2.2}% 
+\contentsline {section}{\numberline {2.2}Methodology}{42}{section.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.1}Cohort composition}{38}{subsection.2.2.1}% 
+\contentsline {subsection}{\numberline {2.2.1}Validating the dynamic coefficient and age at onset inference with Wright-Fisher simulations}{42}{subsection.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.2}Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo}{38}{subsection.2.2.2}% 
+\contentsline {subsubsection}{\nonumberline Bayesian inference of dynamic coefficients}{42}{section*.5}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Preventing identifiability issues and reducing uninformed estimates.}{40}{section*.5}% 
+\contentsline {subsubsection}{\nonumberline Simulating a longitudinal targeted sequencing setup}{42}{section*.6}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Inferring the technical overdispersion of targeted sequencing using technical replicates}{40}{section*.6}% 
+\contentsline {subsubsection}{\nonumberline Coefficient inference and age at onset estimation}{43}{section*.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Determining the expected age at beginning of clone onset}{40}{section*.7}% 
+\contentsline {subsubsection}{\nonumberline Inferring the technical overdispersion of targeted sequencing using technical replicates}{44}{section*.8}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Validating the dynamic coefficient and age at onset inference with Wright-Fisher simulations}{42}{section*.8}% 
+\contentsline {subsection}{\numberline {2.2.2}Validating phylodynamic estimation with Wright-Fisher simulations}{44}{subsection.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.3}Analysing the impact of smoking history, sex, age and smoking experience on the clonal growth rate}{43}{subsection.2.2.3}% 
+\contentsline {subsubsection}{\nonumberline Context}{44}{section*.9}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.4}Phylogenetic and phylodynamic estimation of clonal trajectories from single-cell derived phylogenetic trees}{43}{subsection.2.2.4}% 
+\contentsline {subsubsection}{\nonumberline Simulations and tree construction}{45}{section*.10}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\nonumberline Phylodynamic inference of clonal trajectories from phylogenetic trees}{45}{section*.11}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {3}The longitudinal dynamics and natural history of clonal haematopoiesis}{46}{chapter.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.1}Introduction}{46}{section.3.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.1.1}Contribution}{47}{subsection.3.1.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.2}Methodology}{47}{section.3.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.1}Cohort composition}{47}{subsection.3.2.1}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.2}Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo}{47}{subsection.3.2.2}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\nonumberline Preventing identifiability issues and reducing uninformed estimates.}{49}{section*.12}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\nonumberline Determining the expected age at beginning of clone onset}{49}{section*.13}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.3}Analysing the impact of smoking history, sex, age and smoking experience on the clonal growth rate}{49}{subsection.3.2.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.4}Phylogenetic and phylodynamic estimation of clonal trajectories from single-cell derived phylogenetic trees}{51}{subsection.3.2.4}% 
