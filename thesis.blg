@@ -1,23 +1,23 @@
 [0] Config.pm:304> INFO - This is Biber 2.12
 [0] Config.pm:307> INFO - Logfile is 'thesis.blg'
-[38] biber-darwin:315> INFO - === Thu Sep 16, 2021, 18:25:04
-[77] Biber.pm:371> INFO - Reading 'thesis.bcf'
-[440] Biber.pm:889> INFO - Found 383 citekeys in bib section 0
-[453] Biber.pm:4093> INFO - Processing section 0
-[467] Biber.pm:4254> INFO - Looking for bibtex format file 'references.bib' for section 0
-[526] bibtex.pm:1523> INFO - LaTeX decoding ...
-[1655] bibtex.pm:1340> INFO - Found BibTeX data source 'references.bib'
-[7683] Utils.pm:193> WARN - month field 'may' in entry 'SpencerChapman_2021_gjz4x4' is not an integer - this will probably not sort properly.
-[7702] Utils.pm:193> WARN - month field 'apr' in entry 'Abascal_2021_gjvqfm' is not an integer - this will probably not sort properly.
-[7827] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/ExqOGTqx3i/references.bib_61434.utf8, line 2181, warning: possible runaway string started at line 2162
-[7828] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/ExqOGTqx3i/references.bib_61434.utf8, line 4587, warning: possible runaway string started at line 4555
-[7828] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/ExqOGTqx3i/references.bib_61434.utf8, line 6324, warning: possible runaway string started at line 6287
-[7828] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/ExqOGTqx3i/references.bib_61434.utf8, line 10178, warning: possible runaway string started at line 10176
-[7829] Utils.pm:193> WARN - I didn't find a database entry for 'PaPapaemmanuil2011-nr Papaemmanuil2013-yt' (section 0)
-[8137] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[8137] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[8137] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
-[8137] Biber.pm:3927> INFO - No sort tailoring available for locale 'en-US'
-[8490] bbl.pm:636> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
-[8900] bbl.pm:739> INFO - Output to thesis.bbl
-[8901] Biber.pm:110> INFO - WARNINGS: 7
+[39] biber-darwin:315> INFO - === Fri Sep 17, 2021, 17:49:53
+[76] Biber.pm:371> INFO - Reading 'thesis.bcf'
+[532] Biber.pm:889> INFO - Found 386 citekeys in bib section 0
+[551] Biber.pm:4093> INFO - Processing section 0
+[570] Biber.pm:4254> INFO - Looking for bibtex format file 'references.bib' for section 0
+[656] bibtex.pm:1523> INFO - LaTeX decoding ...
+[1912] bibtex.pm:1340> INFO - Found BibTeX data source 'references.bib'
+[8757] Utils.pm:193> WARN - month field 'may' in entry 'SpencerChapman_2021_gjz4x4' is not an integer - this will probably not sort properly.
+[8778] Utils.pm:193> WARN - month field 'apr' in entry 'Abascal_2021_gjvqfm' is not an integer - this will probably not sort properly.
+[8931] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/6ftSmRiymV/references.bib_92960.utf8, line 2181, warning: possible runaway string started at line 2162
+[8931] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/6ftSmRiymV/references.bib_92960.utf8, line 4587, warning: possible runaway string started at line 4555
+[8931] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/6ftSmRiymV/references.bib_92960.utf8, line 6324, warning: possible runaway string started at line 6287
+[8931] Utils.pm:193> WARN - BibTeX subsystem: /var/folders/t1/q9f13z094k3gn6q_7hjym1j986x5r4/T/6ftSmRiymV/references.bib_92960.utf8, line 10178, warning: possible runaway string started at line 10176
+[8932] Utils.pm:193> WARN - I didn't find a database entry for 'PaPapaemmanuil2011-nr Papaemmanuil2013-yt' (section 0)
+[9308] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[9308] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[9308] Biber.pm:3921> INFO - Sorting list 'none/global//global/global' of type 'entry' with template 'none' and locale 'en-US'
+[9308] Biber.pm:3927> INFO - No sort tailoring available for locale 'en-US'
+[9688] bbl.pm:636> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[10144] bbl.pm:739> INFO - Output to thesis.bbl
+[10146] Biber.pm:110> INFO - WARNINGS: 7

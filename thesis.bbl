@@ -31986,6 +31986,91 @@
       \range{pages}{5}
       \keyw{Inla; Mcmc; evolutionary theory; population dynamics; population genetics - theoretical}
     \endentry
+    \entry{noauthor_undated-gs}{misc}{}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{http://www.netlib.org/port/}}
+      \field{note}{Accessed: 2021-9-17}
+      \field{title}{port}
+    \endentry
+    \entry{Paradis2019-na}{article}{}
+      \name{author}{2}{}{%
+        {{hash=c22cf1e599d60c18185c0afaf6f9efb8}{%
+           family={Paradis},
+           familyi={P\bibinitperiod},
+           given={Emmanuel},
+           giveni={E\bibinitperiod}}}%
+        {{hash=5d2954a3e5add7427a5c770e8345a386}{%
+           family={Schliep},
+           familyi={S\bibinitperiod},
+           given={Klaus},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press (OUP)}%
+      }
+      \strng{namehash}{9d9988aeba6d2caf7b6225e09342058e}
+      \strng{fullhash}{9d9988aeba6d2caf7b6225e09342058e}
+      \strng{bibnamehash}{9d9988aeba6d2caf7b6225e09342058e}
+      \strng{authorbibnamehash}{9d9988aeba6d2caf7b6225e09342058e}
+      \strng{authornamehash}{9d9988aeba6d2caf7b6225e09342058e}
+      \strng{authorfullhash}{9d9988aeba6d2caf7b6225e09342058e}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Bioinformatics}
+      \field{month}{2}
+      \field{number}{3}
+      \field{title}{ape 5.0: an environment for modern phylogenetics and evolutionary analyses in {R}}
+      \field{volume}{35}
+      \field{year}{2019}
+      \field{pages}{526\bibrangedash 528}
+      \range{pages}{3}
+    \endentry
+    \entry{Opgen-Rhein2005-pi}{article}{}
+      \name{author}{3}{}{%
+        {{hash=a57b43a029d98204251fb06c4ca31df3}{%
+           family={Opgen-Rhein},
+           familyi={O\bibinithyphendelim R\bibinitperiod},
+           given={Rainer},
+           giveni={R\bibinitperiod}}}%
+        {{hash=476d0247462120c31452a2a58cbd6cdc}{%
+           family={Fahrmeir},
+           familyi={F\bibinitperiod},
+           given={Ludwig},
+           giveni={L\bibinitperiod}}}%
+        {{hash=7f1cb33b9b093158687e4529dd1fd9b0}{%
+           family={Strimmer},
+           familyi={S\bibinitperiod},
+           given={Korbinian},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{0f3d77197395f4b940dbd27816ffed77}
+      \strng{fullhash}{f639cbec47e3301357e6b0013a87a314}
+      \strng{bibnamehash}{f639cbec47e3301357e6b0013a87a314}
+      \strng{authorbibnamehash}{f639cbec47e3301357e6b0013a87a314}
+      \strng{authornamehash}{0f3d77197395f4b940dbd27816ffed77}
+      \strng{authorfullhash}{f639cbec47e3301357e6b0013a87a314}
+      \field{sortinit}{4}
+      \field{sortinithash}{11cdaee3b18e01d77f3f428b13c1fc76}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BMC Evol. Biol.}
+      \field{month}{1}
+      \field{title}{Inference of demographic history from genealogical trees using reversible jump Markov chain Monte Carlo}
+      \field{volume}{5}
+      \field{year}{2005}
+      \field{pages}{6}
+      \range{pages}{1}
+    \endentry
     \entry{Coombs2017-ph}{article}{}
       \name{author}{15}{}{%
         {{hash=ac319609241a9021d9103d3bcf3b54ba}{%
