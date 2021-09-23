@@ -52,11 +52,16 @@
 \newcommand*\captitle[1]{\textbf{#1}}
 \newcommand*\todo[1]{%
     \graffito{\textcolor{red}{TO\ DO: #1}}}
+\newcommand*\missing[1]{%
+    \graffito{\textcolor{red}{\textbf{MISSING: #1}}}}
 \newcommand*\Beta[1]{$\mathrm{\beta #1}$}
 \newcommand*\Mum[1]{$\mathrm{\mu m #1}$}
 \newcommand*\placefigure[1]{%
 	\includegraphics[center]{#1}\vspace*{-8mm}}
 \newcommand*\placecaption[1]{%
-	\caption{#1}\vspace*{-5mm}}
+	\caption[]{#1}\vspace*{-5mm}}
 \newcommand*\etal[1]{%
 	#1 \textit{et al.}}
+
+\newcommand*{\figref}[1]{\hyperref[{#1}]{Figure~\ref*{#1}}}
+\newcommand*{\tableref}[1]{\hyperref[{#1}]{Table~\ref*{#1}}}

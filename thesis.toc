@@ -40,46 +40,52 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1.2}The coalescent}{40}{subsection.2.1.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.3}Contribution}{41}{subsection.2.1.3}% 
+\contentsline {subsection}{\numberline {2.1.3}Phylodynamic estimation of populations}{41}{subsection.2.1.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Methodology}{42}{section.2.2}% 
+\contentsline {subsection}{\numberline {2.1.4}Contribution}{42}{subsection.2.1.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.1}Validating the dynamic coefficient and age at onset inference with Wright-Fisher simulations}{42}{subsection.2.2.1}% 
+\contentsline {section}{\numberline {2.2}Methodology}{43}{section.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Bayesian inference of dynamic coefficients}{42}{section*.7}% 
+\contentsline {subsection}{\numberline {2.2.1}Validating the dynamic coefficient and age at onset inference with Wright-Fisher simulations}{43}{subsection.2.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Simulating a longitudinal targeted sequencing setup}{42}{section*.8}% 
+\contentsline {subsubsection}{\nonumberline Bayesian inference of dynamic coefficients}{43}{section*.7}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Coefficient inference and age at onset estimation}{43}{section*.9}% 
+\contentsline {subsubsection}{\nonumberline Simulating a longitudinal targeted sequencing setup}{43}{section*.8}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Inferring the technical overdispersion of targeted sequencing using technical replicates}{44}{section*.10}% 
+\contentsline {subsubsection}{\nonumberline Coefficient inference and age at onset estimation}{44}{section*.9}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.2}Validating phylodynamic estimation with Wright-Fisher simulations}{45}{subsection.2.2.2}% 
+\contentsline {subsubsection}{\nonumberline Inferring the technical overdispersion of targeted sequencing using technical replicates}{45}{section*.10}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Simulations and tree construction}{45}{section*.11}% 
+\contentsline {subsection}{\numberline {2.2.2}Validating phylodynamic estimation with Wright-Fisher simulations}{46}{subsection.2.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Phylodynamic inference of clonal trajectories from phylogenetic trees}{45}{section*.12}% 
+\contentsline {subsubsection}{\nonumberline Simulations and tree construction}{46}{section*.11}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Results}{47}{section.2.3}% 
+\contentsline {subsubsection}{\nonumberline Phylodynamic inference of clonal trajectories from phylogenetic trees}{47}{section*.12}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.4}Conclusion}{47}{section.2.4}% 
+\contentsline {section}{\numberline {2.3}Results}{48}{section.2.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}The longitudinal dynamics and natural history of clonal haematopoiesis}{48}{chapter.3}% 
+\contentsline {subsection}{\numberline {2.3.1}A simple model to recapitulate Wright-Fisher dynamics and infer age at clonal onset}{48}{subsection.2.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Introduction}{48}{section.3.1}% 
+\contentsline {subsection}{\numberline {2.3.3}Early growth is a consistent estimator of clone fitness using phylodynamic estimation}{49}{subsection.2.3.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Contribution}{49}{subsection.3.1.1}% 
+\contentsline {section}{\numberline {2.4}Conclusion}{49}{section.2.4}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Methodology}{49}{section.3.2}% 
+\contentsline {chapter}{\numberline {3}The longitudinal dynamics and natural history of clonal haematopoiesis}{50}{chapter.3}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.1}Cohort composition}{49}{subsection.3.2.1}% 
+\contentsline {section}{\numberline {3.1}Introduction}{50}{section.3.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo}{49}{subsection.3.2.2}% 
+\contentsline {subsection}{\numberline {3.1.1}Contribution}{51}{subsection.3.1.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Preventing identifiability issues and reducing uninformed estimates.}{51}{section*.13}% 
+\contentsline {section}{\numberline {3.2}Methodology}{51}{section.3.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{\nonumberline Determining the expected age at beginning of clone onset}{51}{section*.14}% 
+\contentsline {subsection}{\numberline {3.2.1}Cohort composition}{51}{subsection.3.2.1}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.3}Analysing the impact of smoking history, sex, age and smoking experience on the clonal growth rate}{51}{subsection.3.2.3}% 
+\contentsline {subsection}{\numberline {3.2.2}Modelling clonal trajectories using hierarchical Bayes modelling and Hamiltonian Monte Carlo}{51}{subsection.3.2.2}% 
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.4}Phylogenetic and phylodynamic estimation of clonal trajectories from single-cell derived phylogenetic trees}{53}{subsection.3.2.4}% 
+\contentsline {subsubsection}{\nonumberline Preventing identifiability issues and reducing uninformed estimates.}{53}{section*.13}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{\nonumberline Determining the expected age at beginning of clone onset}{53}{section*.14}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.3}Analysing the impact of smoking history, sex, age and smoking experience on the clonal growth rate}{53}{subsection.3.2.3}% 
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.2.4}Phylogenetic and phylodynamic estimation of clonal trajectories from single-cell derived phylogenetic trees}{55}{subsection.3.2.4}% 

@@ -11,3 +11,13 @@ thesis.synctex.gz
 thesis.toc
 .vscode/ltex.hiddenFalsePositives.en-US.txt
 .vscode/ltex.dictionary.en-US.txt
+thesis.aux
+thesis.bbl
+thesis.bcf
+thesis.blg
+thesis.lof
+thesis.log
+thesis.lot
+thesis.pdf
+thesis.synctex.gz
+thesis.toc

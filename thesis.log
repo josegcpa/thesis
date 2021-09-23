@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.7.18)  17 SEP 2021 17:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.7.18)  21 SEP 2021 19:52
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1324,17 +1324,7 @@ LaTeX Font Info:    Font shape `T1/phv/m/n' will be
 
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
 (Font)              scaled to size 10.40245pt on input line 24.
- [3] (./thesis.lof
-Overfull \hbox (26.21616pt too wide) in paragraph at lines 9--9
- \T1/phv/m/n/10.95 machine-learning meth-ods to bet-ter de-rive cy-to-mor-pho-log-i-cal mark-ers of myelodys- 
- []
-
-
-Overfull \hbox (10.90344pt too wide) in paragraph at lines 17--17
- [][] [][][]\T1/phv/m/n/10.95 Schematic rep-re-sen-ta-tion of a con-vo-lu-tional neu-ral net-work. Dif-fer-ently coloured 
- []
-
-)
+ [3] (./thesis.lof)
 \tf@lof=\write7
 \openout7 = `thesis.lof'.
 
@@ -1506,7 +1496,7 @@ Overfull \hbox (8.86813pt too wide) in paragraph at lines 262--263
  []
 
 [28] [29] [30]
-<gfx/segmentation-example.pdf, id=2799, 370.40381pt x 422.20837pt>
+<gfx/segmentation-example.pdf, id=2800, 370.40381pt x 422.20837pt>
 File: gfx/segmentation-example.pdf Graphic file (type pdf)
 <use gfx/segmentation-example.pdf>
 Package pdftex.def Info: gfx/segmentation-example.pdf  used on input line 285.
@@ -1517,7 +1507,7 @@ Package pdftex.def Info: gfx/segmentation-example.pdf  used on input line 285.
                                                   
 l.307 
        <./gfx/segmentation-example.pdf>]
-<gfx/dnn.pdf, id=2842, 332.21815pt x 154.3647pt>
+<gfx/dnn.pdf, id=2843, 332.21815pt x 154.3647pt>
 File: gfx/dnn.pdf Graphic file (type pdf)
 <use gfx/dnn.pdf>
 Package pdftex.def Info: gfx/dnn.pdf  used on input line 309.
@@ -1533,7 +1523,7 @@ Overfull \hbox (24.13525pt too wide) in paragraph at lines 314--315
                                                   
 l.319 
        <./gfx/dnn.pdf>]
-<gfx/u-net.pdf, id=2895, 352.95563pt x 212.51596pt>
+<gfx/u-net.pdf, id=2896, 352.95563pt x 212.51596pt>
 File: gfx/u-net.pdf Graphic file (type pdf)
 <use gfx/u-net.pdf>
 Package pdftex.def Info: gfx/u-net.pdf  used on input line 321.
@@ -1548,33 +1538,44 @@ chapter 2.
 [38
 
 
-] [39] [40] [41] [42]
-<gfx/wf-sim-example.pdf, id=3002, 310.77405pt x 230.80228pt>
+] [39] [40] [41] [42] [43]
+<gfx/wf-sim-example.pdf, id=3015, 310.77405pt x 230.80228pt>
 File: gfx/wf-sim-example.pdf Graphic file (type pdf)
 <use gfx/wf-sim-example.pdf>
-Package pdftex.def Info: gfx/wf-sim-example.pdf  used on input line 72.
+Package pdftex.def Info: gfx/wf-sim-example.pdf  used on input line 82.
 (pdftex.def)             Requested size: 310.77328pt x 230.8017pt.
- [43] [44pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1}) has been already used, duplicate ignored
+ [44] [45pdfTeX warning (ext4): destination with the same identifier (name{figure.2.1}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
-l.92 
-      <./gfx/wf-sim-example.pdf>]
-Overfull \hbox (3.44203pt too wide) in paragraph at lines 101--102
+l.99 \end{enumerate}
+                     <./gfx/wf-sim-example.pdf>]
+Overfull \hbox (3.44203pt too wide) in paragraph at lines 111--112
 []\T1/phv/m/n/10.95 Using the com-plete mu-ta-tional land-scape of each clone, I build trees us-ing a neighbour-
  []
 
-LaTeX Font Info:    Try loading font information for T1+cmtt on input line 108.
-(/usr/local/texlive/2019/texmf-dist/tex/latex/base/t1cmtt.fd
+[46]
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 118.
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2014/09/29 v2.5h Standard LaTeX font definitions
-) [45]
-Overfull \hbox (38.41222pt too wide) in paragraph at lines 118--119
+) [47]
+Overfull \hbox (38.41222pt too wide) in paragraph at lines 128--129
 \T1/phv/m/n/10.95 rive an ap-prox-i-mate es-ti-mate of the log-a-rithm of the vari-ance as $\OML/cmm/m/it/10.95 log\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 var\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 t\OT1/cmr/m/n/10.95 ))[] = (\OML/cmm/m/it/10.95 log\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 Neff\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 t\OT1/cmr/m/n/10.95 )[]) \OMS/cmsy/m/n/10.95 ^^@
  []
 
-[46]) (./dynamics-2.tex [47]
+<gfx/simulated-vs-inferred-fitness.pdf, id=3099, 172.26758pt x 113.8122pt>
+File: gfx/simulated-vs-inferred-fitness.pdf Graphic file (type pdf)
+<use gfx/simulated-vs-inferred-fitness.pdf>
+Package pdftex.def Info: gfx/simulated-vs-inferred-fitness.pdf  used on input line 141.
+(pdftex.def)             Requested size: 172.26715pt x 113.8119pt.
+) (./dynamics-2.tex [48] [49pdfTeX warning (ext4): destination with the same identifier (name{figure.2.2}) has been already used, duplicate ignored
+
+\@EveryShipout@Output ...@Org@Shipout \box \@cclv 
+                                                  
+l.1 \chapter
+            {The longitudinal dynamics and natural history of clonal haemato... <./gfx/simulated-vs-inferred-fitness.pdf>]
 chapter 3.
-[48
+[50
 
 
 ]
@@ -1582,7 +1583,7 @@ Overfull \hbox (6.17188pt too wide) in paragraph at lines 41--43
  [][][] 
  []
 
-[49] [50pdfTeX warning (ext4): destination with the same identifier (name{table.3.1}) has been already used, duplicate ignored
+[51] [52pdfTeX warning (ext4): destination with the same identifier (name{table.3.1}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
@@ -1597,12 +1598,12 @@ Overfull \hbox (6.17186pt too wide) in paragraph at lines 78--80
  [][][] 
  []
 
-[51] [52pdfTeX warning (ext4): destination with the same identifier (name{table.3.2}) has been already used, duplicate ignored
+[53] [54pdfTeX warning (ext4): destination with the same identifier (name{table.3.2}) has been already used, duplicate ignored
 
 \@EveryShipout@Output ...@Org@Shipout \box \@cclv 
                                                   
 l.93 
-     ]) [53]
+     ]) [55]
 LaTeX Font Info:    Font shape `T1/phv/m/it' in size <10> not available
 (Font)              Font shape `T1/phv/m/sl' tried instead on input line 43.
 LaTeX Font Info:    Font shape `T1/phv/m/sl' will be
@@ -1611,7 +1612,7 @@ LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <10> not available
 (Font)              Font shape `T1/phv/b/n' tried instead on input line 43.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 9.49997pt on input line 43.
- [54
+ [56
 
 
 
@@ -1621,7 +1622,7 @@ Overfull \hbox (19.62573pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Adolfsson, J. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Iden-ti-fi-ca-tion of Flt3+ lympho-myeloid stem cells lack-ing erythro-megakaryocytic
  []
 
-[55] [56]
+[57] [58]
 Overfull \hbox (17.6864pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Giemsa, G. Eine Vere-in-fachung und Ver-vol-lkomm-nung meiner Methylenblau-Eosin-Färbemethode
  []
@@ -1631,22 +1632,22 @@ Overfull \hbox (1.96893pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Short, M. W. & Do-ma-gal-ski, J. E. \T1/phv/m/sl/10 Iron De-fi-ciency Ane-mia: Eval-u-a-tion and Man-age-ment [][]$\T1/cmtt/m/n/10 https :
  []
 
-[57]
+[59]
 Overfull \hbox (26.2945pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Heyde, A. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 In-creased stem cell pro-lif-er-a-tion in atheroscle-ro-sis ac-cel-er-ates clonal hematopoiesis.
  []
 
-[58] [59]
+[60] [61]
 Overfull \hbox (40.74376pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Acuna-Hidalgo, R. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Ultra-sensitive Se-quenc-ing Iden-ti-fies High Preva-lence of Clonal Hematopoiesis-
  []
 
-[60]
+[62]
 Overfull \hbox (7.78877pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Yanagisawa, Y., Ito, E., Yuasa, Y. & Maruyama, K. The hu-man DNA methyl-trans-ferases DNMT3A
  []
 
-[61]
+[63]
 Overfull \hbox (1.6811pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Shlush, L. I. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Iden-ti-fi-ca-tion of pre-leukaemic haematopoi-etic stem cells in acute leukaemia.
  []
@@ -1656,12 +1657,12 @@ Overfull \hbox (22.87428pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Hormaechea-Agulla, D. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Chronic in-fec-tion drives Dnmt3a-loss-of-function clonal hematopoiesis
  []
 
-[62]
+[64]
 Overfull \hbox (18.74188pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Molinaro Roberto \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Ab-stract 15575: The Clonal Hematopoiesis Mu-ta-tion-Jak2V617FAggravates
  []
 
-[63] [64]
+[65] [66]
 Overfull \hbox (21.8498pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Castellino, R. C. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 Medul-loblas-tomas over-ex-press the p53-inactivating onco-gene WIP1/PPM1D.
  []
@@ -1676,12 +1677,12 @@ Overfull \hbox (11.92336pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Tartaglia, M. \T1/phv/m/sl/10 et al. \T1/phv/m/n/10 So-matic mu-ta-tions in PTPN11 in ju-ve-nile myelomono-cytic leukemia, myelodys-
  []
 
-[65] [66] [67] [68] [69] [70] [71] [72] [73]
+[67] [68] [69] [70] [71] [72] [73] [74] [75]
 Overfull \hbox (0.28334pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Rumelhart, D. E., Hin-ton, G. E. & Williams, R. J. Learn-ing rep-re-sen-ta-tions by back-propagating
  []
 
-[74]
+[76]
 Overfull \hbox (10.61075pt too wide) in paragraph at lines 44--44
 []\T1/phv/m/n/10 Midic, D. \T1/phv/m/sl/10 et al. Preva-lence and dy-nam-ics of clonal hematopoiesis caused by leukemia-associated
  []
@@ -1692,7 +1693,7 @@ Overfull \hbox (34.00812pt too wide) in paragraph at lines 44--44
  []
 
 No complaints by nag.
-[75]
+[77]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 45.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 45.
  (./thesis.aux)
@@ -1705,18 +1706,18 @@ Package logreq Info: Writing requests to 'thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 55938 strings out of 492616
- 1310774 string characters out of 6129481
- 2793079 words of memory out of 5000000
- 58605 multiletter control sequences out of 15000+600000
+ 55965 strings out of 492616
+ 1311480 string characters out of 6129481
+ 2795585 words of memory out of 5000000
+ 58621 multiletter control sequences out of 15000+600000
  572710 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  85i,11n,127p,9178b,1633s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on thesis.pdf (82 pages, 41604034 bytes).
+Output written on thesis.pdf (84 pages, 41961430 bytes).
 PDF statistics:
- 3548 PDF objects out of 3580 (max. 8388607)
- 2471 compressed objects within 25 object streams
- 551 named destinations out of 1000 (max. 500000)
- 312 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 3617 PDF objects out of 4296 (max. 8388607)
+ 2521 compressed objects within 26 object streams
+ 561 named destinations out of 1000 (max. 500000)
+ 341 words of extra memory for PDF output out of 10000 (max. 10000000)
 
