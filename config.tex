@@ -11,6 +11,8 @@
 \usepackage{hyperref} % hyperref everything
 \usepackage[export]{adjustbox} %center images
 \usepackage[scaled]{helvet} % helvetica
+\usepackage{placeins} % prevent figures from breaking paragraphs
+\usepackage{flafter}  % figures show up only after they are stated
 \renewcommand\familydefault{\sfdefault} 
 \usepackage[T1]{fontenc}
 \usepackage[top=0.5in,bottom=0.0in,left=0.5in,right=0.5in]{geometry} % adjust page margins
@@ -53,13 +55,13 @@
 \newcommand*\todo[1]{%
     \graffito{\textcolor{red}{TO\ DO: #1}}}
 \newcommand*\missing[1]{%
-    \graffito{\textcolor{red}{\textbf{MISSING: #1}}}}
+    \textcolor{red}{\textbf{MISSING: #1}}}
 \newcommand*\Beta[1]{$\mathrm{\beta #1}$}
 \newcommand*\Mum[1]{$\mathrm{\mu m #1}$}
 \newcommand*\placefigure[1]{%
 	\includegraphics[center]{#1}\vspace*{-8mm}}
 \newcommand*\placecaption[1]{%
-	\caption[]{#1}\vspace*{-5mm}}
+	\caption[]{#1}\vspace*{0mm}}
 \newcommand*\etal[1]{%
 	#1 \textit{et al.}}
 

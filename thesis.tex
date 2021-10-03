@@ -7,10 +7,7 @@
 \title{Computational studies of blood cells: morphology and evolution}
 \author{José Guilherme de Almeida}
 
-\pgfplotstableread[col sep=comma]{csv/gene-list.csv}\genes
-\pgfplotstableread[col sep=comma]{csv/individual-timepoint-distribution.csv}\ageDist
-\pgfplotstableread[col sep=tab]{csv/gene-site-list.tsv}\genesSites
-\pgfplotstableread[col sep=semicolon]{csv/blood-counts-ch.csv}\bloodCountsCH
+\input{tables}
 
 \KOMAoptions{twoside=false}
 
@@ -37,6 +34,10 @@
     \input{dynamics-1}
     
     \input{dynamics-2}
+
+    \input{cytomorphology}
+
+    \input{conclusion}
     
     \backmatter
     

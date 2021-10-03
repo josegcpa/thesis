@@ -39,8 +39,6 @@ While phylodynamics is concerned with the causes of a specific phylogenetic tree
 
 The previous paragraph worked under the assumption that $N$ was constant through time - that the population size did not change along the phylogeny. However, it would be unwise to assume this is a fair assumption - in my case, where the main interest is the evolutionary dynamics of fit clones, this would be especially useless. As such, one has to think of these models in terms of a changing population size, $N(t)$ - $\lambda(n,t) = \binom{n}{2}\frac{1}{N(t)}$. From this consideration, I can consider, for illustrative purposes, a relatively simple model of population dynamics: since I analyze fit clones independently of one another by looking at the specific part of the tree they exist in (a clade), I can assume that each individual clade characterized by a driver mutation is evolving under neutral pressure, provided it does not acquire any other driver mutation at some point. This is helpful since it allows us to assume that a constant growth rate drives the expansion - for instance, if this growth rate is exponential with initial population size $N_0$ and rate $r$, we can say that the distribution of times between coalescent events is $\lambda(n,t) = \binom{n}{2}\frac{1}{N_0 e^{-rt}}$ \cite{Volz2013-ey}. This example can then be expanded to include changes in rates and dynamics, making the growth of the \ac{eps} more flexible in less parametric; this can be useful to capture, for example, cases of competition or catastrophic events - in the case of competition, one expects growth to be faster when no other clones are present and competing for the same resources, while in the case of a catastrophic event we can expect the \ac{eps} to grow more slowly or even to decrease. Another, perhaps better known example in the field of phylodynamics, is that of flu seasonality - during colder months, the \ac{eps} of H1N1 circulates through the population much more effectively, leading to a temporary increase in the effective population size \cite{Karcher2020-bg}. 
 
-
-
 \subsection{Contribution}
 
 The work presented in this chapter is partly available as a preprint in \cite{Fabre2021-uw}. Here, I ran a large set of Wright-Fisher simulations and used them to simulate a longitudinal targeted sequencing experiment and inferred dynamic coefficients for each mutation and clone, as well as the age at onset for each clone. Next, using a separate set of simulations, I infer the phylogenetic tree for a single sample at old age and use phylodynamic methods to estimate the dynamic aspects of each clone. Through this, I show how recently available technologies - longitudinal targeted sequencing and single-cell haematopoietic phylogenies - can be used to infer aspects of clonal dynamics.
@@ -79,7 +77,7 @@ To determine the age at onset of a clone - in other words, the age at which ther
 \end{enumerate}
 
 \begin{figure}
-	\placefigure{gfx/wf-sim-example.pdf}
+	\placefigure{gfx/dynamics-1/wf-sim-example.pdf}
 	\placecaption{Example of a Wright-Fisher simulation.}
 	\label{fig:wf-example}
 \end{figure}
@@ -93,9 +91,9 @@ Finally, I calculated the coefficient of determination between the simulated and
 To infer the parameters $\mu_{od}$ and $\sigma_{od}$, I had access to two sets of experimental data:
 
 \begin{enumerate}
-	\item Between two and three different solutions of known \ac{vaf} concentrations (0, 0.005, 0.01, 0.02, 0.05) for 4 different genes (\ac{idh1}, \ac{jak2}, \ac{kras} and \textit{NRAS}) were sequenced at a median depth of 415x;
+	\item \textbf{TruQ} - Between two and three different solutions of known \ac{vaf} concentrations (0, 0.005, 0.01, 0.02, 0.05) for 4 different genes (\ac{idh1}, \ac{jak2}, \ac{kras} and \textit{NRAS}) were sequenced at a median depth of 415x;
 	
-	\item For 5 individuals, technical replicates were elaborated by sequencing two additional samples at all timepoints. These individuals had at least one mutation across 15 different genes (\ac{asxl1}, \textit{BCOR}, \ac{cbl}, \ac{dnmt3a}, \textit{EZH2}, \textit{GNAS}, \ac{idh1}, \ac{jak2}, \textit{NOTCH1}, \textit{PHF6}, \ac{sf3b1}, \textit{SMC1A}, \ac{srsf2}, \ac{tet2}, \textit{ZRSR2}) with \ac{vaf} between 0 and 0.394. 
+	\item \textbf{Replicates} - For 5 individuals, technical replicates were elaborated by sequencing two additional samples at all timepoints. These individuals had at least one mutation across 15 different genes (\ac{asxl1}, \textit{BCOR}, \ac{cbl}, \ac{dnmt3a}, \textit{EZH2}, \textit{GNAS}, \ac{idh1}, \ac{jak2}, \textit{NOTCH1}, \textit{PHF6}, \ac{sf3b1}, \textit{SMC1A}, \ac{srsf2}, \ac{tet2}, \textit{ZRSR2}) with \ac{vaf} between 0 and 0.394. 
 \end{enumerate}
 
 For 1., I model the distribution over the expected \ac{vaf} as a beta distribution such that $VAF \sim Beta(\alpha,\beta)$, where $\alpha=\frac{p\alpha}{1-p}$ and $p$ is the observed \ac{vaf} and for 2. I adopt a model identical to the one described in the previous section using only gene growth effects. Here, I model $\beta \sim exp(r)$ with $r$ as a variable with no prior. I use an identical process as in the previous section - \ac{mcmc} with \ac{hmc} - with 400-500 leapfrog-steps as implemented in greta \cite{Golding2019-wh} to estimate the mean and standard deviation of  using both models for 1. and 2. in parallel. For this estimate I use 1,000 samples from the posterior distribution.
@@ -111,7 +109,7 @@ Similarly to the previous section, I start by simulating a set of scenarios to a
     \item Using the complete mutational landscape of each clone, I build trees using a neighbour-joininig algorithm. This algorithm is relatively simple and iteratively builds the tree by joining the two most similar tips/nodes. 
 \end{enumerate}
 
-For each tree, I detect clades by defining them as a group of tips and branches whose \ac{mrca} has the earliest instance of the driver they share. I also extracted the trajectories for the drivers out of each simulation considering the possibility that two different clones could have the same driver - for instance, if a clone $a$ acquired mutation $i$ at time $t_a$ and clone $b$ acquired mutation $i$ at time $t_a$ these are considered two distinct drivers rather than a single one - this enables the comparison between driver trajectories and trajectories inferred from each clade. In practical terms, I consider that a clade and a driver trajectory correspond to the same clone if the mutations characterising them have the smallest Hamming distance out of all clade-driver trajectory combinations. 
+For each tree, I detect clades by defining them as a group of tips and branches whose \ac{mrca} has the earliest instance of the driver they share. I also extracted the trajectories for the drivers out of each simulation considering the possibility that two different clones could have the same driver - for instance, if a clone $a$ acquired mutation $i$ at time $t_a$ and clone $b$ acquired mutation $i$ at time $t_a$ these are considered two distinct drivers rather than a single one - this enables the comparison between driver trajectories and trajectories inferred from each clade. In practical terms, I consider that a clade and a driver trajectory correspond to the same clone if the mutations characterizing them have the smallest Hamming distance out of all clade-driver trajectory combinations. 
 
 \subsubsection{Phylodynamic inference of clonal trajectories from phylogenetic trees}
 
@@ -129,75 +127,174 @@ For all three estimates described above, I weigh data according to its uncertain
 
 To confirm the impact of this particular method of phylodynamic estimation - \ac{bnpr} - on the \ac{eps} trajectories, I use two additional methods for phylodynamic estimation as implement in the \texttt{ape} package for \texttt{R} \cite{Paradis2019-na}: \texttt{skyline} (an implementation of the generalised skyline plot, a non-parametric method for \ac{eps} estimation that assumes that the \ac{eps} for a given interval is proportional to the accumulated waiting time between coalescent events and the number of lineages while inversely proportional to previous coalescent events) and \texttt{mcmc.popsize} (a method with similar assumptions to those of \texttt{skyline} but uses reversible jump \ac{mcmc} to derive a smoother version of the \ac{eps} estimate) \cite{Opgen-Rhein2005-pi}. I use both additional methods to verify that estimates from \ac{bnpr} are consistent with those from other methods while enabling a more accurate recapitulation of the true fitness effect.
 
+\FloatBarrier
+
 \section{Results}
+
+\subsection{A beta binomial model captures technical overdispersion in targeted sequencing}
+
+To simulate and model targeted sequencing experiments I started by estimating the technical overdispersion associated with sequencing. To do this I had two datasets - TruQ, which consisted of prepared sequencing read solutions with known concentrations (\figref{fig:truq-data}) and Replicates, which consisted on technical triplicate data for 4 individuals (\figref{fig:replicate-data}; more details on the cohort to which these individuals belonged will be made available in the following chapter). For the Replicate dataset, it should be highlighted that the technical replicates were obtained from the same collection; in other words, the variation is expected to be due to technical aspects of sequencing rather than stochastic sampling of blood cells. 
+
+I model both datasets and the associated technical overdispersion as described in the methods section above using \ac{hmc} and obtain an estimate for the mean and standard deviation of the overdispersion by calculating both directly using posterior samples (218.72 and 29.50,respectively). I observed good convergence of the chain for the overdispersion parameters (\figref{fig:overdispersion-chains}) and good estimation of the apparent overdispersion by visually inspecting the fits in the longitudinal data (\figref{fig:overdispersion-longitudinal}). It is worth noting that 74732959 (G>A) in individual 260, while not being captured by this model, follows a fairly atypical trajectory: between the third and fourth timepoints there is a sharp decrease in \ac{vaf}, which can be an outcome of competition in the same individual caused by 74732959 (G>T) (this will be further discussed in the following chapter).
+
+\begin{figure}[!h]
+	\placefigure{gfx/dynamics-1/overdispersion-truq.pdf}
+	\placecaption{The TruQ dataset, containing technical sequencing replicates of prepared sequencing read solutions with known concentration. 90\% confidence intervals are represented assuming \ac{vaf} values follow a beta distribution.}
+	\label{fig:truq-data}
+\end{figure}
+
+\begin{figure}[!h]
+	\placefigure{gfx/dynamics-1/overdispersion-data.pdf}
+	\placecaption{The replicate dataset, which tracks mutations in 53 different genes across 4 individuals over 5 sampling phases. 90\% confidence intervals are represented assuming \ac{vaf} values follow a beta distribution.}
+	\label{fig:replicate-data}
+\end{figure}
+
+\begin{figure}
+	\placefigure{gfx/dynamics-1/beta-chain.pdf}
+	\placecaption{\Ac{mcmc} chains for the variables associated with technical overdispersion.}
+	\label{fig:overdispersion-chains}
+\end{figure}
+
+\begin{figure}
+	\placefigure{gfx/dynamics-1/overdispersion-examples.pdf}
+	\placecaption{Fitted values for the longitudinal modelling and comparison with real triplicate data from Replicate dataset. Dotted lines represent real trajectories and full lines represent inferred trajectory. Vertical lines represent 90\% credible intervals.}
+	\label{fig:overdispersion-longitudinal}
+\end{figure}
+
+\FloatBarrier
 
 \subsection{A simple model to recapitulate Wright-Fisher dynamics and infer age at clonal onset}
 
-Using the simulations described above, I infer coefficients for the growth attributable to mutation $i$ - $b_{mut_i}$ - and for the growth attributable to clone $ij$ - $b_{clone_{ij}}$ and do this jointly for all the simulation experiments. By doing so, it is possible to faithfully estimate the part of growth that is attributable specifically to the mutation and disentangle it from clone-specific effects. First, I verify that the \ac{mcmc} chains converge adequately by visually inspecting them (\figref{fig:mcmc-chains-sim}) and assessing the effective sample size and Gelman-Rubin statistic for all coefficients (\figref{fig:mcmc-ess} and \figref{fig:mcmc-gelman-rubin}). Observing that values for \ac{ess} are routinely above 500 and that the values for the Gelman-Rubin statistic are close to the unit, I can confirm that the simulation has converged.
+Using the simulations described in the methods above, I infer coefficients for the growth attributable to mutation $i$ - $b_{mut_i}$ - and for the growth attributable to clone $ij$ - $b_{clone_{ij}}$ and do this jointly for all the simulation experiments. By doing so, it is possible to faithfully estimate the part of growth that is attributable specifically to the mutation and disentangle it from clone-specific effects. First, I verify that the \ac{mcmc} chains converge adequately by visually inspecting them (\figref{fig:mcmc-chains-sim}) and assessing the effective sample size and Gelman-Rubin statistic for all coefficients (\figref{fig:mcmc-ess}). Combining this visual inspection with the fact that values for \ac{ess} were routinely above 500 and that the values for the Gelman-Rubin statistic were close to the unit, I could confirm that the simulation has converged and that the chains can be further analysed. 
 
-\begin{figure}
-	\missing{figure}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/chains-genetic.pdf}
 	\placecaption{\Ac{mcmc} chains for the mutation coefficients inferred using data simulated under a Wright-Fisher model.}
 	\label{fig:mcmc-chains-sim}
 \end{figure}
 
-\begin{figure}
-	\missing{figure}
-	\placecaption{Effective sample size for all dynamic parameters inferred using data simulated under a Wright-Fisher model.}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/rg-ess-sim.pdf}
+	\placecaption{The Gelman-Rubin statistic (left) and effective sample size (right) for all modelled parameters inferred using data simulated under a Wright-Fisher model.}
 	\label{fig:mcmc-ess}
 \end{figure}
 
-\begin{figure}
-	\missing{figure}
-	\placecaption{The Gelman-Rubin statistic calculated for all dynamic parameters using data simulated under a Wright-Fisher model.}
-	\label{fig:mcmc-gelman-rubin}
-\end{figure}
+Knowing that the \ac{mcmc} chains converge adequately, I use them to show that using this model it is possible to calculate the fitness of drivers with a $R^2 = 91.5\%$ (\figref{fig:sim-vs-inf-driver}). Visual inspection of these trajectories while comparing them with the original trajectories provides further confirmation of the effectiveness of this model in recapitulating clonal growth (\figref{fig:trajectory-examples-sim}). Here, I use the average of all chains to estimate the expected value of each coefficient and calculate the 90\% \ac{hpdi} for all coefficients. In practical terms, the 90\% \ac{hpdi} is the shortest-spanning interval containing 90\% of the samples in our simulation and it is observable that the \ac{hpdi} for each coefficient contains - or is close to containing - the true value of the coefficient. I also measure the likelihood of the simulated data under our model and define an outlier as a value not contained within the 95\% confidence interval defined by our model and consider, from here on, all trajectories with outliers as invalid and do not proceed with their analysis. Taking these standards, 87\% of all trajectories are explained by our model and we observe that this remains relatively constant for different true fitness intervals (\figref{fig:explained-traj-sim}).
 
-Knowing that the \ac{mcmc} chains converge adequately, I use them to show that using this model it is possible to calculate the fitness of drivers with a $R^2 = 91.5\%$ (\figref{fig:sim-vs-inf-driver}). Visual inspection of these trajectories while comparing them with the original trajectories provides further confirmation of the effectiveness of this model in recapitulating clonal growth (\figref{fig:trajectory-examples-sim}). Here, I use the average of all chains to estimate the expected value of each coefficient and calculate the 90\% \ac{hdpi} for all coefficients. In practical terms, the 90\% \ac{hdpi} is the shortest-spanning interval containing 90\% of the samples in our simulation and it is observable that the \ac{hdpi} for each coefficient contains - or is close to containing - the true value of the coefficient. I also measure the likelihood of the simulated data under our model and define an outlier as a value not contained within the 95\% confidence interval defined by our model and consider, from here on, all trajectories with outliers as invalid and do not proceed with their analysis. Taking these standards, 87\% of all trajectories are explained by our model and we observe that this remains relatively constant for different true fitness intervals (\figref{fig:explained-traj-sim}).
-
-\begin{figure}
-	\placefigure{gfx/simulated-vs-inferred-fitness.pdf}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/simulated-vs-inferred-fitness.pdf}
 	\placecaption{Inferred driver effect as a function of the simulated driver effect.}
 	\label{fig:sim-vs-inf-driver}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/example-trajectories-simulated.pdf}
 	\placecaption{Examples of simulated and inferred trajectories for different true fitness levels (s).}
 	\label{fig:trajectory-examples-sim}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/explained-trajectories.pdf}
 	\placecaption{Explained trajectories for different true fitness ranges.}
 	\label{fig:explained-traj-sim}
 \end{figure}
 
-To obtain an age, rather than a generation, at clone onset, I divide the generations by 13 under our assumption of 13 generations per year. Using this value, I am able to compare the inferred and simulated age at onset to assess whether the method stated above to calculate the age at onset - $t_{onset,ij} = \frac{log(g/s_{ij}/N)-1-s_{ij}}{s_{ij}}$ - allows us to recapitulate the true age at onset. To generate each estimate for the age at onset, I calculate for each sample of $b_{mut_i}$, $b_{clone_{ij}}$ and $u_{ij}$ their respective $t_{onset,ij}$ and, for each clone (each having $1,000$ samples), I estimate the median and the 90\% confidence interval for the age at onset. I note here that a relatively low number of clones - 10.3\% of all clones - had a median age at onset that preceded birth. This is due to an underestimation of the true fitness of the clone, especially considering that competition or clones with smaller fitness advantages are present in these simulations. To address this problem and knowing that it is highly unlikely that clones appeared before birth (especially in the context of these simulations) I set a lower bound for the age at onset estimates that precede birth - in other words, if $t_{onset,ij} < 0$ then I correct this to $t_{onset,ij}=0$. Taking these corrections into consideration, I now compare the true with the inferred age at onset for these simulated clones and show that it is possible to estimate the true age at onset using a relatively simple longitudinal sequencing protocol and statistical modelling ($R^2 = 65.8\%$, \figref{fig:age-at-onset-sim}). Additionally, while these estimates can have a relatively high spread, their aggregation shows they appear to be a consistent estimator of the age at onset as represented with the boxplots in \figref{fig:age-at-onset-sim}. 
+To obtain an age, rather than a generation, at clone onset, I divide the generations by 13 under our assumption of 13 generations per year. Using this value, I am able to compare the inferred and simulated age at onset to assess whether the method stated above to calculate the age at onset - $t_{onset,ij} = \frac{log(g/s_{ij}/N)-1-s_{ij}}{s_{ij}}$ - allows us to recapitulate the true age at onset. To generate each estimate for the age at onset, I calculate for each sample of $b_{mut_i}$, $b_{clone_{ij}}$ and $u_{ij}$ their respective $t_{onset,ij}$ and, for each clone (each having $1,000$ samples), I estimate the median and the 90\% confidence interval for the age at onset. I note here that a relatively low number of clones - 10.3\% of all clones - had a median age at onset that preceded birth. This is due to an underestimation of the true fitness of the clone, especially considering that competition or clones with smaller fitness advantages are present in these simulations. To address this problem and knowing that it is highly unlikely that clones appeared before birth (especially in the context of these simulations) I set a lower bound for the age at onset estimates that precede birth - in other words, if $t_{onset,ij} < 0$ then I correct this to $t_{onset,ij}=0$. Taking these corrections into consideration, I now compare the true with the inferred age at onset for these simulated clones and show that it is possible to estimate the true age at onset using a relatively simple longitudinal sequencing protocol and statistical modelling ($R^2 = 65.8\%$, \figref{fig:age-at-onset-sim}). Additionally, while these estimates can have a relatively high spread, their across age intervals shows they appear to be a consistent estimator of the age at onset as represented with the boxplots in \figref{fig:age-at-onset-sim}. 
 
-\begin{figure}
-	\placecaption{Inferred age at onset as a function of the simulated age at onset. Each boxplot represents the distribution of ages at onset for 10 year intervals.}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/ages-at-onset.pdf}
+	\placecaption{Inferred age at onset as a function of the simulated age at onset. Each boxplot represents the distribution of expected ages at onset for 10 year intervals.}
 	\label{fig:age-at-onset-sim}
 \end{figure}
 
-An additional and relatively intuitive finding from this analysis is that the \ac{mae} for the age at onset estimates is considerably higher for smaller fitness advantages ($MAE_{fitness < a} = $ \missing{value}, $MAE_{fitness < b} = $ \missing{value}, \figref{fig:age-at-onset-vs-true-fitness-sim}) - this conclusion highlights the fact that lower fitness advantages make clones more likely to be affected by competition or genetic drift, making the estimation of their ages at onset more biased due to greater relative errors in the inference of their fitness effect. 
+An additional and relatively intuitive finding from this analysis is that the \ac{mae} for the age at onset estimates is considerably higher for smaller fitness advantages ($MAE_{s \geq 0.01} = 12.49$, $MAE_{s > 0.01} = 6.34$, \figref{fig:age-at-onset-vs-true-fitness-sim}) - this conclusion highlights the fact that lower fitness advantages make clones more likely to be affected by competition or genetic drift, making the estimation of their ages at onset more biased due to greater relative errors in the inference of their fitness effect. 
 
-\begin{figure}
-	\placecaption{Inferred age at onset as a function of the simulated age at onset. Each boxplot represents the distribution of ages at onset for 10 year intervals.}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/fitness-vs-inferred-age-residuals.pdf}
+	\placecaption{Residuals for the inferred age at onset as a function of simulated fitness.}
 	\label{fig:age-at-onset-vs-true-fitness-sim}
 \end{figure}
 
 As made clear by the formula for $t_{onset,ij}$, there is some dependency on the assumption of values for $N$ and $g$. Taking this into consideration, I investigate the effect of wrong values for $N$ and $g$ on the age at onset estimates. This shows that there is a set of values for $N$ and $g$ for which the age at onset estimates are relatively similar in their \ac{mae} when compared with the simulated age at onset as shown in \figref{fig:age-at-onset-mae}. Using the correct values, we can be sure that our solution is, on average, within 8.72 years of the real value. Nonetheless, it should also be noted that incorrect assumptions for $N$ and $g$ do not render incorrect values due to their dependence - in the formula for $t_{onset,ij}$, a single term has both $N$ and $g$ ($log(g/s_{ij}/N)$) and, as such, it is reasonable that feasible solutions for $g$ and $N$ occur, as long as the $N/g$ remains close to that of the true value - in our case, $N/g = \frac{200,000}{13} \approx 15384$.
 
-\begin{figure}
-	\placecaption{Inferred age at onset as a function of the simulated age at onset. Each boxplot represents the distribution of ages at onset for 10 year intervals.}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/age-at-onset-mae.pdf}
+	\placecaption{Mean absolute error for the age at onset estimation for different population sizes and number of generations per year. The tile with a black outline represents the best (lowest) performing combination of parameters.}
 	\label{fig:age-at-onset-mae}
 \end{figure}
 
 Finally, I was interested in understanding if there was a reasonable way of estimating a likely solution for the real values of $N$ and $g$ given the distribution of ages at onset for different clones. To do this, an additional set of clones were simulated under a Wright-Fisher model with two different combinations of $N$ and $g$ - $N=100,000;g=5$ and $N=50,000;g=1$. I note here that these constitute slightly different values for $N/g$, particularly $20,000$ and $50,000$, respectively. 
 
-The motivation for this investigation was relatively simple - assuming identical mutation rates, we would expect clones to appear in a more or less uniform manner over life. Under the simulated experimental conditions here stated, however, this expectation may not hold for the detected clones - it would not be possible to detect very small clones or clones that did not manage to fixate in the population. As such, I first assess whether the distribution of simulated ages at onset could be considered uniform by any measure. 
+The motivation for this investigation was relatively simple - assuming identical mutation rates, we would expect clones to appear in a more or less uniform manner over life. Under the simulated experimental conditions here stated, however, this expectation may not hold for the detected clones - it would not be possible to detect very small clones or clones that did not manage to fixate in the population. Indeed, as observable in \figref{real-age-at-onset-distribution}, slower clones will appear mostly over the first half of life (otherwise their detection would be impossible) while faster clones are more likely to appear later in life. Nonetheless, the distribution of ages at onset for all clones appears to be generally characterized by a slow accumulation of clones after which a steady decay is observable.
 
-\subsection{}
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/real-age-at-onset-distribution.pdf}
+	\placecaption{Distribution of the simulated ages at onset for different.}
+	\label{fig:real-age-at-onset-distribution}
+\end{figure}
+
+This suggests that an assumption of uniformity would not be the most adequate, making the choice of a more flexible distribution a necessity. For this reason, I chose the beta distribution, which requires some manipulation of the data. As such, I transformed the ages at onset $a$ for each of the groups of simulations - $N=200,000;g=13$, $N=100,000;g=5$ and $N=50,000;g=1$ - to have range $[0,1]$ as $a' = \frac{a-min(a)}{max(a)-min(a)}$ (henceforth, I will be referring to these values as the relative age at onset). Having done so, I fitted three distinct beta distributions to each group of simulations using moment matching (calculating the moments for the data and using them to estimate the parameters of the beta distribution), verifying relatively similar estimates for both shape parameters and their respective distributions (\tableref{table:beta-dist}; \figref{fig:beta-distance-fit}). 
+
+\begin{table}[!h]
+	\centering
+	\caption{Parameters for beta distributions fitted to the relative ages at onset.}
+	\pgfplotstabletypeset[
+	string type,
+	columns/n/.style={
+		column name=Population size,
+		column type={C{.2\textwidth}}},
+	columns/g/.style={
+		column name=Generations/year,
+		column type={C{.2\textwidth}}},
+	columns/a/.style={
+		column name=$\alpha$,
+		column type={C{.05\textwidth}}},
+	columns/b/.style={
+		column name=$\beta$,
+		column type={C{.05\textwidth}}},
+	every head row/.style={before row={\toprule},after row=\midrule},
+	every last row/.style={after row={\toprule}},
+	every odd row/.style={before row={\rowcolor[gray]{0.9}}}
+	]\betaDistFit
+\label{table:beta-dist}
+\end{table}
+
+\begin{figure}[h]
+	\placefigure{gfx/dynamics-1/beta-distance-fits.pdf}
+	\placecaption{Empirical and theoretical densities from beta distribution fits to the relative ages at onset.}
+	\label{fig:beta-distance-fit}
+\end{figure}
+
+% analysis of uniformity in ages at onset - we cannot infer the true pop size or g, but that's ok! we can still use these estimates in a fairly correct way
+
+\FloatBarrier
 
 \subsection{Early growth is a consistent estimator of clone fitness using phylodynamic estimation}
 
-\section{Conclusion}
+Using a simulation scenario similar to the one described for the previous section of the results, I inferred phylogenetic trees for 120 Wright-Fisher simulations after 800 generations. The structure of each of these trees alone highlights the expected diversity when clones with distinct fitness effects are present (\figref{fig:trees-simulated-examples}) - while smaller fitness advantages do not lead to particularly evident expansions in the tree (a large branch preceding a clade with more than 5 tips), larger fitness advantages often have the capacity to sweep the entire clonal landscape and take over the whole \ac{hsc} population. 
+
+\begin{figure}[h]
+	\placecaption{Examples of the trees generated for different simulation parameters.}
+	\label{fig:trees-simulated-examples}
+\end{figure}
+
+I then defined clones in the trees as a clade described by a unique combination of drivers and correspond them to their respective clones in the simulation. I isolated the clades and for each of them used \ac{bnpr}, a phylodynamic estimation method, to determine the lifelong trajectories of each of these clones. A first assessment, comparing the original trajectories in the simulations with those inferred using phylodynamic estimation from the trees shows good concordance (\figref{fig:wf-vs-bnpr-traj}). This highlights the usefulness of single-cell colony experiments in determining the lifelong trajectory of clones. This comparison also shows that phylodynamic estimates are sensible to the carrying capacity of the \ac{hsc} population, saturating as the clone slows down. 
+
+\begin{figure}[h]
+	\placecaption{Comparison of Wright-Fisher trajectories with their \ac{bnpr}-estimated trajectories.}
+	\label{fig:wf-vs-bnpr-traj}
+\end{figure}
+
+Having observed this concordance, I then proceeded to quantify the growth from the phylodynamic estimates. It is worth noting that \ac{bnpr}, while providing a trustworthy recapitulation of the lifelong clonal trajectory, is a non-parametric method and, as such, does not provide \textit{per se} an estimate of the fitness advantage for any given clone. As such, I fitted three different models to the phylodynamic trajectories - a log-linear model, a sigmoid model and a biphasic log-linear model. Each has particularly different assumptions - growth is constant and exponential, growth saturates as the clone size approximates the carrying capacity and growth is exponential and can be divided into two distinct phases, respectively.
+
+\FloatBarrier
+
+\subsection{BNPR good others bad}
+
+\FloatBarrier
+
+\section{Discussion}
+
+\section{Code availability}
+
+The code for this analysis and the associated notebooks are available in \url{https://gerstung-lab.github.io/ch-dynamics/} as "Estimating the overdispersion", "Validation of hierarchical Bayes model", "Validating the estimation of growth rates and evidence for saturation from phylogenetic trees" and "Comparing different methods for the estimation of population size trajectory".
