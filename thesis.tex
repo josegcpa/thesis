@@ -1,11 +1,10 @@
-\RequirePackage{nag}
 \documentclass[a4paper]{scrbook}
 
 \input{config}
 \input{acronyms}
 
 \title{Computational studies of blood cells: morphology and evolution}
-\author{José Guilherme de Almeida}
+\author{José Guilherme Coelho Peres de Almeida}
 
 \input{tables}
 
@@ -15,13 +14,24 @@
     \pgfplotsset{compat=1.16}
     % Custom hyphenation rules need to be declared AFTER \begin{document}!
         
-    \maketitle
+    %\maketitle
+    \input{title-page}
     
+    \frontmatter
+
     \tableofcontents
     \listoffigures
     \listoftables
 
-    \frontmatter
+    \clearpage
+    \chapter*{List of acronyms}
+    \begin{flushleft}
+        \begin{footnotesize}
+            \begin{multicols}{2}
+                \printacronyms[include-classes=abbrev, heading=none]
+            \end{multicols}
+        \end{footnotesize}
+    \end{flushleft}
     
     \input{acknowledgements}
     

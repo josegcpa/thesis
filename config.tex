@@ -17,12 +17,15 @@
 \usepackage[T1]{fontenc}
 \usepackage[top=0.5in,bottom=0.0in,left=0.5in,right=0.5in]{geometry} % adjust page margins
 \usepackage{float} % figures float
+\usepackage{multicol} % multiple columns on samae page
+\usepackage{enumitem} %allows itemize environment adjustments
+
 
 \setlength{\parskip}{0pt}
 
-\RedeclareSectionCommand[beforeskip=0pt,afterskip=1pt]{section}
-\RedeclareSectionCommand[beforeskip=0pt,afterskip=1pt]{subsection}
-\RedeclareSectionCommand[beforeskip=0pt,afterskip=1pt]{subsubsection}
+\RedeclareSectionCommand[beforeskip=1pt,afterskip=1pt]{section}
+\RedeclareSectionCommand[beforeskip=1pt,afterskip=1pt]{subsection}
+\RedeclareSectionCommand[beforeskip=1pt,afterskip=1pt]{subsubsection}
 
 \addbibresource{references.bib}
 
@@ -39,7 +42,7 @@
 \setlength{\parskip}{6pt}%
 
 \renewcommand{\familydefault}{\sfdefault} % no more serif
-\renewcommand*{\bibfont}{\small} % smaller bibliography font
+\renewcommand*{\bibfont}{\footnotesize} % smaller bibliography font
 \DeclareUnicodeCharacter{2212}{-}
 
 % Set the line spread (height). Be careful here, use too small rather than too
@@ -61,9 +64,19 @@
 \newcommand*\placefigure[1]{%
 	\includegraphics[center]{#1}\vspace*{-8mm}}
 \newcommand*\placecaption[1]{%
-	\caption[]{#1}\vspace*{0mm}}
+	\caption[#1]{#1}\vspace*{0mm}}
 \newcommand*\etal[1]{%
 	#1 \textit{et al.}}
 
 \newcommand*{\figref}[1]{\hyperref[{#1}]{Figure~\ref*{#1}}}
 \newcommand*{\tableref}[1]{\hyperref[{#1}]{Table~\ref*{#1}}}
+
+% making two column list of acronyms
+\newlist{acronyms}{description}{1}
+\setlist[acronyms]{
+labelwidth = 4.5em,
+leftmargin = 5em,
+noitemsep,
+itemindent = 0pt}
+\DeclareAcroListStyle{mystyle}{list}{ list = acronyms }
+\acsetup{ list-style = mystyle }

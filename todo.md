@@ -10,3 +10,7 @@
 * fig:explained-traj-sim - figure with barplots with proportion of explained trajectories
 * fig:age-at-onset-sim - figure with simulated vs inferred age at onset
 * fig:age-at-onset-vs-true-fitness-sim - 
+
+# Analysis
+
+* Uniformity in ages at onset
