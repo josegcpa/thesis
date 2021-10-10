@@ -24,3 +24,6 @@ thesis.toc
 todo.md
 thesis.pdf
 thesis.out
+.vscode/ltex.dictionary.en-GB.txt
+.vscode/ltex.hiddenFalsePositives.en-GB.txt
+.vscode/ltex.disabledRules.en-GB.txt
