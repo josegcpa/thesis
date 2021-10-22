@@ -20,6 +20,7 @@ I worked exclusively with variant calls and, as such, will not go into detail ab
 \centering
 \caption{Distribution of individuals with a given number of timepoints.}
 \pgfplotstabletypeset[
+font=\footnotesize,
 string type,
 columns/ntp/.style={
     column name=Number of timepoints,
@@ -64,6 +65,7 @@ To address possible identifiability issues in this model, when a gene has a sing
 \centering
 \caption{Summary of different effects in the model. “X” indicates the utilization of that specific effect (Truncating and Missense) for each gene and in Sites I detail the sites that were explicitly modelled.}
 \pgfplotstabletypeset[
+font=\footnotesize,
 string type,
 columns/g/.style={
     column name=Gene,
@@ -178,6 +180,20 @@ To better understand whether unexplained trajectories could be attributed to the
 	\label{fig:ch-bad-trajectories-examples}
 \end{figure}
 
+Despite the few unexplained trajectories and thanks to an additional timepoint for 10 individuals, I was able to test the predictive performance of this model and the consistency of the trajectories. As visible in \figref{fig:trajectories-6th-tp}, most trajectories do not deviate greatly from a 6th timepoint which was not used in the inference of the coefficients for the model. Further quantifying this, as represented in \figref{fig:performance-6th-tp}, it becomes clear that the predicted changes in \ac{vaf} correspond nicely to those observed ($MAE = 3.4\%$, $R^2 = 89\%$). This further confirms that trajectories remain consistent over relatively long periods of time during old age.
+
+\begin{figure}[!ht]
+	\placefigure{gfx/dynamics-2/trajectories-6th-tp.pdf}
+	\placecaption{Predicted trajectories for an additional timepoint for 10 individuals. Circles represent datapoints that were used to infer the coefficients in the model, whereas crosses (+) represent datapoints that were not used by the model for inference. Inferred trajectories, as well as their 90\% credible intervals, are represented by arbitrary colours.}
+	\label{fig:trajectories-6th-tp}
+\end{figure}
+
+\begin{figure}[!ht]
+	\placefigure{gfx/dynamics-2/performance-6th-tp.pdf}
+	\placecaption{Observed and predicted change in \ac{vaf} for a 6th timepoint.}
+	\label{fig:performance-6th-tp}
+\end{figure}
+
 \subsection{Identifying the drivers of clonal growth rate}
 
 Considering the relative stability of the trajectories, it is now possible to consider the effect of specific sites (whose mutations are present in two or more individuals) and genes on the growth per year (\figref{fig:ch-gene-site-coefficients}; \tableref{table:ch-gene-coefficients}). I show that the growth advantage conferred by most sites is relatively small with that conferred by the gene, with \ac{srsf2}-P95H being the single exception. It is also clear that \ac{dnmt3a} and \ac{tet2}, the two most commonly mutated genes in \ac{ch}, are by no means the genes conferring the greatest fitness advantage; in fact, it is mutations in \ac{u2af1}, \ac{ptpn11} and \ac{srsf2} that are responsible for the fastest growing clones (\tableref{table:ch-gene-coefficients}). Importantly, both \ac{u2af1} and \ac{srsf2} are, together with another relatively fast gene, \ac{sf3b1}, splicing genes, making their relatively late detection in \ac{ch} more intriguing \cite{McKerrell2015}. I also quantified the fitness effect of truncating and missense separately, showing that, for \ac{cbl}, truncating mutations confer a greater fitness advantage than missense ones (the annual growth rate is 10.9\% ($CI_{90\%}=[3.3\%,18.7\%]$) higher for truncating \ac{cbl} mutations), while the reverse is observable in \ac{tp53} (the annual growth rate is 10.4\% ($CI_{90\%}=[2.6\%,18.0\%]$) higher for missense \ac{tp53} mutations; \figref{fig:ch-trunc}), while other genes for which both effects were modelled show no significant difference between truncating and missense mutations.
@@ -192,6 +208,7 @@ Considering the relative stability of the trajectories, it is now possible to co
     \centering
     \caption{Distribution genetic coefficients.}
     \pgfplotstabletypeset[
+	font=\footnotesize,
     string type,
     columns/g/.style={
         column name=Gene,
@@ -208,7 +225,7 @@ Considering the relative stability of the trajectories, it is now possible to co
     every odd row/.style={before row={\rowcolor[gray]{0.9}}}
     ]\geneCoefficients
     \label{table:ch-gene-coefficients}
-    \end{table}    
+\end{table}    
 
 \begin{figure}[!ht]
 	\placefigure{gfx/dynamics-2/ch-trunc.pdf}
@@ -358,7 +375,7 @@ This gene bias led us to further quantify deceleration in growth inferred from b
 	\label{fig:historical-growth-tally}
 \end{figure}
 
-\subsection{\ac{ch} is characterized by steady clonal onset}
+\subsection{Clonal haematopoiesis is characterized by steady clonal onset}
 
 Knowing that clones decelerate, I have to adjust the age at onset estimates similarly to what was done in the previous chapter to avoid having estimates precede birth --- more concretely, I consider it to be impossible for clones to have appeared before the age of -1, an arbitrary cut-off representing conception. I show here that mutations in \ac{srsf2}-P95H and \ac{u2af1} appear much later in life than those in other genes, contributing to the previously reported age association of splicing genes \cite{McKerrell2015-rl} (\figref{fig:ages-at-onset}). Mutations in every other gene, considering the pervasive effects of deceleration, is likely to appear consistently through life.
 
@@ -366,6 +383,14 @@ Knowing that clones decelerate, I have to adjust the age at onset estimates simi
 	\placefigure{gfx/dynamics-2/ages-at-onset.pdf}
 	\placecaption{Age at onset intervals for different drivers.}
 	\label{fig:ages-at-onset}
+\end{figure}
+
+A key aspect of the age at clonal onset is its close association with the annual growth --- in \figref{fig:age-at-onset-vs-growth} it is clear that clones harbouring mutations which appear later in life grow faster than other mutations; this is especially the case for \ac{srsf2}-P95H and \ac{u2af1}. Additionally, the converse is visible for clones characterized by \ac{dnmt3a} mutations which are projected to appear very early in life, an effect that is impossible to disentangle from the deceleration described in the previous section of the results. Even considering a relative low threshold --- 0.2\%, which would be the theoretical threshold for this longitudinal cohort (\autoref{appendix:theoretical-lod}).
+
+\begin{figure}[!ht]
+	\placefigure{gfx/dynamics-2/age-at-onset-vs-growth.pdf}
+	\placecaption{Association between age at onset and annual growth. Points represent the expected value, whereas the coloured lines represent the 90\% credible intervals. The black line and shaded area represent the theoretical limit of detection at a \ac{vaf} of 0.2\%.}
+	\label{fig:age-at-onset-vs-growth}
 \end{figure}
 
 There was the possibility --- as previously discussed in the previous chapter --- that our estimates, particularly those associated with \ac{u2af1} and \ac{srsf2}-P95H, could be due to a particularly convenient set of values for the population size and number of generations per year. To better clarify this, I also show that this particular age bias remains for a wide array of possible values for the population size and generation time (\figref{fig:ages-at-onset-benchmark}). Additionally, it is possible that our choice of parameters does not allow us to detect the late clonal onset of other drivers, particularly those in \ac{ptpn11} for which there appears to be a bias for a later age at clone onset; however, further studies will have to be conducted to assess this.
@@ -376,7 +401,15 @@ There was the possibility --- as previously discussed in the previous chapter --
 	\label{fig:ages-at-onset-benchmark}
 \end{figure}
 
-\subsection{Clone fitness and its relationship to progression}
+While no association was observable between smoking history and clonal dynamics, I attempted to see if an association could be detected between clone onset and smoking, in order to better understand if the association between smoking and \ac{ch} was mediated by an increased mutation rate, rather than by a change in clonal fitness. However, I found no changes in the distributions for the age at clone onset between individuals smoking during the age at clone acquisition and otherwise (\figref{fig:smoking-age-density}).
+
+\begin{figure}[!ht]
+	\placefigure{gfx/dynamics-2/smoking-age-density.pdf}
+	\placecaption{Age at onset distribution stratified by whether the individuals were smoking at the time of clonal acquisiton.}
+	\label{fig:smoking-age-density}
+\end{figure}
+
+\subsection{Clone fitness and its relation to progression}
 
 The final part of this project focused on analysing whether there was a more concrete connection between the observed growth effects during old age. To this effect, I used the risk coefficients for \ac{aml} onset from \cite{Abelson2018-wh} and the dN/dS values calculated for different sites by Margarete Fabre in a \ac{mds} cohort and in an \ac{aml} cohort to verify whether any association was present between these values --- \ac{aml} risk and selection in \ac{mds} and \ac{aml}, respectively --- and the observed growth rate during old age. As shown in \figref{fig:ch-risk-selection}, there is a clear association between \ac{aml} risk and annual growth rate during old age (\missing{R value}) and between selection in \ac{mds} and \ac{aml} and annual growth rate.
 
@@ -390,11 +423,23 @@ The final part of this project focused on analysing whether there was a more con
 
 \section{Discussion}
 
-% Talking points:
+In this work I present a comprehensive study of the dynamics of \ac{ch} by using longitudinal targeted sequencing data and phylogenetic trees derived from single-cell colonies. By doing so, I present distinct growth coefficients that depend on gene identity, as well as a clear perspective on the variability associated with each gene. Additionally, I show that, while clonal trajectories are very consistent during old age, they decelerate over life, an effect that is likely to be associated with an increasingly competitive oligoclonal landscape. I also show how most clones appear consistently through life, except those characterized by mutations in \ac{u2af1} and \ac{srsf2}-P95H. Finally, I show how selection in myeloid malignancies and risk of progression to \ac{aml} is associated with dynamics.
 
-% - TET2 with age (inflammation, inflamaging)
-% - No association between ASXL1 UC and smoking - so smoking just helps mutations fixate rather than make them more fit?
-% - why does jak2 trajectories so wobbly? upd, maybe other factors?
+A striking aspect of this analysis arises when considering \ac{dnmt3a} and \ac{tet2}, the two most frequently mutated genes in this cohort (\figref{fig:ch-prevalence-genes}), with both showing up among the most mutated genes in \ac{ch} across several studies \cite{Jaiswal2014-rl,Genovese2014-eu,Dawoud2020-af}: while \ac{dnmt3a} shows very clear signs of deceleration as evidenced in both targeted sequencing data and phylogenetic trees (\figref{fig:historical-growth-tally}; \figref{fig:trajectories-fabre-mitchell}), \ac{tet2} is not nearly as affected by this; in fact, here I show how the prevalence of \ac{tet2} increases with age, whereas that of \ac{dnmt3a} shows no clear sign of being affected by age. A number of reasons can be associated with this: the most obvious one would be that \ac{dnmt3a} clones are simply less fit than \ac{tet2} clones while being exposed to similar mutational stimuli --- \ac{dnmt3a} being less fit than \ac{tet2} would not only translate in \ac{tet2} clones outcompeting \ac{dnmt3a} clones; in fact, it would result in \ac{dnmt3a} being much more prominently affected by rises in the average fitness of the population in relative terms. On top of this, links have been established between infection or inflammation and both \ac{dnmt3a} \cite{Hormaechea_Agulla2019-cd,Hormaechea-Agulla2021-kr} and \ac{tet2} \cite{Cai2018-yi} growth, making it complicated to assign phenomenona such as inflammaging to the differences between both genes \cite{Franceschi2018-be}. However, recent work on \ac{mca} in \ac{ch} and its association with specific mutations has shown that \ac{tet2} is associated with \ac{cnloh} events in the same chromosome as \ac{tet2}. Simply put, \ac{cnloh} happens when, during cell division, chromosome segregation leads to there being two copies of a previously heterozygous mutation in the same cell, resulting in two cells with two and no copies of the mutation, respectively. These events, which are impossible to call given my data, can contribute to the incorrect estimation of the fraction of cells harbouring a \ac{tet2} mutation (if a mutation is homozygous rather heterozygous, the counts would have to be adjusted) and potentially an overestimation of the fitness of clones harbouring such events, particularly considering that these events increase the risk of \ac{aml} \cite{Gao2021-ph}, which is itself associated with clonal dynamics as demonstrated above. Additionally, \ac{dnmt3a} loss-of-function is more heavily associated with increasing \ac{hsc} self-renewal and decreasing differentiation \cite{Jeong2018-pn}, whereas \ac{tet2} loss-of-function leads to an increased myeloid-differentiation bias \cite{Zhang2016-ys}. These effects combined may explain why \ac{dnmt3a} mutations become increasingly less detectable in blood while \ac{tet2} overtakes it as the most prevalent gene. If this is the case and considering that I found no difference between truncating and missense mutations (\figref{fig:ch-trunc}) in both \ac{tet2} and \ac{dnmt3a}, this effect may also impact mutations in these genes which do not lead to loss-of-function. These effects, combined with deceleration, may also explain the discrepancies between this work and that by \etal{Watson} --- while the average lifelong fitness conferred by \ac{dnmt3a} mutations is relatively high, its growth during older ages is much slower than expected given its \ac{vaf} distribution during old age.
+
+Mutations in \ac{u2af1} and \ac{srsf2}-P95H were the ones conferring the highest fitness advantage to clones and appearing only at relatively old ages in contrast with other genes which appeared consistently over life, explaining the previously reported later onset of splicing gene mutations \cite{McKerrell2015-rl}. This particular age bias is further highlighted once their prevalence across other myeloid conditions is considered \cite{fig:prevalence-srsf2-p95h-u2af1} --- while mutations in these drivers appear at a relatively low prevalence in our cohort when compared with haematological malignancies, it is considerably higher than that observable in other studies concerning \ac{ch}, which may be attributable to the fact that this cohort is on average older than other cohorts. Mutations in these genes have also been shown to be practically absent from cases of juvenile or paediatric haematological malignancies, appearing only in adult cases \cite{Kar2013-nw,Takita2012-yo}, a possible consequence of the later age at onset. Specifically considering \ac{srsf2}-P95H, it is worth highlighting that other recurring \ac{srsf2} mutations --- P95A and P95L --- confer a considerably smaller fitness advantage when compared with P95H. This is striking because all three mutations affect the same residue, a proline which interacts directly with \ac{rna} and is responsible for exon recognition \cite{Daubner2012-zp,Kim2015-qz}. P95H, however, is responsible for the most striking changes when considering the number of affected sites \cite{Rahman2020-bh,Zhang2015-xu}. A possible factor contributing to the difference between P95H and other P95 mutations is the fact that a change from proline to histidine is much more dramatic in terms of amino acid polarity when compared with changes to alanine or leucine. Mutations in \ac{ptpn11} are also worthy of some attention --- similarly to \ac{u2af1} and \ac{srsf2}-P95H, these mutations confer a considerable fitness advantage and are associated with syndromes which predispose to oncological diseases \cite{Digilio2002-nq,Tartaglia2001-ru,Kratz2005-qh}, making their prevalence in this cohort --- 2.3\% --- quite surprising.
+
+\begin{figure}[!ht]
+	\placefigure{gfx/dynamics-2/prevalence-srsf2-p95h-u2af1.pdf}
+	\placecaption{Prevalence of \textit{SRSF2}-P95H (top) and \textit{U2AF1} across different conditions, in other \ac{ch} studies and in the cohort used in to study clonal dynamics in this dissertation. Data sources were collated from different sources: \textit{U2AF1} prevalence in \ac{aml} \cite{Bamopoulos2020-zx}, in \ac{mds} \cite{Wang2020-dr}, in \ac{cmml} \cite{Kar2013-nw}; \textit{SRSF2} in \ac{mds} \cite{Arbab_Jafari2018-st}, in \ac{aml} \cite{Bamopoulos2020-zx}, \textit{U2AF1} and \textit{SRSF2} prevalence in \ac{ch} \cite{Jaiswal2014-rl,Genovese2014-eu,McKerrell2015-rl,Zink2017-zi,Acuna-Hidalgo2017-ng,Young2016-du,Midic2020-zh,Young2019-rz}. To obtain probability of an individual harbouring a mutation on either \ac{srsf2} or \ac{u2af1} of myeloid origin I marginalize the other probabilities ($P(mut_{myeloid}) = P(mut|AML)P(AML) + P(mut|CMML)P(CMML) + P(mut|MDS)P(MDS) + P(mut|CH)P(CH)$).}
+	\label{fig:prevalence-srsf2-p95h-u2af1}
+\end{figure}
+
+The fact that several expansions in the phylogenetic trees derived for this study have no known driver is also worth highlighting (5 out of 8; \figref{fig:tree-pd34493}; \figref{fig:tree-fig:tree-pd41305}; \figref{fig:tree-pd42176}). This further contributes to the increasingly common knowledge that \ac{ch} is still vastly understudied, similarly to what has been reported elsewhere \cite{Poon2020-ek,Zink2017-zi} and highlights one of the shortcomings of this study --- while focusing on a small panel is considerably more feasible from an economic and labour perspective, it does not permit a comprehensive genetic characterization of \ac{ch} at the genome level or of structural variants \cite{Gao2021-ph,Terao2020-dd,Loh2020-vz,Loh2018-xp}. This could have been relevant to better understand the relative advantage of \ac{tet2} mutations over \ac{dnmt3a} or of \ac{ppm1d} mutations, both of which are associated with \ac{mca} events on the chromosome where they are located. Additional copy-number characterization would have helped to decipher the reason for \ac{jak2} trajectories to be so prone to have a non-constant growth rate as it would have allowed us to detect uni-parental disomy events, frequently associated with \ac{jak2} \cite{Wang2014-qz}. Having access to copy-number information could have also helped in assigning mutations to specific clones, rather than assuming that mutations are mutually exclusive in the same individual. In any case, this is likely to be true for most clones \cite{Miles2020-fz}, but one should expect deviations from this. 
+
+Deceleration appears to be a phenomenon affecting most clones and can have a wealth of possible explanations --- while these have been explored above for \ac{dnmt3a} clones, it still is necessary to highlight a few other factors that may lead to a decreased ability for clones to reach their theoretical carrying capacity. Firstly, the most likely solution is that drivers which we are unable to detect are responsible for filling the bone marrow since, as mentioned, a large fraction of \ac{ch} remains unexplored. Additionally, it is important to consider that the bone marrow is not as homogeneous as we assume it to be --- the stem cell niche, where \ac{hsc} are known to thrive, gets depleted in a non-homogeneous manner as individuals grow older \cite{Crane2017-hl}; it might the case that a clone could be fit enough to out-compete others but has no space where its growth could be viable due to an inability in fostering the constitution or restitution of an adequate stem cell niche. Indeed, the vasculature that enables the existence of stem cell niches is negatively affected by age, which would reduce the ability of \ac{hsc} to exist in the bone marrow \cite{Tanaka2017-pu,Wang2017-rg}. Additionally, the \ac{hsc} population increases considerably with age, as does the myeloid-to-lymphoid bias in cell differentiation \cite{Pang2011-dw}, which can simply lead to a greater denominator concerning the calculation of \ac{vaf} if this expansion happens only in specific sites of the bone marrow --- in a scenario where panmixis is not possible and the population is not homogeneous, a clone may be unable to grow because the local stem cell niche does not permit it, while other regions are still capable of driving clonal expansions. Finally, it is worth considering that murine studies show that an event of \ac{hsc} depletion does not cause considerable harm to the body's ability to produce blood cells, with progenitors and short-term \ac{hsc} playing a key role in the production of peripheral blood cells --- a consistent shift from a predominantly \ac{hsc} population to one composed of progenitors incapable of consistent long-term self-renewal could be responsible for the apparent slowing down of clones without any of them reaching the carrying capacity of the bone marrow \cite{Schoedel2016-bi,Mitchell2021-zl}.
+
+Finally, the association between clonal dynamics and both \ac{aml} onset risk and selection in \ac{aml} and \ac{mds} highlights the connection between a clone's ability to expand within the \ac{hsc} population and transformation and progression to disease, and how this may be unrelated to the relative prevalence of different mutations --- while \ac{tet2} and \ac{dnmt3a} are highly prevalent in \ac{ch}, both their clonal dynamics and their contribution to disease progression are considerably lower than those of \ac{u2af1} and \ac{srsf2}. This has the potential to help clinicians in further stratifying \ac{ch} --- for instance, while a relatively large \ac{dnmt3a} clone may be of little importance, a large \ac{u2af1} clones would warrant closer monitoring of disease progression.
 
 \section{Code availability}
 

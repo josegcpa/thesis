@@ -20,7 +20,7 @@
 \usepackage{multicol} % multiple columns on samae page
 \usepackage{enumitem} %allows itemize environment adjustments
 \usepackage{setspace} % one and half spacing as per UCam requirements
-\onehalfspacing
+\doublespacing % \onehalfspacing
 \usepackage[skip=25pt,labelfont=bf,font=small]{caption}
 
 \setlength{\parskip}{0pt}
@@ -67,6 +67,8 @@
 
 \newcommand*{\figref}[1]{\hyperref[{#1}]{\textbf{Figure~\ref*{#1}}}}
 \newcommand*{\tableref}[1]{\hyperref[{#1}]{\textbf{Table~\ref*{#1}}}}
+\newcommand*{\supfigref}[1]{\hyperref[{#1}]{\textbf{Supplementary Figure~\ref*{#1}}}}
+\newcommand*{\suptableref}[1]{\hyperref[{#1}]{\textbf{Supplementary Table~\ref*{#1}}}}
 
 % making two column list of acronyms
 \newlist{acronyms}{description}{1}

@@ -12,9 +12,7 @@
 
 \begin{document}
     \pgfplotsset{compat=1.16}
-    % Custom hyphenation rules need to be declared AFTER \begin{document}!
         
-    %\maketitle
     \input{title-page}
     
     \frontmatter
@@ -33,9 +31,9 @@
         \end{footnotesize}
     \end{flushleft}
     
-    \input{acknowledgements}
+    %\input{acknowledgements}
     
-    \input{abstract}
+    %\input{abstract}
     
     \mainmatter
     
@@ -43,12 +41,16 @@
     
     %\input{dynamics-1}
     
-    \input{dynamics-2}
+    %\input{dynamics-2}  
 
     \input{cytomorphology}
 
     \input{conclusion}
     
+    \appendix
+    
+    \input{appendix-lod}
+
     \backmatter
     
     \printbibliography
