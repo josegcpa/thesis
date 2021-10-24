@@ -113,11 +113,11 @@ Considering that \ac{wbc} are more variable than \ac{rbc}, I trained a U-Net mod
 
 Training in any case was performed with data-augmentation --- particularly, random alterations to the brightness, saturation, hue and contrast were introduced to each image (10\%, 10\%, 5\% and 10\%, respectively), random Gaussian noise with a standard deviation of 0.005 was added to the image, each image had the probability of being slightly blurred with a Gaussian filter (probability of 0.1\%; standard deviation of 0.005) and random JPEG compression artefacts were added. Additionally, each image is warped using a random elastic transform as suggested in the original U-Net paper \cite{Ronneberger2015-do} --- this creates small, local distortions to the image, increasing the amount of \ac{wbc} shape variability during training. 
 
-In this work I also segment the nucleus of WBC. To this effect, I use the knowledge that the nucleus is darker than the rest of the WBC and, to segment it, I cluster the pixels on each segmented WBC using k-means clustering and two separate clusters, taking inspiration from a wealth of WBC segmentation techniques that are discussed elsewhere \cite{Andrade2019-qv}. Through this we can easily assign each pixel to the darkest (nucleus) or brightest (cytoplasm) part of the image.
+In this work I also segment the nucleus of WBC. To this effect, I use the knowledge that the nucleus is darker than the rest of the WBC and, to segment it, I cluster the pixels on each segmented WBC using k-means clustering and two separate clusters, taking inspiration from a wealth of WBC segmentation techniques that are discussed elsewhere \cite{Andrade2019-qv}. Through this I can easily assign each pixel to the darkest (nucleus) or brightest (cytoplasm) part of the image.
 
 \subsubsection{Characterization of blood cells}
 
-After detecting and adequately segmenting each cell as detailed in the previous section of the methods, we calculate for each cell a set of morphological descriptors. The descriptors used here were implemented in a custom Python script but the large majority of them are also present in bioimage analysis software programs \cite{Carpenter2006-hy,Sommer2011-ds} or described in publications reviewing morphometry in image analysis \cite{Mingqiang2008-wv}. Using the features described in \tableref{table:features}, I describe every RBC and WBC. Additionally, for each WBC we characterize its nucleus using a reduced set of features, also detailed in \tableref{table:features}. Finally, we get 53 features for each WBC (42 for the cellular characterization and 11 for the nuclear characterization) and 42 features for each RBC. To account for the different resolutions (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for \missing{scanner name}) we rescale the cells in AC2 by a factor of 1.1098.
+After detecting and adequately segmenting each cell as detailed in the previous section of the methods, I calculate for each cell a set of morphological descriptors. The descriptors used here were implemented in a custom Python script but the large majority of them are also present in bioimage analysis software programs \cite{Carpenter2006-hy,Sommer2011-ds} or described in publications reviewing morphometry in image analysis \cite{Mingqiang2008-wv}. Using the features described in \tableref{table:features}, I describe every RBC and WBC. Additionally, for each WBC I characterize its nucleus using a reduced set of features, also detailed in \tableref{table:features}. Finally, each \ac{wbc} is described by 53 features (42 for the cellular characterization and 11 for the nuclear characterization) and each \ac{rbc} by 42 features. To account for the different resolutions (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for \missing{scanner name}) I rescale each cell image in AC2 by a factor of 1.1098 prior to their characterization.
 
 \begin{table}[!ht]
     \centering
@@ -152,7 +152,7 @@ Summarily, the pipeline for blood cell detection, implemented in Python and mana
 \begin{enumerate}
     \item Each $512*512$ tile is classified as being of poor or good quality and this classification is stored as a comma-separated values files;
     \item Each good quality tile is analysed using the \ac{rbc} and \ac{wbc} detection protocols and tile regions containing cells are stored in separate HDF5 files (one for \ac{rbc}, another for \ac{wbc}), thus enabling quick access;
-    \item Each cell on each of the HDF5 files described in the point above is characterized using separate protocols
+    \item Each cell on each of the HDF5 files described in the point above is characterized using separate protocols:
     \begin{itemize}
         \item The \ac{wbc} characterization protocol first segments the nucleus and then characterizes the whole cell and the nucleus separately
         \item The \ac{rbc} characterization protocol only characterizes the whole cell.
@@ -160,7 +160,7 @@ Summarily, the pipeline for blood cell detection, implemented in Python and mana
     \item The mean and variance of each feature is calculated.
 \end{enumerate}
 
-All \ac{dl} networks are implemented using Tensorflow 2.0 \cite{tensorflow2015-whitepaper} and are available through Github (Code Availability statement is presented at the end of this chapter). \Ac{cv} operations were implemented using both OpenCV2 \cite{opencv_library} and scikit-learn \cite{van2014scikit}, and slide I/O operations were handled by OpenSlide \cite{Goode2013-zs}. Two distinct pipelines were implemented --- one as described above and one where images were FAN-transformed before step 2.
+All \ac{dl} networks are implemented using Tensorflow 2.0 \cite{tensorflow2015-whitepaper} and are available through Github (Code Availability statement is presented at the end of this chapter). \Ac{cv} operations were implemented using both OpenCV2 \cite{opencv_library} and scikit-image \cite{van2014scikit}, and slide I/O operations were handled by OpenSlide \cite{Goode2013-zs}. Two distinct pipelines were implemented --- one as described above and one where images were FAN-transformed before step 2.
 
 \section{Methods for the prediction of clinical conditions using collections of cells}
 
@@ -169,11 +169,11 @@ In this work, I defined four distinct tasks to assess how well computational cyt
 \begin{enumerate}
     \item Disease detection - identifying the presence of either anaemia or \ac{mds} (easy for trained experts);
     \item Disease classification - distinguishing between anaemia and \ac{mds} (hard for trained experts - anaemia can be a symptom of \ac{mds});
-    \item SF3B1mut MDS detection - distinguishing between \ac{sf3b1}-mutant \ac{mds} and other subtypes of MDS (hard for trained experts - no known morphological manifestation of \ac{sf3b1} mutations exist);
+    \item SF3B1mut \ac{mds} detection - distinguishing between \ac{sf3b1}-mutant \ac{mds} and other subtypes of MDS (hard for trained experts - no known morphological manifestation of \ac{sf3b1} mutations exist);
     \item Anaemia classification - distinguishing between iron deficiency anaemia and megaloblastic anaemia (easy for trained experts).
 \end{enumerate}
 
-In addition to the cytomorphological features already described, I also had access to a few \ac{cbc} parameters, particularly \ac{wbc} counts (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL). In this work, I also assessed their impact on the predictive performance of all the classification methods.
+In addition to the cytomorphological features already described, I also had access to a few \ac{cbc} parameters, particularly \ac{wbcc} (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL). In this work, I also assessed their impact on the predictive performance of all the classification methods.
 
 \subsection{Classification using supervised classification methods}
 
@@ -195,13 +195,23 @@ While traditional algorithms for supervised \ac{ml}, are dedicated to learning a
 
 \subsubsection{Model specification}
 
+Consider a \ac{wbs} $W$ characterized as a set of $n$ cells $W=\{c_1,c_2,...,c_n\}$, with each cell characterized by a vector of $f$ features. A function $C$ maps each cell $c_i$ to a concept (virtual cell) $v_i$ given a vocabulary $theta$ with $m$ concepts such that $v_i = C(c_i,\theta)$, with $\sum_{j=1}^m{v_i} = 1$ --- in other words $v_i$ describes the membership of $c_i$ to a set of $m$ concepts. As such, each \ac{wbs} is now characterized as a set of $n$ concept memberships $W'=\{v_1,v_2,...,v_n\}$. Having identified the concept to which each cell belongs to, it is now possible to calculate the proportion of concepts in $W$ by calculating $V = \frac{1}{n}\sum_{i=1}^n{v_i}$. This vector of proportions can now be used to calculate the probability $p$ of $W$ having been prepared from an individual with one of $k$ conditions such that $p = P(V)$.
+
+I am interested in learning $C$ and $P$ at the same time, thus enabling this approach to both predict conditions from specific slides and learn which virtual cell types are relevant to do so. As such, I need to define $C$ and $P$ in a way that allows concurrent optimization. I also need to consider that there are \ac{wbs} with tens or hundreds of thousands of detected  cells. Because of this, I am interested in selecting a method that enables randomly selected subsets of cells to be used in each training iteration in such a way that converges towards an optimal solution.  Finally, I have to consider the fact that I am interested in characterizing \ac{wbs} and \ac{rbc}. To this end, I parametrize $C_{WBC}$, $C_{RBC}$ and $P$ as linear functions with softmax transforms, such that $C_{WBC}$ and $C_{RBC}$ takes vectors of features characterizing \ac{wbc} $wbc_i$ and \ac{rbc} $rbc_j$, respectively, with each producing a vector of length $m$ containing the probabilities of $wbc_i$ and $rbc_j$ belonging to a specific virtual cell from two distinct vocabularies characterizing \ac{wbc} and \ac{rbc} - $v_{WBC(i)}$ and $v_{RBC(j)}$, respectively. $P$ takes the concatenated vector of virtual cell proportions for \ac{wbc} and \ac{rbc} $V=concatenate([VWBC,VRBC])$ and produces a prediction $p$. 
+
+This formulation also enables the concatenation of additional information - such as blood counts - to $V$ and guarantees that the entire system can be optimized using stochastic gradient descent, also enabling the utilization of randomly selected subsets of \ac{wbc} and \ac{rbc} on each training step. The missing element in this system is defining the optimal number of virtual cell types; I consider this to be a hyperparameter in this model.
+
 \subsubsection{Model optimization}
 
-\subsubsection{From virtual cell types to cellular archetypes}
+I test each task using different numbers of virtual cell types - \missing{confirm this} [5, 10, 25, 40, 50] - assuming that both WBC and RBC can be clustered into the same number of virtual cells. While leading to redundancy, I note that it is possible to cluster different virtual cell types to yield a more compact set of virtual cell types. I also test whether blood counts (WBC counts (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL)) and demographic information (male sex - as a binary variable - and age) improve the classification performance off MILe-ViCe. I standardise (mean = 0 and standard deviation = 1) all additional continuous variables - \ac{wbcc}, haemoglobin concentration, platelet counts or age.
 
-% s\subsubsection{}
+From solving these four tasks separately, I can expect the best possible outcome to be four separate models, each of which is primed to solve its task and to identify virtual cell types which are relevant for the detection of a specific condition. However, I may also be interested in the virtual cell types which are exclusively useful for one task; to this effect, I also train a network that optimises all four tasks at the same time while for all four tasks a single method for virtual cell classification. In other words, I optimise our model using multi-objective learning. To do so, in each training step and for each of the four tasks I sampled a set of relevant WBS to be considered, predicted the outcome class and calculated the cross-entropy. We then add all four loss values after multiplying them by a vector sampled from a Dirichlet distribution with concentration [1,1,1,1], a trick proposed in \cite{Ruchte2021-ch} to approximate Pareto optimality (i.e. no improvement can be done to one task without making a different task worse \cite{Censor1977-nd}) and backpropagate this value. For this scenario I also test the inclusion of blood counts and demographic information in the final vector $V$.
 
-% Weakly supervised learning
+To select the best model in each iteration I use a combination of the cross-validated \ac{auroc}. To get these cross-validated scores, each model is trained over 5 folds and the average value and standard error of each metric is calculated. In each fold, a model is optimised for a maximum 15,000 steps with a learning rate of 0.001 and a weight decay of 0.005. We use a weighted cross-entropy loss and the Adam optimizer \cite{Kingma2014-zd}. The weight for the positive class is calculated as $1 - \frac{no.\ elements\ in\ positive\ class}{total\ number\ of\ elements}$. Additionally, the learning rate is decreased every time the training loss stagnates for at least 100 steps by a factor of 0.85. If the learning rate reaches a value of 0.000001 (smaller than the initial learning rate by a factor of 1,000).
+
+For external validation of all four tasks mentioned above (with and with blood counts and demographic data), AC2 was used. The \ac{auroc} was assessed as a measure of predictive performance that is insensitive to calibration. 
+
+\subsection{Statistical analysis}
 
 \section{Results}
 
