@@ -1,0 +1,18 @@
+name,ab,f,p,chr
+Deoxyribonucleic acid (DNA) (cytosine-5)-methyltransferase 3A,DNMT3A,Epigenetic modifications,0.6126 (0.0098-2.9000),2p23.3
+Tet methylcytosine dioxygenase 2,TET2,Epigenetic modifications,0.3487 (0.0025-1.6176),4q24
+ASXL transcriptional regulator 1,ASXL1,Epigenetic modifications,0.0663 (0.0020-0.3529),20q11.21
+CCCTC-binding factor,CTCF,Epigenetic modifications,0.0003 (0.0000-0.0009),16q22.1
+KRAS proto-oncogene GTPase,KRAS,Cell cycle regulation,0.0314 (0.0000-0.2500),12p12.1
+Janus kinase 2,JAK2,Cell cycle regulation,0.0176 (0.0000-0.1176),9p24.1
+Protein tyrosine phosphatase non-receptor type 11,PTPN11,Cell cycle regulation,0.0067 (0.0000-0.0294),12q24.13
+Tumor protein P53,TP53,DNA damage regulation,0.0723 (0.0000-0.3000),17p13.1
+Protein phosphatase Mg2+/Mn2+ dependent 1D,PPM1D,DNA damage regulation,0.0153 (0.0012-0.0482),17q23.2
+BRCA1/BRCA2-containing complex subunit 3,BRCC3,DNA damage regulation,0.0003 (0.0000-0.0005),Xq28
+Splicing factor 3b subunit 1,SF3B1,Splicing factors,0.0211 (0.0000-0.1471),2q33.1
+Serine and arginine rich splicing factor 2,SRSF2,Splicing factors,0.0155 (0.0000-0.0882),17q25.1
+U2 small nuclear RNA auxiliary factor 1,U2AF1,Splicing factors,0.0127 (0.0000-0.0882),21q22.3
+Isocitrate dehydrogenase (NADP+) 2,IDH2,Glucose metabolism,0.0132 (0.0000-0.0882),15q26.1
+Isocitrate dehydrogenase (NADP+) 1,IDH1,Glucose metabolism,0.0039 (0.0000-0.0294),2q34
+G protein subunit beta 1,GNB1,G-protein coupled receptor-mediated signaling,0.0009 (0.0000-0.0020),1p36.33
+Cbl proto-oncogene,CBL,Protein degradation,0.0493 (0.0002-0.1765),11q23.3

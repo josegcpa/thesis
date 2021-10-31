@@ -1,0 +1,18 @@
+name,abbreviation,function,Jaiswal 2014,Genovese 2014,Young 2016,McKerrel 2015,Zink 2017,Acuna-Hidalgo 2017,Coombs 2017 (therapy-related),Desai 2018 (controls),Desai 2018 (prog. to AML),Young 2019 (controls),Young 2019 (prog. to AML),Bolton 2020 (therapy-related)
+ASXL transcriptional regulator 1,ASXL1,Epigenetic modifications,0.003923802,0.002827141,0.15,nan,0.002575031,0.001994018,0.028677642,0.033149171,0.031914894,0.115942029,0.352941177,0.005018401
+BRCA1/BRCA2-containing complex subunit 3,BRCC3,DNA damage regulation,0.000379723,0,nan,nan,nan,0.000498504,nan,nan,nan,nan,nan,nan
+Cbl proto-oncogene,CBL,Protein degradation,0.000759446,0.000242326,0.15,nan,0.000266383,0.006480558,0.007257922,nan,nan,0.101449275,0.176470588,0.00117096
+CCCTC-binding factor,CTCF,Epigenetic modifications,0,0,nan,nan,nan,nan,0.000885112,nan,nan,nan,nan,0.00016728
+Deoxyribonucleic acid (DNA) (cytosine-5)-methyltransferase 3A,DNMT3A,Epigenetic modifications,0.025504715,0.015347334,2.9,0.01155643,0.009767359,0.067298106,0.193131528,0.187845304,0.367021277,1.855072464,1.676470588,0.041987287
+G protein subunit beta 1,GNB1,G-protein coupled receptor-mediated signaling,0.001392317,0,nan,nan,8.88E-05,0.001994018,nan,nan,nan,nan,nan,nan
+Isocitrate dehydrogenase (NADP+) 1,IDH1,Glucose metabolism,0,0,0,0.000776096,0,0,0.000885112,0,0.015957447,0,0.029411765,0.00033456
+Isocitrate dehydrogenase (NADP+) 2,IDH2,Glucose metabolism,0.000189861,8.08E-05,0,0.000388048,0.000177588,0.000997009,0.00424854,0,0.063829787,0,0.088235294,0.00050184
+Janus kinase 2,JAK2,Cell cycle regulation,0.001961901,0.001938611,0,0.006147037,0.000799148,0.003489531,0.005310674,0.005524862,0.053191489,0.014492754,0.117647059,0.00066912
+KRAS proto-oncogene GTPase,KRAS,Cell cycle regulation/glucose metabolism,0.000189861,0,0.25,0.00076746,0,0.001495513,0.00212427,nan,nan,0.028985507,0.029411765,0.00066912
+Protein phosphatase Mg2+/Mn2+ dependent 1D,PPM1D,DNA damage regulation,nan,0.001211632,nan,nan,0.001775884,nan,0.048150115,nan,nan,nan,nan,0.010204082
+Protein tyrosine phosphatase non-receptor type 11,PTPN11,Cell cycle regulation,0.000189861,0,0,nan,0,0.001495513,0.000354045,nan,nan,0.028985507,0.029411765,0
+Splicing factor 3b subunit 1,SF3B1,Splicing factors,0.001708753,0.001050081,0,0.006984866,0.000887942,0.000997009,0.008320057,0.011049724,0.058510638,0.014492754,0.147058824,0.00267648
+Serine and arginine rich splicing factor 2,SRSF2,Splicing factors,0.000696158,0.000565428,0,0.005044626,0.000621559,0.000997009,0.004425562,0,0.069148936,0.014492754,0.088235294,0.0016728
+Tet methylcytosine dioxygenase 2,TET2,Epigenetic modifications,0.004556674,0.002504039,1,nan,0.008524241,0.005483549,0.066206408,0.055248619,0.25,0.811594203,1.617647059,0.013716962
+Tumor protein P53,TP53,DNA damage regulator,0.002088475,0.000323102,0.3,nan,0.001864678,0.00448654,0.02000354,0,0.111702128,0.202898551,0.147058824,0.004851121
+U2 small nuclear RNA auxiliary factor 1,U2AF1,Splicing factors,0.000316436,8.08E-05,0,nan,0.000177588,0.000498504,0.00354045,0,0.031914894,0.014492754,0.088235294,0.00033456
