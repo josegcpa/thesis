@@ -14,7 +14,7 @@ A recent work showed how previously established cytomorphological descriptions o
 
 Before describing the computational method briefly introduced above, it is necessary to highlight a few recurring features which come into play when training \ac{dl} models, especially in conditions where data acquisition and annotation is complicated. Particularly, it is worth highlighting that these methods, while extremely powerful, require vast amounts of data during training. This is a strategy that generically ensures the success of data-driven approaches --- by using increasingly larger amounts of data from diverse sources and sites, it is more likely that the model will generalize to newer data. However, in the life and biomedical sciences, this represents a circumstance which can be prohibitive, these fields are typically characterized either by the cumbersome and laborious acquisition and/or labelling of digital data and by the heavily biased acquisition of data. While the former is more easily solvable through training and given sufficient time, the latter is more complicated --- anecdotally, it was in 2016 that Yoshua Bengio advised against the training of more radiologists as they would soon (in 5 years) be outcompeted by artificial intelligence \cite{Creative_Destruction_Lab2016-zf} and in 2017 that Andrew Ng first hailed the end of the radiology profession \cite{Ng2017-tz}, but these rumours were greatly exaggerated. Indeed, it is quite common to see \ac{dl} models dramatically lose performance when confronted with independent test sets (data which the model has never seen) when the task is to classify X-ray images (it should nonetheless be noted that radiologists may also perform poorly) \cite{Rajpurkar2021-bj}. The reason for this is fairly illustrative --- most cohorts will be derived from single centres, with the assembly of large, multi-centre cohorts of digitalized image data representing a fairly modern and recent endeavour --- examples of this include The Cancer Genome Atlas. The reason why multi-centre approaches became desirable is due to the high variability in technical aspects concerning staining, image quality and compression and scanning conditions and equipment \cite{Van_der_Laak2021-id}.
 
-To this effect, a classification model is not only concerned with learning a function of the data that returns the correct class; it should also be concerned in avoiding a relatively large drop in predictive performance on data that was not used to train the model due to overfitting --- the model learns a representation of the data that is perfect for the training data but relatively useless for new data --- and underfitting --- the model is far too simple and fails to capture the complex relationships that would allow it to correctly classify new examples. A more mathematically correct terminology for this would be to talk about the bias and variance of a model --- simply put, the bias measures the distance between predictions and target classes, whereas the variance measures differences in the trained model when different sets of data are used (i.e. if subsets of the training data are removed, how much does this impact the classification). Both of these are the two sides of the bias-variance trade-off --- it is not possible to maximize both at once, with low bias models running the risk of overfitting (high variance) and low variance models running the risk of underfitting (high bias) \cite{James2013-py}. While underfitting can be solved with a more complex parametrization of a model (in the case of \ac{dl} this often translates into increasing the number of parameters that the model has to learn), overfitting is slightly more complicated.
+A classification model is not only concerned with learning a function of the data that returns the correct class; it should also be concerned in avoiding a relatively large drop in predictive performance on data that was not used to train the model due to overfitting --- the model learns a representation of the data that is perfect for the training data but relatively useless for new data --- and underfitting --- the model is far too simple and fails to capture the complex relationships that would allow it to correctly classify new examples. A more mathematically correct terminology for this would be to talk about the bias and variance of a model --- simply put, the bias measures the distance between predictions and target classes, whereas the variance measures differences in the trained model when different sets of data are used (i.e. if subsets of the training data are removed, how much does this impact the classification). Both of these are the two sides of the bias-variance trade-off --- it is not possible to maximize both at once, with low bias models running the risk of overfitting (high variance) and low variance models running the risk of underfitting (high bias) \cite{James2013-py}. While underfitting can be solved with a more complex parametrization of a model (in the case of \ac{dl} this often translates into increasing the number of parameters that the model has to learn), overfitting is slightly more complicated.
 
 There are several ways to prevent overfitting when collecting or annotating more data is impossible. Some of these ways are more generic and can be applied to a diverse array of \ac{ml} models, whereas others are only applicable to models that work on image data. Regularization techniques belong to the former and their objective is to constrain or shrink coefficients, forcing models to learn much simpler representations of the data. More formally, given an optimization problem where the objective is to find a set of parameters $\theta$ that minimizes $l(X,y)$, an objective or loss function of the data $X$ and its corresponding annotations $y$ that measures the distance between predictions and target annotations (in other words, $\mathrm{arg min}_{\theta}l_{\theta}(X,y)$), the regularization will be concentrated on minimizing the magnitude of the coefficients. Typically, this regularization can be based on the $L_1$-norm ($L_1(\theta)$ regularization; $\sum_i^k{|\theta_i|}$) or on the $L_2$-norm ($L_2(\theta)$ regularization; $\sum_i^k{(\theta_i)^2}$) and, in the case of \ac{dl} and other gradient-descent based methods, can be added to the objective function when minimizing it, making it $\mathrm{arg min}_{\theta}(l_{\theta}(X,y)+\lambda L_2(\theta))$, where $\lambda$ is how much the regularization will contribute to the loss \cite{James2013-py}. The reason why I represented the $L_2$, rather than the $L_1$ regularization is because the standard application of gradient-descent algorithms require the loss function to be completely differentiable and $L_1$ is not differentiable whenever any parameter approximates $0$. Dropout is another method that can help in the training of \ac{dl} networks --- for each training iteration, a proportion $p$ of all neurons is randomly selected and set to $0$, forcing other neurons to learn representations which are both sparse and uncorrelated from those of other neurons \cite{Srivastava2014a}. Other methods which are fairly model-agnostic are those concerned with dimensionality reduction, where a low-dimensional and typically uncorrelated representation of the data is inferred using techniques such as principal component analysis. However useful these may be, I did not use them in this dissertation and, as such, will not further discuss them.
 
@@ -40,7 +40,7 @@ This work required access to a sufficiently large collection of \ac{wbs}. To thi
     \item textbf{AC2} --- 68 \ac{wbs} from individuals with \ac{mds} with mutations in either \ac{sf3b1}, \ac{srsf2}, \ac{u2af1} or \ac{runx1}, iron deficiency anaemia, megaloblastic anaemia and controls (digitalized by Dr. Emma Gudgin at the Munich Leukaemia Laboratory over two weeks with a Hamamatsu Nanozoomer 2.0). This cohort was used to validate the computational algorithms for predicting different clinical conditions.
 \end{itemize}
 
-For MLLC and AC2 I also had access to blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) and the age and sex of each individual. 
+For MLLC and AC2 I also had access to blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) and the age and sex of each individual. Each slide was inspected individually and, if there was a problem covering the entire slide (i.e. cellular density was too high across the whole slide or the digitalization resulted in a consistently blurry slide) this was removed from further analysis.
 
 \subsection{Computational detection and characterization of blood cells}
 
@@ -119,7 +119,7 @@ While simple, the protocol described above for \ac{rbc} detection can return obj
 
 \subsubsection{Detection of white blood cells}
 
-Considering that \ac{wbc} are more variable than \ac{rbc}, I trained a U-Net model \cite{Ronneberger2015-do} to segment \ac{wbc}. To this effect, I annotated all of \ac{wbc} in the 158 $2096*2096$ tiles mentioned above, yielding a total of 2853 annotated \ac{wbc}, 2747 of which were completely visible. To assess the performance of U-Net across all cohorts, I also labelled 2 images from MLLC (containing 60 \ac{wbc}) and 30 tiles from AC2 (containing 69 \ac{wbc}). Different architectures were tested to assess whether the depth (the number of retrieved features) of the network (i.e. the richness of the characterization) had a preponderant impact on the output; to this effect, different instances of a U-Net model were trained where the depths of each layer were multiplied by 1.0, 0.5 and 0.25 and rounded to the nearest integer. I trained each U-Net model on randomly rotated $512*512$ tiles extracted from the original tiles and an $L_2$-regularization of 0.005 with a weighted cross-entropy loss and using the Adam optimizer \cite{Kingma2014-zd} over 200 epochs. The learning rate for training was set to 0.0005 for depth multipliers of 0.25 and 0.5 and 0.0001 for the original depth (depth multiplier = 1). The weighted cross-entropy was weighted based on each pixel's relative distance to the nearest cell border --- particularly, the weight of pixels belonging to a cell was 1, whereas that of other pixels was calculated based on their distance to the nearest cell border $d$ as $w = 0.5 * (1-0.5)e^{-\frac{2d^2}{2*10^2}}$; in other words, pixels belonging to the cell and near the cell were more heavily considered during training as a mechanism to avoid the over-segmentation of cells (i.e. two cells being segmented as a single object) \cite{Ronneberger2015-do}. I also tested whether using \ac{tta} could improve results \cite{Moshkov2020-rc}, and assess the performance of all models at 75 to verify whether early stopping can lead to improved results in my case \cite{Prechelt2012-xf}. Additionally, to assess whether FAN-transforming images leads to improved results, I fine-tune the best performing U-Net architecture with FAN-transformed images with a learning rate of \missing{LR} for \missing{EPOCHS} epochs. 
+Considering that \ac{wbc} are more variable than \ac{rbc}, I trained a U-Net model \cite{Ronneberger2015-do} to segment \ac{wbc}. To this effect, I annotated all of \ac{wbc} in the 158 $2096*2096$ tiles mentioned above, yielding a total of 2853 annotated \ac{wbc}, 2747 of which were completely visible. To assess the performance of U-Net across all cohorts, I also labelled 2 images from MLLC (containing 60 \ac{wbc}) and 30 tiles from AC2 (containing 69 \ac{wbc}). Different architectures were tested to assess whether the depth (the number of retrieved features) of the network (i.e. the richness of the characterization) had a preponderant impact on the output; to this effect, different instances of a U-Net model were trained where the depths of each layer were multiplied by 1.0, 0.5 and 0.25 and rounded to the nearest integer. I trained each U-Net model on randomly rotated $512*512$ tiles extracted from the original tiles and an $L_2$-regularization of 0.005 with a weighted cross-entropy loss and using the Adam optimizer \cite{Kingma2014-zd} over 200 epochs. The learning rate for training was set to 0.0005 for depth multipliers of 0.25 and 0.5 and 0.0001 for the original depth (depth multiplier = 1). The weighted cross-entropy was weighted based on each pixel's relative distance to the nearest cell border --- particularly, the weight of pixels belonging to a cell was 1, whereas that of other pixels was calculated based on their distance to the nearest cell border $d$ as $w = 0.5 * (1-0.5)e^{-\frac{2d^2}{2*10^2}}$; in other words, pixels belonging to the cell and near the cell were more heavily considered during training as a mechanism to avoid the over-segmentation of cells (i.e. two cells being segmented as a single object) \cite{Ronneberger2015-do}. I also tested whether using \ac{tta} could improve results \cite{Moshkov2020-rc}, and assess the performance of all models at 75 to verify whether early stopping can lead to improved results in my case \cite{Prechelt2012-xf}. Additionally, to assess whether FAN-transforming images leads to improved results, I fine-tune the best performing U-Net architecture with FAN-transformed images with a learning rate of 0.00005 for 25 epochs. 
 
 Training in any case was performed with real-time data-augmentation --- particularly, random alterations to the brightness, saturation, hue and contrast were introduced to each image (10\%, 10\%, 5\% and 10\%, respectively), random Gaussian noise with a standard deviation of 0.005 was added to the image, each image had the probability of being slightly blurred with a Gaussian filter (probability of 0.1\%; standard deviation of 0.005) and random JPEG compression artefacts were added. Additionally, each image is warped using a random elastic transform as suggested in the original U-Net paper \cite{Ronneberger2015-do} --- this creates small, local warping distortions in the image, increasing the amount of \ac{wbc} shape variability during training. 
 
@@ -127,7 +127,7 @@ All models were evaluated based on their mean \ac{iou} on independent test sets 
 
 In this work I also segment the nucleus of WBC. To this effect, I use the knowledge that the nucleus is darker than the rest of the WBC and, to segment it, I cluster the pixels on each segmented WBC using k-means clustering and two separate clusters, taking inspiration from a wealth of WBC segmentation techniques that are discussed elsewhere \cite{Andrade2019-qv}. Through this I can easily assign each pixel to the darkest (nucleus) or brightest (cytoplasm) part of the image.
 
-During inference, I consider only objects with an area greater than 1000px and smaller than 8000px as being \ac{wbc}. These values were calculated from the size distribution of the \ac{wbc} I labelled for segmentation.
+During inference, I consider only objects with an area greater than 1000px and smaller than 8000px as being \ac{wbc}. These values were calculated from the size distribution of the \ac{wbc} I labelled for segmentation. Additionally, I use \ac{tta} to improve the robustness of the detected objects and to avoid segmenting objects on the edge of an image (which may be incomplete) I use a sliding window of size 640px with a 128px stride and remove objects detected as being on the edge of the sliding window. 
 
 \subsubsection{Characterization of blood cells}
 
@@ -183,7 +183,7 @@ In this work, I defined four distinct tasks to assess how well computational cyt
 \begin{enumerate}
     \item Disease detection --- identifying the presence of either anaemia or \ac{mds} (easy for trained experts);
     \item Disease classification --- distinguishing between anaemia and \ac{mds} (hard for trained experts --- anaemia can be a symptom of \ac{mds});
-    \item SF3B1mut \ac{mds} detection --- distinguishing between \ac{sf3b1}-mutant \ac{mds} and other subtypes of \ac{mds} (hard for trained experts --- no known morphological manifestation of \ac{sf3b1} mutations exist);
+    \item \ac{sf3b1}mut \ac{mds} detection --- distinguishing between \ac{sf3b1}-mutant \ac{mds} and other subtypes of \ac{mds} (hard for trained experts --- no known morphological manifestation of \ac{sf3b1} mutations exist);
     \item Anaemia classification --- distinguishing between iron deficiency anaemia and megaloblastic anaemia (easy for trained experts).
 \end{enumerate}
 
@@ -271,10 +271,10 @@ Finally, I also observe that \ac{sf3b1}-mutant \ac{mds} presents clinically dist
 
 \subsubsection{Deep-learning-assisted quality control}
 
-I trained a model based on DenseNet121 to classify whether individual tiles from slides were of good or poor quality (\figref{fig:slide-quality-examples}). Validation shows good predictive performance with an \ac{auroc} of \missing{value}, accuracy of \missing{value}, recall of \missing{value} and precision of \missing{value}. In other words, this model is better at identifying poor quality slides than good quality slides. The direction of this bias is desirable --- given the problem at hand (the morphologic characterization of \ac{wbc} and \ac{rbc}), it is better to avoid the detection of downstream false positives (i.e. objects in the \ac{wbs} which are not blood cells) so that no artefactual morphological signatures are detected.
+I trained a model based on DenseNet121 to classify whether individual tiles from slides were of good or poor quality (\figref{fig:slide-quality-examples}). Validation shows good predictive performance with an \ac{auroc} of 93.4\%, recall of 82.2\% and precision of 85.2\%. In other words, this model is better at identifying poor quality slides than good quality slides. This leads to a tolerable excess of false negatives when compared with false positives --- given the problem at hand (the morphologic characterization of \ac{wbc} and \ac{rbc}), it is preferable to avoid false positives as this also avoids the detection of downstream false positives (i.e. objects in the \ac{wbs} which are not blood cells), thus minimizing the detected artefactual morphological signatures.
 
 \begin{figure}[!ht]
-    \missing{IMAGE}
+    \placefigure{gfx/cytomorphology/slide-quality-examples.pdf}
     \placecaption{Examples of good and poor quality tiles used in training and testing with classifications.}
     \label{fig:slide-quality-examples}
 \end{figure}
@@ -282,8 +282,8 @@ I trained a model based on DenseNet121 to classify whether individual tiles from
 An overview of the slide regions classified as good quality further confirms the quality of the predictions \figref{fig:slide-quality-regions} --- mostly, the regions corresponding to the monolayer, a region of the slide where a good number of non-overlapping cells are observable and that is usually preferred for \ac{wbs} analysis by haematologists \cite{Adewoyin2014-vo}, is the one identified by this approach.
 
 \begin{figure}[!ht]
-    \missing{IMAGE}
-    \placecaption{Examples of regions of the slide labelled as being of good or poor quality.}
+    \placefigure{gfx/cytomorphology/slide-quality-regions.pdf}
+    \placecaption{Examples of regions of the slide labelled as being of good or poor quality (brighter regions on the quality map were predicted as being of good quality).}
     \label{fig:slide-quality-regions}
 \end{figure}
 
@@ -297,11 +297,11 @@ Individual \ac{rbc} were detected using a pipeline of relatively simple morpholo
     \label{fig:rbc-filter-examples}
 \end{figure}
 
-% stats on detected rbc, frequency, density, etc
+\missing{stats on detected rbc, frequency, density, etc}
 
 \subsubsection{White blood cell detection}
 
-The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015-do} trained on tiles from a few slides from AC1 and validated on tiles from other slides from AC1, MLLC and AC2. I tested different network sizes (multiplying the depth of all layers by a factor of 0.25, 0.5 and 1.0), showing that an intermediate (0.5) size yields the best results (\figref{fig:u-net-validation}). Additionally, it is clear that \ac{tta} improves results consistently (\missing{list average results here}), making it a simple yet effective addition to improve the results of my \ac{wbc} detection pipeline. Early stopping has been reported as an effective strategy to potentially improve the performance of \ac{dl} models \cite{Prechelt2012-xf}. However, in my case, using an earlier epoch did not lead to any improvements in the result (\figref{fig:u-net-early-stopping}) which, together with the performance in independent validation sets, hints that training for 100 epochs did not lead to overfitting. 
+The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015-do} trained on tiles from a few slides from AC1 and validated on tiles from other slides from AC1, MLLC and AC2. I tested different network sizes (multiplying the depth of all layers by a factor of 0.25, 0.5 and 1.0), showing that an intermediate (0.5) size yields the best results (\figref{fig:u-net-validation}) which generalize well to the other cohorts being studied \figref{fig:wbc-segmentation-good}. Additionally, it is clear that \ac{tta} improves results consistently (\missing{list average results here}), making it a simple yet effective addition to improve the results of my \ac{wbc} detection pipeline. This improvement stems mostly from the elimination of relatively small spurious and artefactual regions predicted as belonging to \ac{wbs} as visible in \figref{fig:wbc-segmentation-good}. Early stopping has been reported as an effective strategy to potentially improve the performance of \ac{dl} models \cite{Prechelt2012-xf}. However, in my case, using an earlier epoch did not lead to any improvements in the result (\figref{fig:u-net-early-stopping}) which, together with the performance in independent validation sets, hints that training for 100 epochs did not lead to overfitting. 
 
 \begin{figure}[!ht]
     \missing{Figure!}
@@ -315,7 +315,13 @@ The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015
     \label{fig:u-net-early-stopping}
 \end{figure}
 
-I further post-processed each prediction by removing objects detected as \ac{wbc} whose size lies outside the expected distribution for \ac{wbc} sizes, and filling small convex hull defects. I note that this leads to a slight improvement in the prediction (\figref{fig:u-net-post-process-metrics}).
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-segmentation-good.pdf}
+    \placecaption{Examples of \ac{wbc} segmentation using a U-Net across three different cohorts. The first column for each represents the input, the second the regular  prediction, the third the prediction using test-time augmentation (TTA) and the fourth shows the effect of refining the prediction after filtering small objects and filling large convex defects. The orange circles represent regions of the image where an improvement between the regular prediction and the prediction using TTA is visible.}
+    \label{fig:wbc-segmentation-good}
+\end{figure}
+
+I further post-processed each prediction by removing objects detected as \ac{wbc} whose size lies outside the expected distribution for \ac{wbc} sizes, and filling small convex hull defects. I note that this leads to a slight improvement in the prediction (\figref{fig:u-net-post-process-metrics}; \figref{fig:wbc-segmentation-good}). 
 
 \begin{figure}[!ht]
     \missing{Figure!}
@@ -323,11 +329,68 @@ I further post-processed each prediction by removing objects detected as \ac{wbc
     \label{fig:u-net-post-process-metrics}
 \end{figure}
 
-% stats on detected wbc, frequency, density, etc. compare wbc wbs density vs wbcc
+Still regarding the performance of this model, it is worth considering a few cases where predictions are of poor quality --- in \figref{fig:wbc-segmentation-bad} I show a three examples of this, noting that these are relatively rare as demonstrated by the high predictive performance of this U-Net model. In essence, these can be classified as one of three types of error --- undersegmentation (\figref{fig:wbc-segmentation-bad}, top), where parts of the \ac{wbc} where not segmented, oversegmentation (\figref{fig:wbc-segmentation-bad}, middle), where the segmented object includes more than just the \ac{wbc}, and false positives ((\figref{fig:wbc-segmentation-bad}, bottom), where the detected object is not a \ac{wbc}. 
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-segmentation-bad.pdf}
+    \placecaption{Examples of poor \ac{wbc} segmentations.}
+    \label{fig:wbc-segmentation-bad}
+\end{figure}
+
+\missing{stats on detected wbc, frequency, density, etc. compare wbc wbs density vs wbcc}
 
 \subsubsection{Feature aware normalization as a pre-processing step}
 
 \subsection{Predicting clinical conditions using computational cytomorphology}
+
+\subsubsection{Morphometric distributions discriminate between clinically-relevant conditions}
+
+\noindent \textbf{Independent evaluation of morphometric distributions}
+
+To get a sense on whether the retrieved features could be useful in classification, I first aggregated them on a per-individual basis by calculating the mean and variance of each feature for each cell type (\ac{rbc} and \ac{wbc}). I then used a relatively simple statistical pipeline to test whether there were significant differences between different clinical conditions on MLLC (normal individuals, individuals with iron deficiency anaemia, individuals with megaloblastic anaemia, individuals with \ac{sf3b1} \ac{mds} and individuals with other \ac{mds} subtypes): first, I perform a Kruskal-Wallis test --- an extension of the Mann-Whitney U-test (a sum of ranks based non-parametric test that tests whether a set of samples originate from the same distribution) for multiple samples --- on each individual feature. Then, considering only the features for which the Kruskal-Wallis test was significant after correcting for multiple testing, I performed a post-hoc Dunn test --- a sum of ranks pairwise test for multiple groups that tests if each group pair originates from the same distribution --- to determine how many features are relevant for each comparison (if $p<0.05$ after multiple testing correction).
+
+This analysis shows that, for most cases, a considerable amount of features has sufficient discriminatory power to discriminate between conditions (\figref{fig:dunn-test-heatmap}). I note here that for the remainder of this paragraph I consider a feature to be significant if either its mean or variance is significant. Identifying the presence of a clinically-relevant condition is the easier task, with at least 42 features (79.2\%) and 22 features (52.4\%) offering discriminatory power for \ac{wbc} and \ac{rbc}, respectively. Additionally, discriminating between \ac{mds} and anaemia is a relatively easy task (at least 38 features (71.7\%) and 20 features (47.6\%) for \ac{wbc} and \ac{rbc}, respectively). Finally, it is worth noting that the greatest challenge --- i.e. the comparison for which there are fewer significant features --- lies in the discrimination between \ac{sf3b1}-mutant \ac{mds} and other \ac{mds} subtypes, with 19 features (35.8\%) and 23 features (54.8\%) for \ac{wbc} and \ac{rbc}, respectively. 
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/dunn-test-heatmap.pdf}
+    \placecaption{Number of statistically significant features which offer good discriminating power for \ac{wbc} means (top left), \ac{wbc} variance (top right), \ac{rbc} mean (bottom left) and \ac{rbc} variance (bottom right). Colours represent the percentage of features which are statistically-significant.}
+\end{figure}
+
+Finally, inspecting the distributions of the two most discriminating features (largest Kruskal-Wallis statistic) reveals already striking differences between features depending on the condition --- regarding the mean of \ac{wbc} features, a decrease on both the ellipse variance (i.e. how distinct a shape is from an ellipse) and the first moment of the \ac{cdf} (a relatively abstract quantifier of shape irregularity) are typical of anaemia or \ac{mds} ($p=2.03*10^{-14}$ and $p=8.44*10^{-16}$ for Mann-Whitney tests comparing the distributions of the means of the ellipse variance and the first moment of the \ac{cdf}, respectively, for normal individuals and individuals with a clinically-relevant condition) and can be used to discriminate between both types of anaemia ($p=3.53*10^{-4}$ and $p=1.72*10^{-4}$ for Mann-Whitney tests comparing distributions of the means of the ellipse variance and the first moment of the \ac{cdf}, respectively, for individuals with either iron deficiency or megaloblastic anaemia; \figref{fig:feature-distribution-mean} (top)), whereas the mean of \ac{rbc} features shows that individuals with \ac{sf3b1}-mutant \ac{mds} have \ac{rbc} with larger perimeters (which can be indicative of large size or shape irregularities) and smaller minimum values for the \ac{cdf} (which can be indicative of smaller sizes or shape irregularities; $p=3.14*10^{-13}$ and $p=9.78*10^{-6}$ for Mann-Whitney tests comparing the distributions of the perimeter and minimum value of the \ac{cdf}, respectively; \figref{fig:feature-distribution-mean} (bottom)).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/top-features-kw.pdf}
+    \placecaption{Examples of the two most discriminating features for \ac{wbc} (top) and \ac{rbc} (bottom) stratified by clinically-relevant condition.}
+    \label{fig:feature-distribution-mean}
+\end{figure}
+
+\noindent \textbf{Morphometric distributions as features in supervised learning}
+
+These results show the potential of morphometric distributions for diagnostic. However, they also reveal complex relationships between features --- in\ac{rbc}, the perimeter and minimum value of the \ac{cdf} can both be indicative of size but are increased and decreased, respectively, when comparing \ac{sf3b1}-mutant \ac{mds} with other \ac{mds} subtypes. As such, to study these relationships, I test the performance of these features in a 5-fold cross-validated supervised learning setting with two different models --- an elastic network model and a regularized \ac{rf} model --- as described in the methods section. I also use blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) as covariates in these models, imputing their value as the median whenever these are absent. For clarity, I consider here four distinct binary tasks --- disease detection (normal vs. disease), disease classification (anaemia vs. \ac{mds}), \ac{sf3b1}mut detection (\ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds}) and anaemia classification (iron deficiency anaemia vs. megaloblastic anaemia) --- as well as the multi-class scenario (normal vs. \ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds} vs. iron deficiency anaemia vs. megaloblastic anaemia). 
+
+Firstly, I assessed which of the models offered the best performance as this can reveal important aspects of how features are associated with one another. Particularly, while a \ac{rf} model is capable of capturing both linear and non-linear relationships, an elastic network model assumes that the relationship between each variable and the label is linear. In \figref{fig:glmnet-vs-rf-auc} and using both the morphometric distributions and blood count data I show that the elastic regression model outperforms the \ac{rf} model for disease detection and classification, while being slightly worst for \ac{sf3b1}mut detection. Additionally, both perform equally well on the task of anaemia classification. As such, I carry on with the elastic regression model, which has the added advantage of allowing the simple calculation of feature group importance.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/glmnet-vs-rf-auc.pdf}
+    \placecaption{Cross-validated \ac{auroc} for the elastic regression model (glmnet; green) and randomized random forest model (RRF; dark red) for the different tasks considered. The average value for each model-task combination is shown as a slanted square.}
+    \label{fig:glmnet-vs-rf-auc}
+\end{figure}
+
+I then trained models using only blood counts, only morphology (morphometric profiles), or both. I show that morphology often outperforms blood counts across all tasks, with a considerable improvement when considering disease classification (\figref{fig:roc-curves-binary} and \figref{fig:auc-binary}), where using only blood counts is considerably worst. Importantly, I note that in all cases the performance is best when using both types of data. Interestingly, using blood counts alone is relatively effective at detecting the presence of a \ac{sf3b1} mutation in an individual with \ac{mds} (). % multiclass
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/roc-curves-binary.pdf}
+    \placecaption{Cross-validated receiver operating characteristic curves for the four tasks considered. Coloured depending on the data type used --- blood counts (B.C.), morphology or both (morphology + B.C.).}
+    \label{fig:roc-curves-binary}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/auc-binary.pdf}
+    \placecaption{\Ac{auroc} values for the four tasks considered. Coloured depending on the data type used --- blood counts (B.C.), morphology or both (morphology + B.C.).}
+    \label{fig:auc-binary}
+\end{figure}
+
+\subsubsection{MILe-ViCe identifies visually coherent and clinically relevant groups of cells}
 
 \section{Discussion}
 
