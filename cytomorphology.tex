@@ -26,7 +26,7 @@ To further alleviate the burden of the biases present in the training data, simp
 
 \subsection{Contribution}
 
-In this chapter I present the outline and validation of a method I developed to detect and characterize cells in \ac{wbs}. Additionally, and using large collections of cells detected using this method in normal individuals and individuals with megaloblastic anaemia, iron deficiency anaemia, and different subtypes of \ac{mds} (\ac{sf3b1}-positive and \ac{sf3b1}-negative), I demonstrate how it is possible to discriminate all conditions with high predictive performance. Finally, I will be presenting MILe-ViCe, a weakly-supervised \ac{ml} framework to cluster cells into virtual cell types which can be used to derive cellular archetypes that characterize specific conditions and enable the discovery of novel cytomorphological markers.
+In this chapter I present the outline and validation of a method I developed to detect and characterize cells in \ac{wbs}. Additionally, and using large collections of cells detected using this method in normal individuals and individuals with megaloblastic anaemia, iron deficiency anaemia, and different subtypes of \ac{mds} (\ac{sf3b1}-positive and \ac{sf3b1}-negative), I demonstrate how it is possible to discriminate all conditions with high predictive performance. Finally, I will be presenting \ac{mile-vice}, a weakly-supervised \ac{ml} framework to cluster cells into virtual cell types which can be used to derive cellular archetypes that characterize specific conditions and enable the discovery of novel cytomorphological markers.
 
 \section{Methods for the detection of blood cells in whole blood slides}
 
@@ -157,7 +157,7 @@ After detecting and adequately segmenting each cell as detailed in the previous 
 
 \subsubsection{Morphometric distributions}
 
-I define morphometric distributions as parametric characterizations of the distribution of each feature across different whole blood slides. To do so, I calculate for all individual features retrieved from RBC and WBC collections their mean and variance. This way I obtain a relatively simple characterization of the distribution of each feature which can be used in predictive modelling tasks as features.
+I define morphometric distributions as parametric characterizations of the distribution of each feature across different whole blood slides. To do so, I calculate for all individual features retrieved from RBC and WBC collections their mean and variance. This way I obtain a relatively simple characterization of the distribution of each feature which can be used in predictive modelling tasks as features. To ensure that estimates for mean and variance are adequate, I exclude all cases where fewer than 50 \ac{wbc} or \ac{rbc} were detected. 
 
 \subsubsection{Pipeline description and method implementation}
 
@@ -187,7 +187,7 @@ In this work, I defined four distinct tasks to assess how well computational cyt
     \item Anaemia classification --- distinguishing between iron deficiency anaemia and megaloblastic anaemia (easy for trained experts).
 \end{enumerate}
 
-In addition to the cytomorphological features already described, I also had access to a few \ac{cbc} parameters, particularly \ac{wbcc} (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL). In this work, I also assessed their impact on the predictive performance of all the classification methods.
+In addition to the cytomorphological features already described, I also had access to a few \ac{cbc} parameters, particularly \ac{wbcc} (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL). In this work, I also assessed their impact on the predictive performance of all the classification methods. For clarity, I do not report training metrics and focus exclusively on cross-validated metrics or external validation metrics.
 
 \subsection{Classification using supervised classification methods}
 
@@ -197,7 +197,7 @@ To assess the predictive performance of these features for each one of the tasks
 
 After training each model, I calculate the \ac{auroc} by using the concatenated results from all cross-validation rounds to obtain the cross-validated \ac{auroc} \cite{Fawcett2006-mo}. However, for inference and assessment of feature importance I select the best performing model out of each set of cross-validated models. I assessed the feature importance for the binomial regression by calculating the standardized value for each coefficient and for the random forests by using the mean decrease in accuracy as recommended by Breiman in the original paper describing random forests \cite{Breiman2001-yz}. To assess the importance of a group of features --- the total explained variance for each group --- I use the trained binomial regression model and calculate the effect of each group of variables by summing the effects of the standardized variables composing it for each individual. Finally, I calculated the total explained variance by each group of features by calculating the sum of the rows in the covariance matrix between all 5 groups of features --- \ac{wbc} mean, \ac{wbc} variance, \ac{rbc} mean, \ac{rbc} variance and \ac{cbc} parameters.
 
-\subsection{MILe-ViCe --- Multiple Instance Learning for Virtual Cell identification}
+\subsection{MILe-ViCe --- Multiple Instance Learning for Virtual Cell quantification}
 
 \subsubsection{Motivation}
 
@@ -217,11 +217,11 @@ This formulation also enables the concatenation of additional information --- su
 
 \subsubsection{Model optimization}
 
-I test each task using different numbers of virtual cell types --- \missing{confirm this} $[10, 25, 50]$ --- assuming that both WBC and RBC can be clustered into the same number of virtual cells. While leading to redundancy, I note that it is possible to cluster different virtual cell types to yield a more compact set of virtual cell types. I also test whether blood counts (WBC counts (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL)) and demographic information (male sex --- as a binary variable --- and age) improve the classification performance off MILe-ViCe. I standardise (mean = 0 and standard deviation = 1) all additional continuous variables --- \ac{wbcc}, haemoglobin concentration, platelet counts or age.
+I test each task using different numbers of virtual cell types --- $[10, 25, 50]$ --- assuming that both \ac{wbc} and \ac{rbc} can be clustered into the same number of virtual cells. I also test whether blood counts (WBC counts (cells/uL), haemoglobin concentration (g/dL) and platelet counts (platelets/uL)) improve the classification performance of \ac{mile-vice}. I standardize (mean = 0 and standard deviation = 1) all additional continuous variables --- \ac{wbcc}, haemoglobin concentration, platelet counts or age. 
 
-From solving these four tasks separately, I can expect the best possible outcome to be four separate models, each of which is primed to solve its task and to identify virtual cell types which are relevant for the detection of a specific condition. However, I may also be interested in the virtual cell types which are exclusively useful for one task; to this effect, I also train a network that optimises all four tasks at the same time while for all four tasks a single method for virtual cell classification. In other words, I optimise our model using multi-objective learning. To do so, in each training step and for each of the four tasks I sampled a set of relevant WBS to be considered, predicted the outcome class and calculated the cross-entropy. I then add all four loss values after multiplying them by a vector sampled from a Dirichlet distribution with concentration [1,1,1,1], a trick proposed in \cite{Ruchte2021-ch} to approximate Pareto optimality (i.e. no improvement can be done to one task without making a different task worse \cite{Censor1977-nd}) and backpropagate this value. For this scenario I also test the inclusion of blood counts and demographic information in the final vector $V$.
+From solving these four tasks separately, I can expect the best possible outcome to be four separate models, each of which is primed to solve its task and to identify virtual cell types which are relevant for the detection of a specific condition. However, I was also interested in the virtual cell types which are exclusively useful for one task; to this effect, I train additional models under two specific settings --- one that is a multiclass model, similar to that describe in the previous section, and one that focuses on the concurrent optimization of all four tasks using multi-objective learning. Regarding the multi-objective learning setting, in each training step and for each of the four tasks I sampled a set of relevant \ac{wbs} to be considered, predicted the outcome class and calculated the cross-entropy. I then add all four loss values after multiplying them by a vector sampled from a Dirichlet distribution with concentration [1,1,1,1], a trick proposed in \cite{Ruchte2021-ch} to approximate Pareto optimality (i.e. no improvement can be done to one task without making a different task worse \cite{Censor1977-nd}) and backpropagate this value. For this scenario I also test the inclusion of blood counts and demographic information in the final vector $V$.
 
-To select the best model in each iteration I use a combination of the cross-validated \ac{auroc}. To get these cross-validated scores, each model is trained over 5 folds and the average value and standard error of each metric is calculated. In each fold, a model is optimized for a maximum 15,000 steps with a learning rate of 0.001 and a weight decay of 0.005. I use a weighted cross-entropy loss and the Adam optimizer \cite{Kingma2014-zd}. The weight for the positive class is calculated as $1 - \frac{no.\ elements\ in\ positive\ class}{total\ number\ of\ elements}$. Additionally, the learning rate is decreased every time the training loss stagnates for at least 100 steps by a factor of 0.85. If the learning rate reaches a value of 0.000001 (smaller than the initial learning rate by a factor of 1,000).
+To select the best model in each setting I use the cross-validated \ac{auroc}. To get these cross-validated scores, each model is trained over 5 folds and the average value and standard error of each metric is calculated. In each fold, a model is optimized for a maximum 15,000 steps with a learning rate of 0.001 and a weight decay of 0.005. I use a weighted cross-entropy loss and the Adam optimizer \cite{Kingma2014-zd}. The weight for the positive class is calculated as $1 - \frac{no.\ elements\ in\ positive\ class}{total\ number\ of\ elements}$. Additionally, the learning rate is decreased every time the training loss stagnates for at least 100 steps by a factor of 0.85. If the learning rate reaches a value of 0.000001 (smaller than the initial learning rate by a factor of 1,000). On each training iteration I sample without replacement $1000$ \ac{wbc} and $1000$ \ac{rbc}. Whenever fewer than $1000$ cells were detected, I sample with replacement. This may lead to a situation where bags of cells with a smaller amount of information (fewer cells) contribute equally to those with a large amount of cells. To minimize this, I weigh each instance with a weight $w_{avail}$ calculated from the number of available \ac{rbc} $m$ and \ac{wbc} $n$ such that $w_{avail} = 1 + \frac{minimum(1000,m) + minimum(1000,n)}{1000*2}$.
 
 As mentioned above, external validation was performed using AC2. The \ac{auroc} was assessed as a measure of predictive performance that is insensitive to calibration. 
 
@@ -297,20 +297,38 @@ Individual \ac{rbc} were detected using a pipeline of relatively simple morpholo
     \label{fig:rbc-filter-examples}
 \end{figure}
 
-\missing{stats on detected rbc, frequency, density, etc}
+A median of 20277 were detected in each \ac{wbs} across cohorts (range between 70 and 133916), with more \ac{rbc} being detected on AC1, the cohort used to develop the detection algorithms with no obvious biases dependent on condition or condition subtype being detected except when comparing normal \ac{wbs} with those from individuals with a clinically-relevant condition (\figref{fig:rbc-count-coarse} and \figref{fig:rbc-count-fine}). While controlling for the number of good quality tiles (the ones used in \ac{rbc} detection) and dataset, normal \ac{wbs} are expected to have 11944 \ac{rbc} fewer cells ($p=3*10^{-8}$). 
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-count-coarse.pdf}
+    \placecaption{Detected red blood cells (RBC) stratified by condition (normal, \ac{mds} and anaemia).}
+    \label{fig:rbc-count-coarse}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-count-fine.pdf}
+    \placecaption{Detected red blood cells (RBC) stratified by relevant condition subtype.}
+    \label{fig:rbc-count-fine}
+\end{figure}
 
 \subsubsection{White blood cell detection}
 
-The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015-do} trained on tiles from a few slides from AC1 and validated on tiles from other slides from AC1, MLLC and AC2. I tested different network sizes (multiplying the depth of all layers by a factor of 0.25, 0.5 and 1.0), showing that an intermediate (0.5) size yields the best results (\figref{fig:u-net-validation}) which generalize well to the other cohorts being studied \figref{fig:wbc-segmentation-good}. Additionally, it is clear that \ac{tta} improves results consistently (\missing{list average results here}), making it a simple yet effective addition to improve the results of my \ac{wbc} detection pipeline. This improvement stems mostly from the elimination of relatively small spurious and artefactual regions predicted as belonging to \ac{wbs} as visible in \figref{fig:wbc-segmentation-good}. Early stopping has been reported as an effective strategy to potentially improve the performance of \ac{dl} models \cite{Prechelt2012-xf}. However, in my case, using an earlier epoch did not lead to any improvements in the result (\figref{fig:u-net-early-stopping}) which, together with the performance in independent validation sets, hints that training for 100 epochs did not lead to overfitting. 
+The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015-do} trained on tiles from a few slides from AC1 and validated on tiles from other slides from AC1, MLLC and AC2. I tested different network sizes (multiplying the depth of all layers by a factor of 0.25, 0.5 and 1.0), showing that an intermediate (0.5) size yields the best results (mean \ac{iou} across cohorts = 87\%; \figref{fig:u-net-validation}) which generalize well to the other cohorts being studied \figref{fig:wbc-segmentation-good}. Additionally, it is clear that \ac{tta} improves results consistently (mean \ac{iou} improvement for depth multiplier = 0.5 across all datasets = 1.1\%; \figref{fig:u-net-tta}), making it a simple yet effective addition to improve the results of my \ac{wbc} detection pipeline. This improvement stems mostly from the elimination of relatively small spurious and artefactual regions predicted as belonging to \ac{wbs} as visible in \figref{fig:wbc-segmentation-good}. Early stopping has been reported as an effective strategy to potentially improve the performance of \ac{dl} models \cite{Prechelt2012-xf}. However, in my case, using an earlier epoch did not lead to any improvements in the result for the best performing depth multiplier of 0.5 (\figref{fig:u-net-early-stopping}) which, together with the performance in independent validation sets, hints that training for 100 epochs did not lead to overfitting. However, when considering the case for depth multiplier of 1.0, training for fewer epochs could have led to better results, especially on Adden2; this suggests that overfitting is likely in this model.
 
 \begin{figure}[!ht]
-    \missing{Figure!}
+    \placefigure{gfx/cytomorphology/u-net-validation.pdf}
     \placecaption{U-Net metrics stratified by network size and dataset.}
     \label{fig:u-net-validation}
 \end{figure}
 
 \begin{figure}[!ht]
-    \missing{Figure!}
+    \placefigure{gfx/cytomorphology/u-net-tta.pdf}
+    \placecaption{Comparison of U-Net performance with and without test-time augmentation (TTA).}
+    \label{fig:u-net-tta}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/u-net-early-stopping.pdf}
     \placecaption{Comparison of U-Net performance on epoch 50 and epoch 100.}
     \label{fig:u-net-early-stopping}
 \end{figure}
@@ -321,12 +339,12 @@ The detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015
     \label{fig:wbc-segmentation-good}
 \end{figure}
 
-I further post-processed each prediction by removing objects detected as \ac{wbc} whose size lies outside the expected distribution for \ac{wbc} sizes, and filling small convex hull defects. I note that this leads to a slight improvement in the prediction (\figref{fig:u-net-post-process-metrics}; \figref{fig:wbc-segmentation-good}). 
+I further post-processed each prediction by removing objects detected as \ac{wbc} whose size lies outside the expected distribution for \ac{wbc} sizes, and filling small convex hull defects. I note that this leads to a slight improvement in the prediction (mean \ac{iou} improvement for inference with post-processing across all datasets = 1.2\%; \figref{fig:u-net-post-process}; \figref{fig:wbc-segmentation-good}). 
 
 \begin{figure}[!ht]
-    \missing{Figure!}
+    \placefigure{gfx/cytomorphology/u-net-post-process.pdf}
     \placecaption{Comparison of U-Net performance before and after segmentation post-processing.}
-    \label{fig:u-net-post-process-metrics}
+    \label{fig:u-net-post-process}
 \end{figure}
 
 Still regarding the performance of this model, it is worth considering a few cases where predictions are of poor quality --- in \figref{fig:wbc-segmentation-bad} I show a three examples of this, noting that these are relatively rare as demonstrated by the high predictive performance of this U-Net model. In essence, these can be classified as one of three types of error --- undersegmentation (\figref{fig:wbc-segmentation-bad}, top), where parts of the \ac{wbc} where not segmented, oversegmentation (\figref{fig:wbc-segmentation-bad}, middle), where the segmented object includes more than just the \ac{wbc}, and false positives ((\figref{fig:wbc-segmentation-bad}, bottom), where the detected object is not a \ac{wbc}. 
@@ -337,7 +355,41 @@ Still regarding the performance of this model, it is worth considering a few cas
     \label{fig:wbc-segmentation-bad}
 \end{figure}
 
-\missing{stats on detected wbc, frequency, density, etc. compare wbc wbs density vs wbcc}
+A median of 936 \ac{wbc} were detected in each \ac{wbs} across cohorts (range between 13 and 36551), with more \ac{wbc} being detected on AC1, the cohort used to develop and train the \ac{wbc} detection algorithms with no obvious biases dependent on condition or condition subtype being detected (\figref{fig:wbc-count-coarse} and \figref{fig:wbc-count-fine}). While controlling for the number of good quality tiles and dataset, no differences were found between conditions. Given that \ac{wbc} counts were available for all individuals in MLLC, I calculate the association between \ac{wbc} counts and the \ac{wbc} density (ratio between the number of detected \ac{wbc} and the number of good quality tiles), showing good association between both ($robust R^2=0.39 [0.30,0.50]$; \figref{fig:wbc-count-association}).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-count-coarse.pdf}
+    \placecaption{Detected red blood cells (WBC) stratified by condition (normal, \ac{mds} and anaemia).}
+    \label{fig:wbc-count-coarse}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-count-fine.pdf}
+    \placecaption{Detected red blood cells (WBC) stratified by relevant condition subtype.}
+    \label{fig:wbc-count-fine}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-count-association.pdf}
+    \placecaption{Association between white blood cell (WBC) density in whole blood slides and WBC counts as measured by complete blood counts ($robust\ R^2=0.39$).}
+    \label{fig:wbc-count-association}
+\end{figure}
+
+\subsubsection{Characterization of blood cells}
+
+I chose a panel of features that was relatively varied and that captured distinct aspects of cell morphology --- shape, colour and intensity distribution and texture. To provide a more concrete understanding of what a few of these features capture, I provide a few nominal examples of the distribution of these features in both \ac{wbc} and \ac{rbc} in \figref{fig:feature-examples-wbc} and \figref{fig:feature-examples-rbc}. For further clarity, in \figref{fig:feature-examples-wbc} I show examples of variation in terms of cell size (perimeter --- length of the cell edge), shape (circle variance --- how close the shape of the cell approximates that of a circle), nuclear shape (nuclear solidity --- the ratio between the areas of the convex hull of the nucleus and of the nucleus) and granularity (\ac{glcm} (textural) energy --- measures the homogeneity of a region of an image. i.e. the maximum value for the energy is 1 and corresponds to a constant image) for \ac{wbc}. In \figref{fig:feature-examples-rbc}, I show examples of variation in terms of the shape of central pallor (error of the Fourier reconstruction of the colour along the major axis --- measures how complex the colour signal is along the cell) and shape (eccentricty --- ratio between the lengths of the minor and major axis).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-examples-wbc.pdf}
+    \placecaption{Examples of features and how their characterization relates to \ac{wbc} morphology.}
+    \label{fig:feature-examples-wbc}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-examples-rbc.pdf}
+    \placecaption{Examples of features and how their characterization relates to \ac{rbc} morphology.}
+    \label{fig:feature-examples-rbc}
+\end{figure}
 
 \subsubsection{Feature aware normalization as a pre-processing step}
 
@@ -366,7 +418,7 @@ Finally, inspecting the distributions of the two most discriminating features (l
 
 \noindent \textbf{Morphometric distributions as features in supervised learning}
 
-These results show the potential of morphometric distributions for diagnostic. However, they also reveal complex relationships between features --- in\ac{rbc}, the perimeter and minimum value of the \ac{cdf} can both be indicative of size but are increased and decreased, respectively, when comparing \ac{sf3b1}-mutant \ac{mds} with other \ac{mds} subtypes. As such, to study these relationships, I test the performance of these features in a 5-fold cross-validated supervised learning setting with two different models --- an elastic network model and a regularized \ac{rf} model --- as described in the methods section. I also use blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) as covariates in these models, imputing their value as the median whenever these are absent. For clarity, I consider here four distinct binary tasks --- disease detection (normal vs. disease), disease classification (anaemia vs. \ac{mds}), \ac{sf3b1}mut detection (\ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds}) and anaemia classification (iron deficiency anaemia vs. megaloblastic anaemia) --- as well as the multi-class scenario (normal vs. \ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds} vs. iron deficiency anaemia vs. megaloblastic anaemia). 
+These results show the potential of morphometric distributions for diagnostic. However, they also reveal complex relationships between features --- in \ac{rbc}, the perimeter and minimum value of the \ac{cdf} can both be indicative of size but are increased and decreased, respectively, when comparing \ac{sf3b1}-mutant \ac{mds} with other \ac{mds} subtypes. As such, to study these relationships, I test the performance of these features in a 5-fold cross-validated supervised learning setting with two different models --- an elastic network model and a regularized \ac{rf} model --- as described in the methods section. I also use blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) as covariates in these models, imputing their value as the median whenever these are absent. For clarity, I consider here four distinct binary tasks --- disease detection (normal vs. disease), disease classification (anaemia vs. \ac{mds}), \ac{sf3b1}mut detection (\ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds}) and anaemia classification (iron deficiency anaemia vs. megaloblastic anaemia) --- as well as the multi-class scenario (normal vs. \ac{sf3b1}-mutant \ac{mds} vs. other subtypes of \ac{mds} vs. iron deficiency anaemia vs. megaloblastic anaemia). 
 
 Firstly, I assessed which of the models offered the best performance as this can reveal important aspects of how features are associated with one another. Particularly, while a \ac{rf} model is capable of capturing both linear and non-linear relationships, an elastic network model assumes that the relationship between each variable and the label is linear. In \figref{fig:glmnet-vs-rf-auc} and using both the morphometric distributions and blood count data I show that the elastic regression model outperforms the \ac{rf} model for disease detection and classification, while being slightly worst for \ac{sf3b1}mut detection. Additionally, both perform equally well on the task of anaemia classification. As such, I carry on with the elastic regression model, which has the added advantage of allowing the simple calculation of feature group importance.
 
@@ -376,7 +428,7 @@ Firstly, I assessed which of the models offered the best performance as this can
     \label{fig:glmnet-vs-rf-auc}
 \end{figure}
 
-I then trained models using only blood counts, only morphology (morphometric profiles), or both. I show that morphology often outperforms blood counts across all tasks, with a considerable improvement when considering disease classification (\figref{fig:roc-curves-binary} and \figref{fig:auc-binary}), where using only blood counts is considerably worst. Importantly, I note that in all cases the performance is best when using both types of data. Interestingly, using blood counts alone is relatively effective at detecting the presence of a \ac{sf3b1} mutation in an individual with \ac{mds} (). % multiclass
+I then trained models using only blood counts, only morphology (morphometric profiles), or both. I show that morphology often outperforms blood counts across all tasks, with a considerable improvement when considering disease classification (\figref{fig:roc-curves-binary} and \figref{fig:auc-binary}), where using only blood counts is considerably worst. Importantly, I note that in all cases the performance is best when using both types of data. Interestingly, using blood counts alone is relatively effective at detecting the presence of a \ac{sf3b1} mutation in an individual with \ac{mds} (AUC = \missing{AUC}).
 
 \begin{figure}[!ht]
     \placefigure{gfx/cytomorphology/roc-curves-binary.pdf}
@@ -390,7 +442,104 @@ I then trained models using only blood counts, only morphology (morphometric pro
     \label{fig:auc-binary}
 \end{figure}
 
+Inspecting how different features impact prediction using both blood counts and morphology can reveal some important trends. For instance and for disease detection, lower haemoglobin levels, an excess of average \ac{rbc} eccentricity (the ratio between major and minor axes) and average \ac{wbc} nuclear green mass displacement (measures how much the red colour distribution is shifted from the centre, thus quantifying nuclear irregularities) contributes considerably to the "normal" classification (\figref{fig:feature-importance-disease-detection-classification} (left)). Within individuals with a disease (anaemia or \ac{mds}), it becomes clear that low platelet and \ac{wbc} counts, together with high haemoglobin concentration are hallmarks of \ac{mds}. An increase in the average \ac{rbc} perimeter, decrease in the average \ac{wbc} nuclear eccentricity, an increase in the variance of \ac{wbc} solidity (the ratio between the object and its convex hull, quantifying deformations to the shape) can also be important in diagnostic of \ac{mds} (\figref{fig:feature-importance-disease-detection-classification} (right)).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-importance-disease-detection-classification.pdf}
+    \placecaption{Coefficients for the five most important features in the elastic network regression (glmnet) model by feature group (blood counts (B.C.), \ac{rbc} mean, \ac{rbc} variance, \ac{wbc} mean and \ac{wbc} variance) for disease detection (left) and disease classification (right).}
+    \label{fig:feature-importance-disease-detection-classification}
+\end{figure}
+
+As for the discrimination between disease subtypes shows that, for the most part, high platelet counts are indicative of \ac{sf3b1}-mutant \ac{mds} (\figref{fig:feature-importance-mds}) as observed earlier in \figref{fig:mds-plt}. Additionally, an increase in the average \ac{rbc} perimeter is also predictive of \ac{sf3b1}-mutant \ac{mds}. Regarding the classification of different anaemia subtypes, an increase in platelet counts is expected in iron deficiency anaemia, whereas an increase in the \ac{rbc} average minimum of the minor axis peak profile (a measure of the colour distribution along the major axis of the cell) is expected in megaloblastic anaemia \figref{fig:feature-importance-anaemia}. This can point towards a greater prevalence of spherocytes in iron deficiency anaemia. Additionally, a seemingly unintuitive finding which will be further confirmed ahead is that morphological aspects of \ac{wbc} --- particularly concerning the nuclei of \ac{wbc} --- contribute heavily towards the classification of different subtypes of anaemia, a disease affecting \ac{rbc}. However, this can be explained by the fact that hypersegmented neutrophils --- neutrophils with more than 5 nuclear segments --- are overrepresented in \ac{wbs} in megaloblastic anaemia \cite{Hariz2021-qw}.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-importance-mds.pdf}
+    \placecaption{Coefficients for the important features in the elastic network regression (glmnet; abs(coefficient) > 0) model by feature group (blood counts (B.C.), \ac{rbc} mean, \ac{rbc} variance, \ac{wbc} mean and \ac{wbc} variance) for \ac{sf3b1} mutation detection.}
+    \label{fig:feature-importance-mds}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-importance-anaemia.pdf}
+    \placecaption{Coefficients for the important features in the elastic network regression (glmnet; abs(coefficient) > 0) model by feature group (blood counts (B.C.), \ac{rbc} mean, \ac{rbc} variance, \ac{wbc} mean and \ac{wbc} variance) for \ac{sf3b1} mutation detection.}
+    \label{fig:feature-importance-anaemia}
+\end{figure}
+
+Finally, looking at how groups of features impact prediction shows that morphometric distributions account for most of the variance explained by these predictive models, with aspects pertaining to both mean and variance playing a significant role (\figref{fig:feature-group-importance}). An obvious exception is the detection of \ac{sf3b1} mutations in individuals with \ac{mds} --- here, it is blood counts, particularly platelet counts, that drive the classification, with \ac{wbc} playing a practically negligible part. This may be due to the fact that \ac{wbc} abnormalities are present only in a few cells in \ac{mds}, making the use of relatively generic distribution descriptors (i.e. mean and variance) not adequate for classification.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/feature-group-importance.pdf}
+    \placecaption{Feature group importance for the prediction of different conditions by feature group (blood counts (B.C.), \ac{rbc} mean, \ac{rbc} variance, \ac{wbc} mean and \ac{wbc} variance). Each circle is scaled according to the explained variance.}
+    \label{fig:feature-group-importance}
+\end{figure}
+
+Finally, reconsidering this problem as a multiple class problem and training models for each data type further highlights the value of morphology in classification --- the multiple class \ac{auroc} is considerably higher morphology (91.3\%) than for blood counts only (83.6\%; \figref{fig:multiclass-auc}), an effect driven largely by the poor predictive ability of blood counts in discriminating between \ac{sf3b1}-mutant \ac{mds} (AUC = 33\%) and between megaloblastic anaemia and non-\ac{sf3b1}-mutant anaemia (AUC = 72\%; \figref{fig:multiclass-auc-heatmap}). As is the case for the binary classification tasks, using information on both blood counts and morphology is the best option (AUC = 93.6\%).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/multiclass-auc.pdf}
+    \placecaption{Multiple class \ac{auroc}.}
+    \label{fig:multiclass-auc}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/multiclass-auc-heatmap.pdf}
+    \placecaption{Multiple class pairwise \ac{auroc} for different tasks and data types.}
+    \label{fig:multiclass-auc-heatmap}
+\end{figure}
+
+This section covers the potential of morphometric profiles in haematological diagnostic. However, it also highlights an important caveat of this method --- while it is relatively simple to understand what an increase on the average perimeter of \ac{rbc} (as observable in cases of \ac{sf3b1}-mutant \ac{mds} when compared with other \ac{mds} subtypes) or even a decrease in the variability of solidity in \ac{wbc} (as observable in cases of \ac{mds} when compared with anaemias), some of these features do not translate immediately to evident visual features, especially when the variation of these features in a single individual is the relevant aspect of classification. Additionally, as is the case for \ac{sf3b1}mut detection, alterations may be present in a small subset of cells, rendering morphometric distributions less suitable to capturing relevant morphological signatures. For this reason, I developed \ac{mile-vice}, a method capable of creating visually coherent groups of cells which are relevant for disease classification with minimal human input.
+
 \subsubsection{MILe-ViCe identifies visually coherent and clinically relevant groups of cells}
+
+Multiple Instance Learning for Virtual Cell --- \ac{mile-vice} --- is a \ac{mil} method capable of clustering collections (regularly known as bags in the \ac{mil} field) of cells in a way that makes their prevalence relevant for classification. I trained models to perform the same tasks as those in the previous section described in the methods' section of this Chapter ---  disease detection, disease classification, \ac{sf3b1}mut \ac{mds} detection and anaemia classification, as well as a multi-objective scenario where the same set of cells is used to optimize different binary tasks. For clarity, I will also call the binary class tasks as "single objective" tasks. To reduce the search space for \ac{mile-vice}, I select the subset of features whose mean or variance had a coefficient with an absolute value greater than 0.01 in the elastic network regression model.
+
+\noindent \textbf{Algorithm performance}
+
+\ac{mile-vice} has to assume that cells can be clustered into a given number of virtual cells. I tested three different values for the number of virtual cells in the binary classification tasks (10, 25 and 50) and two different values for the multi-objective task (25 and 50). I also test whether including blood count data can help improve results \figref{\figref{fig:mile-vice-performance}}. The number of virtual cells has an impact on the median cross-validation \ac{auroc}:
+
+\begin{itemize}
+    \item In the \textbf{single objective} setting using \textbf{morphology}, the best performing models are generally the ones with 25 virtual cells excluding the case of anaemia classification, for which the best performing model considers 10 virtual cells;
+    \item In the \textbf{single objective} setting using \textbf{morphology and blood counts}, the best performing models have 50 virtual cells excluding the case of anaemia classification, for which the best performance is observed for the model considering 10 virtual cells;
+    \item In the \textbf{multiple objective} setting using \textbf{morphology}, the best performing models have 50 virtual cells excluding the case of anaemia classification. In this case, the best performing model considers 25 virtual cells;
+    \item \item In the \textbf{multiple objective} setting using \textbf{morphology and blood counts}, the best performing models have 50 virtual cells excluding the case of disease classification, for which the best performing model has 25 virtual cells.
+\end{itemize}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-cv-performance.pdf}
+    \placecaption{\Ac{auroc} for \ac{mile-vice} models with different numbers of virtual cells and using different types of data --- "Morphology" (only using image features retrieved from cells in the slide) and "Morphology + B.C." (using image features from cells and blood counts). The models with the best performance for each set of virtual cell numbers are highlighted with black rectangles.}
+    \label{fig:mile-vice-performance}
+\end{figure}
+
+While performance does not vary widely between different numbers of virtual cells, this analysis highlights that for some tasks a smaller number of virtual cells is beneficial --- this may be associated with the over-parametrization of models with higher numbers of virtual cells in specific tasks. Additionally, I also note that the multi-objective scenario leads to slightly worse performance (\figref{fig:mile-vice-performance} and \figref{fig:mile-vice-roc-curves}). However, the multi-objective has a clear advantage --- while the single-objective performance can be slightly better, it also offers a less compact representation, with a higher number of possible virtual cells.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-roc-curve.pdf}
+    \placecaption{\Ac{auroc} for \ac{mile-vice} models with different numbers of virtual cells and using different types of data --- "Morphology" (only using image features retrieved from cells in the slide) and "Morphology + B.C." (using image features from cells and blood counts). The models with the best performance for each set of virtual cell numbers are highlighted with black rectangles.}
+    \label{fig:mile-vice-performance}
+\end{figure}
+
+Comparing \ac{mile-vice} with the elastic linear regression models trained on morphometric distributions shows that \ac{mile-vice} offers better performance (\figref{fig:mile-vice-vs-glmnet} and \figref{fig:mile-vice-vs-glmnet-scatter}) in both the single and multiple objective settings. The only exception is for the task of disease classification, where using \ac{mile-vice} with morphology and blood counts leads to slightly worse performance in both single and multiple objective settings, and using using MILe-Vice with morphology leads to slightly worse performance in the multiple objective setting. Overall, however, I show here that \ac{mile-vice} offers comparable performance while avoiding aggregating morphometric data in a class-agnostic way. 
+
+\begin{figure}[!ht]
+    \missing{figure}
+    \placecaption{Barplot comparing the cross-validated \ac{auroc} between \ac{mile-vice} and the elastic linear regression model trained on morphometric features (glmnet).}
+    \label{fig:mile-vice-vs-glmnet}
+\end{figure}
+
+\begin{figure}[!ht]
+    \missing{figure}
+    \placecaption{Scatterplot comparing the cross-validated \ac{auroc} between \ac{mile-vice} and the elastic linear regression model trained on morphometric features (glmnet).}
+    \label{fig:mile-vice-vs-glmnet-scatter}
+\end{figure}
+
+\noindent \textbf{Virtual cell inspection and validation}
+
+After showing that \ac{mile-vice} is capable of discriminating different clinically relevant conditions, performing almost always better than simpler models, I inspect specific virtual cell groups to better understand which ones are contributing the most towards classification. To this effect, I retrieve the absolute coefficient values for the classification layer from the best performing \ac{mile-vice} model for each task and multiply it by the cell proportions in the MLLC cohort, thus obtaining an effect-size for each virtual cell type. I then use this effect size to rank the most and least important virtual cell types. The final step is the careful observation of the more important virtual cell types in order to determine how these cell types relate to cytomorphological phenotypes.
+
+\subsection{External validation}
+
+\subsubsection{Evidence for covariate shift}
+
+\subsubsection{Feature aware normalization is ineffective at reducing covariate shift}
 
 \section{Discussion}
 

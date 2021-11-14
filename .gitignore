@@ -33,3 +33,6 @@ csv/morphometry-features.tsv
 .vscode/ltex.dictionary.en-GB.txt
 thesis.pdf
 additional-analyses/.Rhistory
+thesis.synctex(busy)
+.gitignore
+.vscode/ltex.dictionary.en-GB.txt
