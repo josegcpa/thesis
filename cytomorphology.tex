@@ -35,9 +35,9 @@ To further alleviate the burden of the biases present in the training data, simp
 This work required access to a sufficiently large collection of \ac{wbs}. To this effect, during this work I had access to three cohorts:
 
 \begin{itemize}
-    \item \textbf{AC1} --- 55 \ac{wbs} from normal individuals used to develop the \ac{wbc} and \ac{rbc} detection pipelines detailed below (digitalized by Jonathan L. Cooper at the Munich Leukaemia Laboratory over two weeks with a Hamamatsu Nanozoomer 2.0). This cohort was used to develop the computational pipeline for blood cell detection;
+    \item \textbf{AC1} --- 55 \ac{wbs} from normal individuals used to develop the \ac{wbc} and \ac{rbc} detection pipelines detailed below (slides from Addenbrooke's Hospital digitalized by Jonathan L. Cooper at the Sanger Institute over a day with a Hamamatsu Nanozoomer 2.0). This cohort was used to develop the computational pipeline for blood cell detection;
     \item \textbf{MLLC} --- 354 \ac{wbs} from individuals with \ac{mds} with mutations in either \ac{sf3b1}, \ac{srsf2}, \ac{u2af1} or \ac{runx1}, iron deficiency anaemia, megaloblastic anaemia and controls (digitalized by myself at the Munich Leukaemia Laboratory over two weeks with a Hamamatsu Nanozoomer 2.0). This cohort was used to develop the computational algorithms for predicting different clinical conditions;
-    \item textbf{AC2} --- 68 \ac{wbs} from individuals with \ac{mds} with mutations in either \ac{sf3b1}, \ac{srsf2}, \ac{u2af1} or \ac{runx1}, iron deficiency anaemia, megaloblastic anaemia and controls (digitalized by Dr. Emma Gudgin at the Munich Leukaemia Laboratory over two weeks with a Hamamatsu Nanozoomer 2.0). This cohort was used to validate the computational algorithms for predicting different clinical conditions.
+    \item textbf{AC2} --- 68 \ac{wbs} from individuals with \ac{mds} with mutations in either \ac{sf3b1}, \ac{srsf2}, \ac{u2af1} or \ac{runx1}, iron deficiency anaemia, megaloblastic anaemia and controls (digitalized by Dr. Emma Gudgin at Addenbrooke's Hospital using an Aperio AT2). This cohort was used to validate the computational algorithms for predicting different clinical conditions.
 \end{itemize}
 
 For MLLC and AC2 I also had access to blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) and the age and sex of each individual. Each slide was inspected individually and, if there was a problem covering the entire slide (i.e. cellular density was too high across the whole slide or the digitalization resulted in a consistently blurry slide) this was removed from further analysis.
@@ -118,7 +118,7 @@ During inference, I consider only objects with an area greater than 1000px and s
 
 \subsubsection{Characterization of blood cells}
 
-After detecting and adequately segmenting each cell as detailed in the previous section of the methods, I calculate for each cell a set of morphological descriptors. The descriptors used here were implemented in a custom Python script but the large majority of them are also present in bioimage analysis software programs \cite{Carpenter2006-hy,Sommer2011-ds} or described in publications reviewing morphometry in image analysis \cite{Mingqiang2008-wv}. Using the features described in \tableref{table:features}, I describe every RBC and WBC. Additionally, for each WBC I characterize its nucleus using a reduced set of features, also detailed in \tableref{table:features}. Finally, each \ac{wbc} is described by 53 features (42 for the cellular characterization and 11 for the nuclear characterization) and each \ac{rbc} by 42 features. To account for the different resolutions (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for \missing{scanner name}) I rescale each cell image in AC2 by a factor of 1.1098 prior to their characterization.
+After detecting and adequately segmenting each cell as detailed in the previous section of the methods, I calculate for each cell a set of morphological descriptors. The descriptors used here were implemented in a custom Python script but the large majority of them are also present in bioimage analysis software programs \cite{Carpenter2006-hy,Sommer2011-ds} or described in publications reviewing morphometry in image analysis \cite{Mingqiang2008-wv}. Using the features described in \tableref{table:features}, I describe every RBC and WBC. Additionally, for each WBC I characterize its nucleus using a reduced set of features, also detailed in \tableref{table:features}. Finally, each \ac{wbc} is described by 53 features (42 for the cellular characterization and 11 for the nuclear characterization) and each \ac{rbc} by 42 features. To account for the different resolutions (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for Aperio AT2) I rescale each cell image in AC2 by a factor of 1.1098 prior to their characterization.
 
 \begin{table}[!ht]
     \centering
@@ -489,7 +489,7 @@ Multiple Instance Learning for Virtual Cell --- \ac{mile-vice} --- is a \ac{mil}
     \item In the \textbf{single objective} setting using \textbf{morphology}, the best performing models are generally the ones with 25 virtual cells excluding the case of anaemia classification, for which the best performing model considers 10 virtual cells;
     \item In the \textbf{single objective} setting using \textbf{morphology and blood counts}, the best performing models have 50 virtual cells excluding the case of anaemia classification, for which the best performance is observed for the model considering 10 virtual cells;
     \item In the \textbf{multiple objective} setting using \textbf{morphology}, the best performing models have 50 virtual cells excluding the case of anaemia classification. In this case, the best performing model considers 25 virtual cells;
-    \item \item In the \textbf{multiple objective} setting using \textbf{morphology and blood counts}, the best performing models have 50 virtual cells excluding the case of disease classification, for which the best performing model has 25 virtual cells.
+    \item In the \textbf{multiple objective} setting using \textbf{morphology and blood counts}, the best performing models have 50 virtual cells excluding the case of disease classification, for which the best performing model has 25 virtual cells.
 \end{itemize}
 
 \begin{figure}[!ht]
@@ -503,52 +503,182 @@ While performance does not vary widely between different numbers of virtual cell
 \begin{figure}[!ht]
     \placefigure{gfx/cytomorphology/mile-vice-roc-curve.pdf}
     \placecaption{\Ac{auroc} for \ac{mile-vice} models with different numbers of virtual cells and using different types of data --- "Morphology" (only using image features retrieved from cells in the slide) and "Morphology + B.C." (using image features from cells and blood counts). The models with the best performance for each set of virtual cell numbers are highlighted with black rectangles.}
-    \label{fig:mile-vice-performance}
+    \label{fig:mile-vice-roc-curves}
 \end{figure}
 
 Comparing \ac{mile-vice} with the elastic linear regression models trained on morphometric distributions shows that \ac{mile-vice} offers better performance (\figref{fig:mile-vice-vs-glmnet} and \figref{fig:mile-vice-vs-glmnet-scatter}) in both the single and multiple objective settings. The only exception is for the task of disease classification, where using \ac{mile-vice} with morphology and blood counts leads to slightly worse performance in both single and multiple objective settings, and using using \ac{mile-vice} with morphology leads to slightly worse performance in the multiple objective setting. Overall, however, I show here that \ac{mile-vice} offers comparable performance while avoiding aggregating morphometric data in a class-agnostic way. 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/mile-vice-roc-curve.pdf}
+    \placefigure{gfx/cytomorphology/mile-vice-vs-glmnet.pdf}
     \placecaption{Barplot comparing the cross-validated \ac{auroc} between \ac{mile-vice} and the elastic linear regression model trained on morphometric features (glmnet).}
     \label{fig:mile-vice-vs-glmnet}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/mile-vice-roc-curve-scatter.pdf}
+    \placefigure{gfx/cytomorphology/mile-vice-vs-glmnet-scatter.pdf}
     \placecaption{Scatterplot comparing the cross-validated \ac{auroc} between \ac{mile-vice} and the elastic linear regression model trained on morphometric features (glmnet).}
     \label{fig:mile-vice-vs-glmnet-scatter}
 \end{figure}
 
 \noindent \textbf{Virtual cell inspection and validation}
 
-After showing that \ac{mile-vice} is capable of discriminating different clinically relevant conditions, performing almost always better than the elastic network regression model using the distribution parameters of differnt morphometric features, I inspect specific virtual cell groups to better understand which ones are contributing the most towards classification. To this effect, I retrieve the absolute coefficient values for the classification layer from the best performing \ac{mile-vice} model for each task and multiply it by the cell proportions in the MLLC cohort, thus obtaining an effect-size for each virtual cell type. I then use this effect size to rank the most and least important virtual cell types, taking the 5 most important cells for classification (the 5 cells with the highest absolute effect size). The final step is the careful observation of the more important virtual cell types (the virtual cell types with the highest effect size) in order to determine how these cell types relate to cytomorphological phenotypes and define cellular (\ac{rbc} and \ac{wbc}) archetypes. I refer here to "morphology-only model" as the models which consider only morphological aspects of cells, and "complete model" as the model which, apart from morphology, also considers \ac{cbc}.
+After showing that \ac{mile-vice} is capable of discriminating different clinically relevant conditions, performing almost always better than the elastic network regression model using the distribution parameters of differnt morphometric features, I inspect specific virtual cell groups to better understand which ones are contributing the most towards classification. To this effect, I retrieve the absolute coefficient values for the classification layer from the best performing \ac{mile-vice} model for each task and multiply it by the cell proportions in the MLLC cohort, thus obtaining an effect-size for each virtual cell type. I then use this effect size to rank the most and least important virtual cell types, taking the 5 most important cells for classification (the 5 cells with the highest absolute effect size). The final step is the careful observation of the more important virtual cell types (the virtual cell types with the highest effect size) in order to determine how these cell types relate to cytomorphological phenotypes and define cellular (\ac{rbc} and \ac{wbc}) archetypes. I refer here to "morphology-only model" as the models which consider only morphological aspects of cells, and "complete model" as the model which, apart from morphology, also considers \ac{cbc}. 
 
-\paragraph{Disease detection.} In disease detection (normal vs. disease), it is evident that \ac{mile-vice} does a good job at descriminating between cell types which are more prevalent in each condition when using only morphology and when using both morphology and \ac{cbc} (B.C.; \figref{fig:mile-vice-vcq-so-disease-detection}). More particularly, when considering \ac{rbc}, relatively large \ac{rbc} (high perimeter) are one of the \ac{rbc} archetypes detected by our model as hallmarks of the disease classification (25, 42 and 5 in the morphology-only model and 44, 16, 35 and 19 in the complete model; \figref{fig:rbc-disease-detection-examples-disease}). Additionally, rounder \ac{rbc} (low eccentricity) are \ac{rbc} archetypes of the normal classification (45 in the morphology-only model and 37 in the complete model \figref{fig:rbc-disease-detection-examples-normal}). However, it should be noted that \ac{rbc} homogeneity makes it complicated to assign specific and well-defined \ac{rbc} archetypes. These \ac{rbc} archetypes make sense --- a hallmark of \ac{mds} and megaloblastic anaemia is indeed enlarged \ac{rbc}, while the presence of non-circular \ac{rbc} (poikilocytosis) is a general hallmark of aberrant \ac{rbc} production as observed in both \ac{mds} and anaemia \cite{Ford2013-nd}. 
+\paragraph{Disease detection.} In disease detection (normal vs. disease), it is evident that \ac{mile-vice} does a good job at descriminating between cell types which are more prevalent in each condition when using only morphology and when using both morphology and \ac{cbc} (B.C.; \figref{fig:mile-vice-vcq-so-disease-detection}). More particularly, when considering \ac{rbc}, relatively large \ac{rbc} (high perimeter) are one of the \ac{rbc} archetypes detected by \ac{mile-vice} as more prevalent in disease when compared with normal cases (virtual \ac{rbc} types 25, 42 and 5 in the morphology-only model and 44, 16, 35 and 19 in the complete model; \figref{fig:rbc-disease-detection-examples}). Additionally, rounder \ac{rbc} (low eccentricity) are \ac{rbc} archetypes of the normal classification (virtual \ac{rbc} types 45 in the morphology-on ly model and 37 in the complete model \figref{fig:rbc-disease-detection-examples}). However, it should be noted that \ac{rbc} homogeneity makes it complicated to assign specific and well-defined \ac{rbc} archetypes. These \ac{rbc} archetypes make sense --- a hallmark of \ac{mds} and megaloblastic anaemia is indeed enlarged \ac{rbc}, while the presence of non-circular \ac{rbc} (poikilocytosis) is a general hallmark of aberrant \ac{rbc} production as observed in both \ac{mds} and anaemia \cite{Ford2013-nd}. 
 
 \begin{figure}[!ht]
     \placefigure{gfx/cytomorphology/mile-vice-vcq-so-disease-detection.pdf}
-    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for disease detection (disease vs. normal) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with classification as normal, whereas negative effect values/lower proportion ratio are associated with classification as disease.}
+    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for disease detection (disease vs. normal) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with normal cases (controls), whereas negative effect values/lower proportion ratio are associated with disease cases.}
     \label{fig:mile-vice-vcq-so-disease-detection}
 \end{figure}
 
-A few \ac{wbc} archetypes can also be pointed out (\figref{fig:mile-vice-vcq-so-disease-detection}) --- virtual cell type 20 in the morphology-only model and 4 in the complete model contain neutrophils featuring nucelar abnormalities (Pelger-Huët anomalies, characterized by either U- or dumbbell-shaped nuclei \cite{Bain2005-uq} and nuclear oversegmentation), whereas virtual cell type features, among other types of cells, a relatively high proportion of blasts \figref{fig:wbc-disease-detection-examples-disease}. It is worth highlight that, specifically for this task, the identified \ac{wbc} archetypes are somewhat varied, probably due to the considerable variability of \ac{wbc} in anaemias and, more particularly, in \ac{mds} \cite{Bain2005-uq,Bain2014-oc}.
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-disease-detection-examples.pdf}
+    \placecaption{Virtual red blood cell (RBC) type examples relevant for disease detection for the morphology-only model and the complete model.}
+    \label{fig:rbc-disease-detection-examples}
+\end{figure}
 
-It is worth noting at this point that \ac{rbc} are relatively homogeneous and trying to identify specific subgroups is quite challenging across all predictive tasks. Additionally, the analysis in the previous subsection illustrates how some changes in easily interpreatable \ac{rbc} feature distributions --- such as increases in their average perimeter --- can be informative for prediction. For this reason, I have focused mainly on \ac{wbc} archetypes. Additionally, I will focus on the virtual cell types important for the classification while using \ac{cbc} --- this allows me to focus aspects of condition prediction which are not captured by \ac{cbc} as these are relatively simple to obtain. 
+A relevant \ac{wbc} archetype can also be pointed out (\figref{fig:mile-vice-vcq-so-disease-detection}) --- virtual \ac{wbc} type 20 in the morphology-only model and 4 in the complete model contain neutrophils featuring nucelar abnormalities (pseudo-Pelger-Huët anomalies/band cells, characterized by either U- or dumbbell-shaped nuclei \cite{Bain2005-uq} and nuclear oversegmentation), whereas virtual cell type features, among other types of cells, a relatively high proportion of blasts \figref{fig:wbc-disease-detection-examples}. It is worth highlighting that, specifically for this task, the identified \ac{wbc} archetypes are somewhat varied, probably due to the considerable variability of \ac{wbc} in anaemias and, more particularly, in \ac{mds} \cite{Bain2005-uq,Bain2014-oc}. I must note here that distinguishing between some specific \ac{wbc} can be complicated --- particularly, band cells (immature and hypolobulated neutrophils, typically with U-shaped nuclei) and pseudo-Pelger-Huët anomalies (granulocytes with U- or dumbbell-shaped nuclei) are remarkably similar and their distinction is non-trivial --- as mentioned, both can be loosely characterized as granulocytes with U-shaped nuclei, with band cells having slightly larger nuclei and less densely packed chromatin (i.e. the staining appears lighter under the microscope) \cite{Colella2012-so}. These fine-grained differences are likely to go undifferentiated within \ac{mile-vice} in the task of discriminating \ac{mds} and anaemia, particularly since both cell types have been observed in cases of \ac{mds} \cite{Davey1988-zn,Cunningham1995-pc}.
 
-\paragraph{Disease classification.} In disease classification (anaemia vs. \ac{mds}), an \ac{rbc} archetype typical of anaemia is the presence of dacrocytes (tear-shaped \ac{rbc}) and eliptocytes (elongated \ac{rbc}; 25 in the complete model), whereas larger \ac{rbc} are expected in \ac{mds} (15 and 23 in the complete model; \figref{fig:mile-vice-vcq-so-disease-classification} and \figref{fig:rbc-disease-classification-examples}). Regarding \ac{wbc} archetypes, the presence of normal lymphocytes and hyperlobulated neutrophils are hallmarks of anaemia (18 and 14 in the complete model, respectively), whereas Pelger-Huët anomalies/band cells and immature myeloid lineage \ac{wbc} are more typical of \ac{mds} (9 and 24 in complete model, respectively; \figref{fig:wbc-disease-classification-examples}). Here, it is important to note that the task of distinguishing between band cells (immature and hypolobulated) and Perger-Huët anomalies is non-trivial --- while both can be characterized as granulocytes with U-shaped nuclei, it is worth noting that band cells have slightly larger nuclei and less densely packed chromatin (i.e. the staining appears lighter under the microscope) \cite{Colella2012-so}. These fine-grained differences are likely to go undifferentiated within \ac{mile-vice} in the task of discriminating \ac{mds} and anaemia, particularly since both cell types have been observed in cases of \ac{mds} \cite{Davey1988-zn,Cunningham1995-pc}.
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-disease-detection-examples.pdf}
+    \placecaption{Virtual white blood cell (WBC) type examples relevant for disease detection for the morphology-only model and the complete model. Examples of hyperlobulated neutrophils and pseudo-Pelger-Huët anomalies/band cells are circled in red and green, respectively.}
+    \label{fig:wbc-disease-detection-examples-disease}
+\end{figure}
+
+Henceforth, I will focus on the virtual cell types important for the classification while using \ac{cbc} --- this allows me to focus aspects of condition prediction which are not captured by \ac{cbc} as these are relatively simple to obtain. 
+
+\paragraph{Disease classification.} In disease classification (anaemia vs. \ac{mds}), an \ac{rbc} archetype typical of anaemia is the presence of dacrocytes (tear-shaped \ac{rbc}) and eliptocytes (elongated \ac{rbc}; 25 in the complete model), whereas larger \ac{rbc} are expected in \ac{mds} (15 and 23 in the complete model; \figref{fig:mile-vice-vcq-so-disease-classification} and \figref{fig:rbc-disease-classification-examples}). Regarding \ac{wbc} archetypes, the presence of normal lymphocytes is more prevalent in anaemia (18 in the complete model), whereas pseudo-Pelger-Huët anomalies/band cells and immature myeloid lineage \ac{wbc} are more typical of \ac{mds} (9 and 24 in complete model; \figref{fig:wbc-disease-classification-examples}). Here it is important to highlight the fact that blasts are not a group of cells defined by a single set of characteristics --- indeed, a blast can any of the following: a deformable nucleus (in contrast with lymphocytes, were the nuclei are generally round), immature chromatin (textural variation within the nuclei), a relatively small cytoplasm-to-nucleus ratio and relatively large sizes (typically larger than lymphocytes) \cite{Bain2004-uq,Bain2005-zg,Bain2014-oc}.
 
 \begin{figure}[!ht]
     \placefigure{gfx/cytomorphology/mile-vice-vcq-so-disease-classification.pdf}
-    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for disease classification (anaemia vs. \ac{mds}) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with classification as \ac{mds}, whereas negative effect values/lower proportion ratio are associated with classification as anaemia.}
+    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for disease classification (anaemia vs. \ac{mds}) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with \ac{mds} cases, whereas negative effect values/lower proportion ratio are associated with anaemia cases.}
     \label{fig:mile-vice-vcq-so-disease-classification}
 \end{figure}
 
-\paragraph{\ac{sf3b1}-mutation detection.} 
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-disease-classification-examples.pdf}
+    \placecaption{Virtual red blood cell (RBC) type examples relevant for disease classification for the complete model.}
+    \label{fig:rbc-disease-classification-examples}
+\end{figure}
 
-\subsection{External validation}
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-disease-classification-examples.pdf}
+    \placecaption{Virtual white blood cell (WBC) type examples relevant for disease classification for the complete model. Examples of pseudo-Pelger-Huët anomalies/band cells and immature myeloid lineage cells are circled in green and blue, respectively.}
+    \label{fig:wbc-disease-classification-examples}
+\end{figure}
 
-\subsubsection{Evidence for covariate shift}
+\paragraph{\ac{sf3b1}-mutation detection.} The task of \ac{sf3b1}-mutation detection focuses on detecting which individuals with \ac{mds} have an \ac{sf3b1} mutation. \Ac{sf3b1} mutations are generally recognized as having a better prognosis and a fairly well determined cytomorphological phenotype in the bone marrow \cite{Malcovati2020-no,Hellstrom_Lindberg2015-zs,Malcovati2015-tz}. To the best of my knowledge, no cytomorphogical phenotype has been previously identified for \ac{sf3b1}-mutant \ac{mds} --- here I outline such a phenotype. 
+
+Using \ac{mile-vice}, it is possible to detect both \ac{rbc} and \ac{wbc} archetypes in \ac{sf3b1}-mutant \ac{mds} (\figref{fig:mile-vice-vcq-so-disease-classification}) --- the most easily identifiable \ac{rbc} archetype is relatively large \ac{rbc}, which are more prevalent in \ac{sf3b1}-mutant \ac{mds}, while poikilocytic \ac{rbc} are more prevalent in other \ac{mds} subtypes \ac{mds} (15 and 2 in the complete model; \figref{fig:rbc-mds-classification-examples}). As for \ac{wbc}, the prevalence of pseudo-Pelger-Huët anomalies is higher in cases of \ac{sf3b1}-mutant \ac{mds} (virtual cell types 2 in the complete model \figref{fig:wbc-mds-classification-examples}). These are unlikely to be band cells due to the lack of granules in the cytoplasm, a hallmark of pseudo-Pelger-Huët anomalies.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-vcq-so-mds-classification.pdf}
+    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for \ac{mds} classification (\ac{sf3b1}-mutant vs. non-\ac{sf3b1}-mutant \ac{mds}) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with non-\ac{sf3b1}-mutant \ac{mds} cases, whereas negative effect values/lower proportion ratio are associated with \ac{sf3b1}-mutant \ac{mds} cases.}
+    \label{fig:mile-vice-vcq-so-mds-classification}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-mds-classification-examples.pdf}
+    \placecaption{Virtual red blood cell (RBC) type examples relevant for \ac{mds} classification for the complete model.}
+    \label{fig:rbc-mds-classification-examples}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-mds-classification-examples.pdf}
+    \placecaption{Virtual white blood cell (WBC) type examples relevant for \ac{mds} classification for the complete model. Examples of pseudo-Pelger-Huët anomalies/band cells are circled in green.}
+    \label{fig:wbc-mds-classification-examples}
+\end{figure}
+
+\paragraph{Anaemia classification.} The final task I used to evaluate the performance of \ac{mile-vice} was that of anaemia classification (iron deficiency vs. megaloblastic anemia). Here, the \ac{rbc} archetypes are relatively straighforward as they all capture the expected aspects of both of these anaemias --- iron deficiency anaemias exhibit \ac{rbc} which are smaller in size, whereas \ac{rbc} in megaloblastic anaemia are considerably larger (virtual \ac{rbc} types 4/23 and 19, respectively, in the complete model; \figref{fig:rbc-anaemia-classification-examples}) and there is a larger fraction of poikilocytic \ac{rbc} in megaloblastic anaemia (virtual \ac{rbc} type 23; \figref{fig:rbc-anaemia-classification-examples}). As for \ac{wbc}, \ac{mile-vice} captures a fairly well known \ac{wbc} archetype in both megaloblastic anaemia and iron deficiency anemia --- hypersegmented neutrophils (virtual \ac{wbc} type 14 and 12, respectively, in the complete model; \figref{fig:wbc-anaemia-classification-examples}) \cite{Lindenbaum1980 -ux,Westerman1999-gs}. The main difference between both of these groups is that in megaloblastic anaemia hypersegmented neutrophils (virtual cell type 14) are considerably larger than in iron deficiency (virtual cell type 12). As such, while being a hallmark of both iron deficiency and megaloblastic anaemia, hypersegmented neutrophils are larger in megaloblastic anaemia.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-vcq-so-anaemia-classification.pdf}
+    \placecaption{The effect size and average proportion ratio for the five most relevant virtual cell types for both red blood cells (RBC) and white blood cells (WBC) for anaemia classification (iron deficiency vs. megaloblastic anaemia) when using only morphological features (Morphology) and when using both morphological features and complete blood counts (Morphology + B.C.). Positive effect values/higher proportion ratio are associated with iron deficiency anaemia cases, whereas negative effect values/lower proportion ratio are associated with megaloblastic anaemia cases.}
+    \label{fig:mile-vice-vcq-so-anaemia-classification}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/rbc-anaemia-classification-examples.pdf}
+    \placecaption{Virtual red blood cell (RBC) type examples relevant for anaeamia classification for the complete model.}
+    \label{fig:rbc-aneamia-classification-examples}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/wbc-anaemia-classification-examples.pdf}
+    \placecaption{Virtual white blood cell (WBC) type examples relevant for anamemia classification for the complete model. Examples of pseudo-Pelger-Huët anomalies/band cells are circled in green.}
+    \label{fig:wbc-aneamia-classification-examples}
+\end{figure}
+
+\paragraph{Cross-objective importance.} To better understand if there were virtual cell types which were transversally important, I used the multi-objective models described above and calculated the absolute median effect size for each virtual cell type, proceeding to filter all values smaller than $0.05$ (\figref{fig:multi-objective-importance}). Unsurprisingly, some of the aforementioned \ac{wbc} archetypes are once again evidenced --- hypersegmented neutrophils (virtual cell type 1 in the complete model), and pseudo-Pelger-Huët anomalies (virtual cell type 19 in the complete model) come up once again as being among the most relevant for classification \figref{fig:multi-objective-cell-examples}. Regarding \ac{rbc}, some cellular archetypes are also picked up by the multi-objective \ac{mile-vice} model --- poikilocytic \ac{rbc} (with a relatively high prevalence of echinocytes --- \ac{rbc} with small and frequent membrane projections; virtual \ac{rbc} type 20) and small \ac{rbc} (virtual \ac{rbc} type 18 \figref{fig:multi-objective-cell-examples}).
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/multi-objective-importance.pdf}
+    \placecaption{Average median effect size for white and red blood cells (WBC and RBC, respectively) in the complete multi-objective model.}
+    \label{fig:multi-objective-importance}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/cell-mo-examples.pdf}
+    \placecaption{Virtual white and blood cell (WBC and RBC, respectively) type examples relevant for anaeamia classification for the complete multi-objective model.}
+    \label{fig:rbc-mo-examples}
+\end{figure}
+
+\paragraph{Expert-assisted validation.} To assess whether virtual cell types were not only helpful in prediction but also consistent, I requested the help of 3 haematologists to label 1746 \ac{rbc} and 1600 \ac{wbc}. I note here that most annotations were done by a single expert which can be problematic as shown by previous studies \cite{De_Swart2017-wc,Howe2004-mn,Goasguen2009-dn,Foucar2020-uz}. This is further highlighted once I take a more dedicated look at which circumstances have a high degree of agreeability between experts --- in \figref{fig:mile-vice-annotated-cells-wbc-concordance} I show the circumstances where, for cells which were annotated by two or more experts, there was at least one disagreement. In essence, while some cell groups (neutrophils or lymphocytes) show good concordance, others are more subjective --- annotations of monocytes and band cells/Pelger-Huët anomalies by experts show very limited agreeability between experts. Taking this into account during this analysis is crucial as it highlights renders some annotations (particularly those of monocytes and Pelger-Huët anomalies) considerably more questionable. Analysis of which annotations are picked by experts stratified by the majority label shows that Pelger-Huët anomalies were considered neutrophils in at least one third of the annotations (22/65), in line with previous reports showing that nuclear hypolobulation in neutrophils showed the least inter-expert agreement \cite{Weinberg2015-ra}. Monocytes are considered neutrophils or lymphocytes in 20.6\% and 7.6\% of the annotations, respectively. I also note here that the "poor resolution" and the "fragmented/unrecognizable" categories also have a relatively high fraction of uncertainty. This may be due to the personal experience of each expert --- while some experts will be more confident in calling specific cell types, others will be more confident in not analysing ambiguous cell types since the diagnostic is generally performed by inspecting a sufficiently large number of peripheral blood cells. Very few \ac{rbc} were annotated by more than one expert (N=28) and, as such, no assessment of inter-expert agreement will be performed.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-annotated-cells-wbc-concordance.pdf}
+    \placecaption{Proportion of \ac{wbc} annotations where all experts agree.}
+    \label{fig:mile-vice-annotated-cells-wbc-concordance}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-annotated-cells-wbc-concordance-heatmap.pdf}
+    \placecaption{Distribution of annotations stratified by the majority label (the most consensual label).}
+    \label{fig:mile-vice-annotated-cells-wbc-concordance-heatmap}
+\end{figure}
+
+For \ac{wbc} and in general, there does not appear to be any virtual cell types in which the majority of a specific cell type is contained --- the main exceptions being eosinophils in virtual cell type 18 for the \ac{sf3b1}-mutation detection in \ac{mds} task \figref{fig:mile-vice-annotated-cells-wbc}. This virtual cell type is more prevalent in \ac{sf3b1}-mutant \ac{mds}, hinting that hypereosinophilia (the overproduction of eosinophils) may be a hallmark of \ac{sf3b1}-mutant \ac{mds}. This is a phenotype which has been previously observed across several myeloid neoplasms but which is typically associated with fusion genes \cite{Reiter2017-pj}. As for \ac{rbc}, a similar picture can be observed --- no particular virtual cell type is particularly representative of a specific cell type except for spherocytes (spherical \ac{rbc}) in the disease detection task (virtual cell type 37). 
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-annotated-cells-wbc.pdf}
+    \placecaption{Proportion of annotated white blood cell (WBC) types by each virtual cell type (left) and number of annotated \ac{wbc} (right). Only virtual cell types with at least 10\% of a specific \ac{wbc} type are shown.}
+    \label{fig:mile-vice-annotated-cells-wbc}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-annotated-cells-rbc.pdf}
+    \placecaption{Proportion of annotated red blood cell (RBC) types by each virtual cell type (left) and number of annotated \ac{wbc} (right). Only virtual cell types with at least 10\% of a specific \ac{rbc} type are shown.}
+    \label{fig:mile-vice-annotated-cells-rbc}
+\end{figure}
+
+While it would be good to recapitulate specific cell types using a weakly supervised approach, it is worth noting that the tasks at hand are likely to not be the most useful for this --- if one had access to cases of hypereosinophilia or hyperbasophilia (excess of peripheral eosiniphils and neutrophils, respectively), perhaps this approach could be useful to create a virtual cell vocabulary that could be useful to label specific cell types. However, here I conditions which are not known for having an excess of specific healthy cell types but rather specific deformations and dysplasias. Nonetheless, the analysis concerned with inter-expert agreement in \ac{wbc} annotation is a further confirmation of the difficulties experts in haematology face when analysing \ac{wbs}.
+
+\subsubsection{External validation}
+
+I used AC2, a cohort of individuals with either one of the conditions studied above in this chapter --- case controls (normal; N=10), iron deficiency anaemia (N=12), megaloblastic anaemia (N=3), \ac{sf3b1}-mutant \ac{mds} (N=13) and other \ac{mds} subtypes (specifically, \ac{srsf2}-mutant \ac{mds}; N=12). 
+
+For the elastic regression model it is possible to state that there is a good generalization capability, with \ac{auroc} scores suffering no significant drop (\figref{fig:glmnet-auc-validation}). However, when inspecting the same scores for \ac{mile-vice}, a considerable drop in \ac{auroc} for the disease detection task is evident (\figref{fig:glmnet-auc-validation}), which led me to further investigate possible reasons for this drop.
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/glmnet-auc-validation.pdf}
+    \placecaption{Cross-validated (bars) and external validation \ac{auroc} values for the elastic net regression model.}
+    \label{fig:glmnet-auc-validation}
+\end{figure}
+
+\begin{figure}[!ht]
+    \placefigure{gfx/cytomorphology/mile-vice-auc-validation.pdf}
+    \placecaption{Cross-validated (bars) and external validation \ac{auroc} values for \ac{mile-vice}.}
+    \label{fig:mile-vice-auc-validation}
+\end{figure}
+
+\noindent \textbf{Evidence for covariate shift}
+
+Firstly, I considered in which ways the external validation cohort (AC2) differed from the training cohort (MLLC) --- AC2, while similar in composition to (MLLC), was digitalised using a different scanner --- an Aperio AT2 --- and slides were obtained in different ways depending on wheather they were from an \ac{mds} patient. Whereas slides from normal individuals or individuals with anaemia were digitalized within 12 hours after being automatically smeared and stained using a Siemens Hematek 3000 system, the slides from individuals with \ac{mds} came from a different laboratory, dedicated to haematooncological diagnostic, and were prepared (smeared and stained) by hand 12-24 hours after blood collection. This difference in preparation time induces different levels of \ac{edta} artefacts --- as mentioned in the Introduction, \ac{edta} is an anticoagulant agent used to ensure that there is no cellular aggregates in the \ac{wbs}; however, if more than a few hours pass between the addition of \ac{edta} to blood and the smearing, artefacts affecting both \ac{wbc} and \ac{rbc} are to be expected even after 2 hours, with their severity and frequency increasing as time passes \cite{Bain2005-zg,Narasimha2008-fh}.
+
+Furthermore, the Aperio AT2, as mentioned in the Methods section for this chapter, has a slightly different resolution from the Hamamatsu Nanozoomer 2.0 which was used to digitalise the other cohorts (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for Aperio AT2) and to correct this systematic shift I resize images digitalized using the Aperio AT2 prior to their analysis; however, this resizing step may introduce interpolation artefacts which can cause small changes to the values of each shape descriptor. Other artefacts, relating to image compression, may also influence this. 
+
+\FloatBarrier
 
 \section{Discussion}
 
