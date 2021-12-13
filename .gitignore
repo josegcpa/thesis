@@ -43,3 +43,5 @@ additional-analyses/.Rhistory
 .vscode/ltex.dictionary.en-GB.txt
 gfx/cytomorphology/virtual-cell-types
 thesis.pdf
+chapter-4-discussion.pdf
+.gitignore
