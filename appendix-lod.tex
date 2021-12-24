@@ -1,4 +1,4 @@
-\chapter{Determining the effect of repeated sampling on the theoretical limit of detection}
+\chapter{Determining the effect of repeated sampling on the limit of detection}
 \label{appendix:theoretical-lod}
 
 Across this work we sequence individuals a median of three times across their lifetime. We define a detection threshold of 0.5\% \ac{vaf} as the minimum clone size for detection on individual timepoints, but the repeated sampling leads to 0.5\% \ac{vaf} being an overestimation of the actual limit of detection (LOD) --- the size at which clones become detectable.
@@ -8,7 +8,7 @@ To show this, we simulate the repeated sampling of variants existing at a true c
 With this, we show that, at a threshold of 0.5\% and sampling only once, we detect 14.8\% of all clones existing at 0.5\% (\supfigref{fig:theoretical-lod}). However, repeating this sampling 3 and 5 times leads to the detection of approximately 37.7\% and 54.3\% of all clones existing at 0.5\%, respectively. As such, under regular conditions --- a single sample --- we would detect 13.5\% of all clones present at 0.5\% with a detection threshold of 0.5\%. The question we should now ask is: what is the smallest possible clone size we detect at the same rate of detection --- 13.5\% --- if we increase the number of samples? Using the same set of simulations, we can calculate the likely minimal size of the detected clones, summarized in \suptableref{table:theoretical-lod}, with clones as small as 0.21\% and 0.14\% being detected with 3 and 5 samples, respectively, using the same detection rate. As such, when considering the theoretical LOD used in Figure 4k, we avoided using 0.5\% which, as we show, would be at least twice as high as the theoretical LOD obtained from simulations.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/theoretical_lod.pdf}
+	\placefigure{dynamics-2/theoretical_lod}
 	\placecaption{Fraction of detected clones upon repeated samples/timepoints at a detection threshold of 0.5\%.}
 	\label{fig:theoretical-lod}
 \end{figure}

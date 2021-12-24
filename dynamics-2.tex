@@ -81,27 +81,27 @@ I worked exclusively with variant calls and, for this reason, will not go into d
 First, using this cohort --- 384 individuals aged between 54 and 93 at study entry whose blood was sampled and sequenced for a panel of 53 genes between 2 to 5 times (median: 4) over a median period of 13 years --- in a gene-agnostic way I was able to confirm a well known aspect of \ac{ch} that it increases with age in both magnitude, clonality and prevalence \cite{Jaiswal2014-rl,McKerrell2015-rl}, as illustrated in \figref{fig:ch-magnitude-increase} and \figref{fig:ch-prevalence-increase}, with 305 individuals harbouring at least one \ac{ch} mutation. Additionally, I could also verify that not only are some genes much more prevalent than others, with both \ac{dnmt3a} and \ac{tet2} being present in more than 30\% of individuals, but also that the prevalence of some genes is differentially affected by age (\figref{fig:ch-prevalence-genes}) --- particularly, while the prevalence of mutations in spliceosome genes and \ac{tet2} increases consistently with age (5.4\% increase per year (p-value=0.00124) and 6.8\% increase per year (p-value=0.000371), respectively, for a binomial regression controlling for gender), that of \ac{dnmt3a} appears to show no association with age. 
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-magnitude-increase.pdf}
-	\placecaption{Average \ac{ch} clone size stratified by age (Figure 1b in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-magnitude-increase}
+	\placecaption{Average clonal haematopoiesis clone size stratified by age (Figure 1b in \cite{Fabre2021-uw}).}
 	\label{fig:ch-magnitude-increase}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-prevalence-increase.pdf}
-	\placecaption{\ac{ch} prevalence and clonality stratified by age (Figure 1c in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-prevalence-increase}
+	\placecaption{Clonal haematopoiesis prevalence and clonality stratified by age (Figure 1c in \cite{Fabre2021-uw}).}
 	\label{fig:ch-prevalence-increase}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-prevalence-genes.pdf}
-	\placecaption{Prevalence of mutations in different genes in \ac{ch} (top). Age-stratified prevalence of mutations \ac{dnmt3a}, \ac{tet2} and spliceosome (\ac{sf3b1}, \ac{srsf2} and \ac{u2af1}) genes (bottom) (Figure 1d in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-prevalence-genes}
+	\placecaption{Prevalence of mutations in different genes in clonal haematopoiesis (top). Age-stratified prevalence of mutations \textit{DNMT3A}, \textit{TET2} and spliceosome (\textit{SF3B1}, \textit{SRSF2} and \textit{U2AF1}) genes (bottom) (Figure 1d in \cite{Fabre2021-uw}).}
 	\label{fig:ch-prevalence-genes}
 \end{figure}
 
 Inspecting the prevalence of multiple mutations across different genes also revealed distinct patterns. Using a series of permutations to derive empirical distributions and Monte Carlo p-values, I observe that individuals with multiple \ac{tet2} mutations are overrepresented, with a single individual harbouring 8 \ac{tet2} mutations \figref{fig:ch-mutations-per-gene}. Individuals with multiple \ac{dnmt3a} mutations are also overrepresented to a smaller extent. Together with the analysis presented in \figref{fig:ch-prevalence-genes}, this can suggest that the increasing prevalence of \ac{tet2} ac{ch} is linked with a higher likelihood of mutational acquisition as age progresses. 
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-mutations-per-gene.pdf}
+	\placefigure{dynamics-2/ch-mutations-per-gene}
 	\placecaption{Expected and observed mutation prevalence excess for different numbers of mutations per individual stratified by gene (Extended Data Figure 4c in \cite{Fabre2021-uw}).}
 	\label{fig:ch-mutations-per-gene}
 \end{figure}
@@ -117,19 +117,19 @@ For the sampling and coefficient inference, I use \ac{hmc} as implemented in gre
 I applied this model to all the trajectories in this cohort. The most immediate finding is that trajectories are remarkably consistent over old age (\figref{fig:ch-trajectories-examples}), with the vast majority of clones (92.4\%) having no outliers (defined as samples falling outside the 95\% confidence interval defined by the longitudinal model). For simplicity, I will also be referring to trajectories without outliers as "explained trajectories". However, this scenario is not the same for all genes --- while trajectories for clones harbouring mutations in genes such as \ac{u2af1}, \ac{dnmt3a} and \ac{tet2} have practically no outliers, those with mutations in \ac{jak2}, \ac{idh1} and \ac{srsf2} show a higher proportion of unexplained trajectories, hinting that these mutations may make clones more unpredictable (\figref{fig:ch-trajectories-explained-gene}). Given the number of mutations or available timepoints for each individual could affect the number of outliers in trajectories, I confirmed that this was not the case as per \figref{fig:ch-trajectories-explained-mut-tp}. 
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-trajectories-examples.pdf}
-	\placecaption{Examples of trajectories overlapped with real data. Lines represent inference while points/crosses represent real data. Grey bands represent the 90\% \ac{hpdi} (Figure 2a in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-trajectories-examples}
+	\placecaption{Examples of trajectories overlapped with real data. Lines represent inference while points/crosses represent real data. Grey bands represent the 90\% highest posterior density interval (Figure 2a in \cite{Fabre2021-uw}).}
 	\label{fig:ch-trajectories-examples}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-trajectories-explained-gene.pdf}
+	\placefigure{dynamics-2/ch-trajectories-explained-gene}
 	\placecaption{Fraction of explained trajectories by gene with 90\% Beta-distributed confidence intervals (Figure 2b in \cite{Fabre2021-uw}).}
 	\label{fig:ch-trajectories-explained-gene}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-trajectories-explained-mut-tp.pdf}
+	\placefigure{dynamics-2/ch-trajectories-explained-mut-tp}
 	\placecaption{Fraction of explained trajectories by number of mutations (left) and number of available timepoints (right) with 90\% beta-distributed confidence intervals (Figure 2c in \cite{Fabre2021-uw}).}
 	\label{fig:ch-trajectories-explained-mut-tp}
 \end{figure}
@@ -137,13 +137,13 @@ I applied this model to all the trajectories in this cohort. The most immediate 
 To better understand whether unexplained trajectories could be attributed to the modelling assumptions or to other biological factors, I further assessed whether the proportion of explained trajectories was different between different modelling conditions --- between truncating and missense mutations, and between clones with and without explicitly modelled sites. Additionally, I checked whether sex (male vs. female) and smoking status (has smoked vs. has never smoked) could impact the proportion of explained trajectories. However, I found no statistically significant association between either of the groups according to a Chi-square test (for the model-intrinsic factors: recurring vs. non-recurring and truncating vs. missense; for other biological factors: male vs. female and has smoked vs. has never smoked) \figref{fig:ch-unexplained-trunc-site-sex-smoke}. To try to better understand whether a more illustrative cause for unexplained trajectories could be found, I inspected all unexplained trajectories and found that they could be tentatively categorized as belonging to one of three main groups --- competition (one clone outcompetes a second clone, causing it to decelerate or even decrease in size), sequencing artefacts or consequences of genetic drift (a mutation randomly fluctuates to detectable levels for a single timepoint) and size-dependent deceleration (a clone grows too big and, due to the increase in the relative fitness of the population, grows more slowly), with examples presented in \figref{fig:ch-bad-trajectories-examples}. It is important to note that these explanations are not absolute, but rather possible. To avoid using poor inferences and unless otherwise noted, I only used explained trajectories and their respective coefficients in the remaining analyses of this chapter.
 
 \begin{figure}[!ht]
-    \label{gfx/dynamics-2/ch-unexplained-trunc-site-sex-smoke.pdf}
+    \label{dynamics-2/ch-unexplained-trunc-site-sex-smoke}
 	\placecaption{Fraction of explained trajectories by modelling conditions (left) and by sex and smoking status (right).}
 	\label{fig:ch-unexplained-trunc-site-sex-smoke}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-bad-trajectories-examples.pdf}
+	\placefigure{dynamics-2/ch-bad-trajectories-examples}
 	\placecaption{Examples of trajectories which are not explained by the model.}
 	\label{fig:ch-bad-trajectories-examples}
 \end{figure}
@@ -151,20 +151,20 @@ To better understand whether unexplained trajectories could be attributed to the
 Blood was collected at an additional timepoint --- Phase 6 --- for 11 individuals with mutations in \ac{cbl} (c.2434+1G>A), \ac{dnmt3a} (P385fs, R882H, W330X), \ac{gnb1} (K57E), \ac{jak2} (V617F), \ac{ppm1d} (Q524X), \ac{sf3b1} (K666N, K700E, R625L), \ac{srsf2} (P95H, P95L), \ac{tet2} (Q1542X) and \ac{u2af1} (Q157P, Q157R). Using these data, I was able to test the predictive performance of this model and the consistency of the trajectories. As visible in \figref{fig:trajectories-6th-tp}, most trajectories do not deviate greatly from a 6th timepoint which was not used in the inference of the coefficients for the model. Further quantifying this, as represented in \figref{fig:performance-6th-tp-2} and \figref{fig:performance-6th-tp}, it becomes clear that the predicted changes in \ac{vaf} correspond nicely to those observed ($MAE = 3.4\%$ and $R^2 = 89\%$ between the observed and expected fold change). This further confirms that trajectories remain consistent over relatively long periods of time during old age. It nonetheless should be noted, as evidenced more clearly in \figref{fig:performance-6th-tp-2}, that the \ac{vaf} for \ac{srsf2} trajectories is consistently over-estimated.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trajectories-6th-tp.pdf}
+	\placefigure{dynamics-2/trajectories-6th-tp}
 	\placecaption{Predicted trajectories for an additional timepoint for 10 individuals. Circles represent datapoints that were used to infer the coefficients in the model, whereas crosses (+) represent datapoints that were not used by the model for inference. Inferred trajectories, as well as their 90\% credible intervals, are represented by arbitrary colours (based on Extended Data Figure 3g,h in \cite{Fabre2021-uw}).}
 	\label{fig:trajectories-6th-tp}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/performance-6th-tp-2.pdf}
-	\placecaption{Observed and predicted \ac{vaf} for a 6th timepoint (based on Extended Data Figure 3f in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/performance-6th-tp-2}
+	\placecaption{Observed and predicted variant allele frequency (VAF) for a 6th timepoint (based on Extended Data Figure 3f in \cite{Fabre2021-uw}).}
 	\label{fig:performance-6th-tp-2}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/performance-6th-tp.pdf}
-	\placecaption{Observed and predicted fold change in \ac{vaf} for a 6th timepoint (Extended Data Figure 3f in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/performance-6th-tp}
+	\placecaption{Observed and predicted fold change in variant allele frequency (VAF) for a 6th timepoint (Extended Data Figure 3f in \cite{Fabre2021-uw}).}
 	\label{fig:performance-6th-tp}
 \end{figure}
 
@@ -173,8 +173,8 @@ Blood was collected at an additional timepoint --- Phase 6 --- for 11 individual
 Considering the relative stability of the trajectories, it is now possible to consider the effect of specific sites (whose mutations are present in two or more individuals) and genes on the growth per year (\figref{fig:ch-gene-site-coefficients}; \tableref{table:ch-gene-coefficients}). I show that the growth advantage conferred by most sites is relatively small with that conferred by the gene, with \ac{srsf2}-P95H being the single exception. It is also clear that \ac{dnmt3a} and \ac{tet2}, the two most commonly mutated genes in \ac{ch}, are by no means the genes conferring the greatest fitness advantage; in fact, it is mutations in \ac{u2af1}, \ac{ptpn11} and \ac{srsf2} that are responsible for the fastest growing clones (\tableref{table:ch-gene-coefficients}). Importantly, both \ac{u2af1} and \ac{srsf2} are, together with another relatively fast gene, \ac{sf3b1}, splicing genes, making their relatively late detection in \ac{ch} more intriguing \cite{McKerrell2015-rl}. I also quantified the fitness effect of truncating and missense separately, showing that, for \ac{cbl}, truncating mutations confer a greater fitness advantage than missense ones (the annual growth rate is 10.9\% ($\mathrm{CI}_{90\%}=[3.3\%,18.7\%]$) higher for truncating \ac{cbl} mutations), while the reverse is observable in \ac{tp53} (the annual growth rate is 10.4\% ($\mathrm{CI}_{90\%}=[2.6\%,18.0\%]$) higher for missense \ac{tp53} mutations; \figref{fig:ch-trunc}), while other genes for which both effects were modelled show no significant difference between truncating and missense mutations.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-gene-site-coefficients.pdf}
-	\placecaption{Driver growth per year for different genes and sites. Individual points and vertical lines represent the expected value and 90\% \ac{hpdi} for sites and horizontal lines and rectangles represent the expected value and 90\% \ac{hpdi} for genes (Figure 2c in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-gene-site-coefficients}
+	\placecaption{Driver growth per year for different genes and sites. Individual points and vertical lines represent the expected value and 90\% highest posterior density interval for sites and horizontal lines and rectangles represent the expected value and 90\% highest posterior density interval for genes (Figure 2c in \cite{Fabre2021-uw}).}
 	\label{fig:ch-gene-site-coefficients}
 \end{figure}
 
@@ -205,7 +205,7 @@ Considering the relative stability of the trajectories, it is now possible to co
 \end{table}    
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-trunc.pdf}
+	\placefigure{dynamics-2/ch-trunc}
 	\placecaption{Difference between truncating and missense effect for genes where both effects were modelled (Extended Data Figure 3j in \cite{Fabre2021-uw}).}
 	\label{fig:ch-trunc}
 \end{figure}
@@ -213,19 +213,19 @@ Considering the relative stability of the trajectories, it is now possible to co
 The unknown cause effect is an additional model parameter which quantifies how different the observed growth is from the growth conferred by gene and/or site in a given clone. It is worth noting that the magnitude of the unknown cause effect depends largely on the gene --- whereas genes such as \ac{u2af1} or \ac{ptpn11} show a relatively small spread of unknown cause effects, those of \ac{asxl1}, \ac{jak2} and \ac{tet2} are considerably more dispersed (\figref{fig:unknown-by-gene}). However, it is not only its absolute magnitude that is relevant --- the relative magnitude of the unknown cause effect, when compared with the observed growth for different clones, has also distinct gene-specific signatures (\figref{fig:ch-genetic-vs-unknown}) --- whereas the larger magnitude of unknown cause effects in \ac{jak2} mutants is expectable due to its relatively low proportion of explained trajectories, such is not the case of \ac{tet2} or \ac{asxl1}; indeed, while more variable, trajectories in both these genes may be affected by relatively stable and extra-genetic effects as will be discussed further ahead in the Discussion. While genetics is generally the strongest driver of clonal growth, it is worth noting that for clones characterized by mutations in lesser fit genes during the observation period (such as \ac{dnmt3a}), the unknown cause effect can have a sizeable impact on the clonal trajectory. Indeed, it should also be highlighted that a larger unknown cause effect magnitude may not necessarily imply a considerable shift in growth rate --- comparing the mean of the annual growth and the standard deviation of the unknown cause growth for different drivers, it becomes clear that, for most genes, there appears to be a clear positive trend between both \figref{fig:ch-mean-std-growth}. However, drivers such as mutations in \ac{ptpn11} or \ac{u2af1} and \ac{srsf2}-P95H have a distinctly small unknown cause effect magnitude when compared with their mean, suggesting these clones are particularly unaffected by non-driver effects. Conversely, \ac{jak2} clones have considerably higher unknown cause effect magnitude for the unknown cause effect when compared with its mean total annual growth, suggesting other factors which are not capture by this model can explain the high dynamic variability of \ac{jak2} clones.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/unknown-by-gene.pdf}
+	\placefigure{dynamics-2/unknown-by-gene}
 	\placecaption{Unknown cause effects stratified by gene (Figure 2e in \cite{Fabre2021-uw}).}
 	\label{fig:unknown-by-gene}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-genetic-vs-unknown.pdf}
+	\placefigure{dynamics-2/ch-genetic-vs-unknown}
 	\placecaption{Comparison of the effects determined by gene and site (predicted by driver) with those observed (Figure 2d in \cite{Fabre2021-uw}).}
 	\label{fig:ch-genetic-vs-unknown}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-mean-std-growth.pdf}
+	\placefigure{dynamics-2/ch-mean-std-growth}
 	\placecaption{Comparison between the mean annual growth effect and the standard deviation of the unknown cause effect for different drivers. The 90\% credible intervals for the mean are derived from the posterior distribution, whereas the 80\% confidence intervals for the standard deviation are calculated as $\frac{\sigma\sqrt{N-1}}{\sqrt{q_{\chi^2}(0.1,N-1)}}$, with $N$ as the total number of mutations for each driver, $q_{\chi^2}(x,f)$ as the quantile function for the Chi-squared distribution for probability $x$ and $f$ degrees of freedom, and $\sigma$ is the standard deviation (Extended Data Figure 4a in \cite{Fabre2021-uw}).}
 	\label{fig:ch-mean-std-growth}
 \end{figure}
@@ -245,13 +245,13 @@ Similarly to the analysis performed with the unexplained trajectories, I also in
 \end{enumerate}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-variance-uc-technical.pdf}
+	\placefigure{dynamics-2/ch-variance-uc-technical}
 	\placecaption{Association between technical aspects of modelling and the estimated unknown cause effect: comparison between and within individual variance (left) and between truncating and recurrence status (right).}
 	\label{fig:ch-variance-uc-technical}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-variance-uc-biological.pdf}
+	\placefigure{dynamics-2/ch-variance-uc-biological}
 	\placecaption{Association between biological factors and the estimated unknown cause effect: comparison of between and within individual variance (left) and between truncating and recurrence status (right) (Extended Data Fig. 4e,d, respectively, in \cite{Fabre2021-uw}).}
 	\label{fig:ch-variance-uc-biological}
 \end{figure}
@@ -267,23 +267,23 @@ Each tree was made ultrametric (or linearized) by iteratively extending branches
 The first tree (PD42176; \figref{fig:tree-pd42176}) is characterized by a single, massive \ac{sf3b1}-K666N clone, which appeared between the age of 36.5 and 45.4 years old. Other mutations are presented at relatively low proportions (in only a few clades), while a chromosome Y deletion preceded all other mutations in this individual, suggesting that this must have happened during development or very early in life. Using \ac{bnpr}, a phylodynamic method, to estimate the lifelong trajectory of the \ac{sf3b1}-K666N clone, it becomes clear that this clone had an initial period during which its relative fitness was much higher than that of the other clones, progressively slowing down as it approached the time of sampling (\figref{fig:tree-pd42176}). Comparing this lifelong trajectory with the one inferred using longitudinal data, I can observe good concordance between both, with the phylodynamic estimation using the single-cell colonies highlighting an initial, faster expansion which the longitudinal data fails to capture.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trees-pd42176.pdf}
-	\placecaption{Ultrametric phylogenetic tree for individual PD42176, with all studied driver mutations annotated and relevant structural rearrangements (left). Lifelong trajectory for the \ac{sf3b1}-K666N, inferred using both longitudinal targeted sequencing data and phylodynamic methods (Figure 3a,d in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/trees-pd42176}
+	\placecaption{Ultrametric phylogenetic tree for individual PD42176, with all studied driver mutations annotated and relevant structural rearrangements (left). Lifelong trajectory for the \textit{SF3B1}-K666N, inferred using both longitudinal targeted sequencing data and phylodynamic methods (Figure 3a,d in \cite{Fabre2021-uw}).}
 	\label{fig:tree-pd42176}
 \end{figure}
 
 The tree of individual PD34493 shows four fairly large expansions (\figref{fig:tree-pd34493}), two of which are characterized as being driven by no immediately recognizable driver. The expansions that are characterized by known drivers, clones 1 and 2 (\ac{sf3b1}-K666N and \ac{u2af1}-Q157R, respectively), exhibited fairly distinct behaviour over the lifetime of this individual --- while clone 1 expanded steadily until the time of sampling, having first appeared anywhere between conception and the age of 33, clone 2 expanded rapidly, having first appeared between the ages of 39 and 60 on the back of a previous expansion with an unidentified driver, highlighting distinct behaviours from two genes frequently clustered together as functionally similar. Once again and in both cases, it is visible that the trajectories inferred from longitudinal targeted sequencing and phylodynamic methods are in good agreement. A final remarkable aspect of this phylogenetic tree is that its largest expansion has no known driver despite constituting more than half of the sampled colonies (\figref{fig:tree-pd34493}). 
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trees-pd34493.pdf}
-	\placecaption{Ultrametric phylogenetic tree for individual PD34493, with all studied driver mutations annotated and relevant structural rearrangements (left). Lifelong trajectory for the \ac{sf3b1}-K666N and \ac{u2af1}-Q157R, inferred using both longitudinal targeted sequencing data and phylodynamic methods (right) (Figure 3b,e,f in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/trees-pd34493}
+	\placecaption{Ultrametric phylogenetic tree for individual PD34493, with all studied driver mutations annotated and relevant structural rearrangements (left). Lifelong trajectory for the \textit{SF3B1}-K666N and \textit{U2AF1}-Q157R, inferred using both longitudinal targeted sequencing data and phylodynamic methods (right) (Figure 3b,e,f in \cite{Fabre2021-uw}).}
 	\label{fig:tree-pd34493}
 \end{figure}
 
 The final tree derived from the Sardinian cohort is that of individual PD41305, characterized as having no expansions with identifiable drivers (\figref{fig:tree-pd41305}). This individual was selected because I was interested in assessing the behaviour of its \ac{srsf2}-P95H clone; however, due to possible technical complications associated with \ac{srsf2}-P95H clones not being particularly well suited for cultivation or colony selection bias before choosing the colonies which were to be sequenced. Because of this it was impossible to capture the lifelong behaviour of this clone. Nonetheless, this tree further highlights the dimension and relevance of expansions with no known drivers that were already visible in the tree of individual PD34493 (\figref{fig:tree-pd34493}). Their lifelong behaviour, similarly to the expansions in the tree of individual PD34493 excluding the \ac{u2af1}-Q157R, is characterized by appearing early in life (any time between conception and 22 years old). Particularly for individual PD41305, expansions with no known driver expand quickly early in life, stabilizing during later years.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trees-pd41305.pdf}
+	\placefigure{dynamics-2/trees-pd41305}
 	\placecaption{Ultrametric phylogenetic tree for individual PD34493, with all studied driver mutations annotated and relevant structural rearrangements (left). Lifelong trajectory for two expansions with no known drivers, inferred using phylodynamic methods (right) (Figure 3c,g,h in \cite{Fabre2021-uw}).}
 	\label{fig:tree-pd41305}
 \end{figure}
@@ -291,7 +291,7 @@ The final tree derived from the Sardinian cohort is that of individual PD41305, 
 Considering all three phylogenetic trees, it is also worth noting that chromosome Y deletion is prevalent during old age, with all three (male) individuals presented here harbouring at least an occurrence of chromosome Y deletion and with the tree for individual PD41305 harbouring three independent losses of chromosome Y. Additionally, the prevalence and dynamics of expansions with no known drivers --- 5 out of 8 --- highlights the unknown dimensions of \ac{ch}. Finally, by comparing trajectories inferred from two separate methods it is possible to observe fairly good concordance, as observable in \figref{fig:trees-coefficients-ages-at-onset}, presenting the quantification of the growth dynamics during the longitudinal sampling and on the ages at onset. This, together with the validation experiments in previous chapter using simulations, provides further orthogonal validation of both approaches. Interestingly, expansions with no known drivers appear to be remarkable slow during later stages of life, having largely stagnated despite not having reached the carrying capacity of the \ac{hsc} population.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trees-coefficients-ages-at-onset.pdf}
+	\placefigure{dynamics-2/trees-coefficients-ages-at-onset}
 	\placecaption{Comparison of the growth dynamic coefficients calculated using longitudinal targeted sequencing and phylodynamic modelling over the study period (left) and the ages at clone onset using longitudinal targeted sequencing and phylogenetic trees (Figure 3i in \cite{Fabre2021-uw}).}
 	\label{fig:trees-coefficients-ages-at-onset}
 \end{figure}
@@ -301,7 +301,7 @@ Considering all three phylogenetic trees, it is also worth noting that chromosom
 Upon calculating the ages at clone onset for all the clones in this cohort, I noted this estimate exceeded lifetime (preceded birth; \figref{fig:exceeds-within-lifetime-representation}) for large fraction of clones (34.4\%). Together with the fact that the trees in the previous section revealed that several expansions had a period during which their growth was considerably faster than the one observed, I set out to quantify this apparent phenomenon of deceleration. Thanks to four additional phylogenetic trees provided by collaborators (Emily Mitchell and Peter Campbell) from their 2021 publication investigating age-related changes to haematopoiesis \cite{Mitchell2021-zl}, I was able to systematically quantify the effect of deceleration on clonal trajectories.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/exceeds-within-lifetime-representation.pdf}
+	\placefigure{dynamics-2/exceeds-within-lifetime-representation}
 	\placecaption{Representation of the lifelong extrapolation of two longitudinal trajectories, one of which exceeds lifetime (age at onset precedes the birth of the individual) and the other is fully contained within lifetime (Figure 4e in \cite{Fabre2021-uw}).}
 	\label{fig:exceeds-within-lifetime-representation}
 \end{figure}
@@ -309,27 +309,27 @@ Upon calculating the ages at clone onset for all the clones in this cohort, I no
 To do this, I first inferred the phylodynamic trajectories for all expansions in all trees across both cohorts (\figref{fig:trajectories-fabre-mitchell}), highlighting the ubiquitousness of this effect --- even if only qualitatively, it is possible to see that several of the clones show some form of deceleration later in their life. Two particular aspects of this representation is the much higher frequency of detected expansions in the trees from \etal{Mitchell}, attributable to the fact that phylogenetic trees in this publication were constructed using approximately 4 times more colonies than ours, and the prevalence of \ac{dnmt3a} clones in these trees, with two out of four trees harbouring \ac{dnmt3a} clones.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/trajectories-fabre-mitchell.pdf}
-	\placecaption{Lifelong clonal trajectories inferred for \cite{Fabre2021-uw} (left) and \cite{Mitchell2021-zl} (right). Fractions of the trajectories showing low variance ($V(t) < 5$) are represented as full lines, whereas fractions with high variance ($V(t) \geq 5$) are represented as dotted lines. A thin grey band represents the carrying capacity from \cite{Lee-Six2018-lp} (50,000-200,000 \ac{hsc}) (Figure 4a,b in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/trajectories-fabre-mitchell}
+	\placecaption{Lifelong clonal trajectories inferred for \cite{Fabre2021-uw} (left) and \cite{Mitchell2021-zl} (right). Fractions of the trajectories showing low variance ($V(t) < 5$) are represented as full lines, whereas fractions with high variance ($V(t) \geq 5$) are represented as dotted lines. A thin grey band represents the carrying capacity from \cite{Lee-Six2018-lp} (50,000-200,000 haematopoietic stem cells) (Figure 4a,b in \cite{Fabre2021-uw}).}
 	\label{fig:trajectories-fabre-mitchell}
 \end{figure}
 
 I then fitted biphasic log-linear models to each phylodynamic trajectory in order to quantify early and late growth. Having both these quantities, I first calculated what the expected clone size would be if the early growth was representative of lifelong clonal growth (expected clone fraction assuming that the population size is 200,000 \ac{hsc} as suggested in \cite{Lee-Six2018-lp}) and compare it with the observed clone size (assuming that the fraction of tips belonging to an expansion are representative of the size of the clone; \figref{fig:expected-observed-ratio-representation}). As per \figref{fig:expected-observed-ratio}, showing the ratio between observed and expected clone size, the expected size of the clone vastly exceeds that which was observed, showing that clonal deceleration was essential to explain the observed clone sizes. Additionally, I also show that this still holds when assuming that population size is much larger (1,000,000 \ac{hsc}) --- in \figref{fig:expected-observed-full} I show all the inferences for the clades in \etal{Mitchell} demonstrating how the extrapolation of the earlier phase of growth would lead to much larger clones.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/expected-observed-ratio-representation.pdf}
+	\placefigure{dynamics-2/expected-observed-ratio-representation}
 	\placecaption{Representation of the extrapolation of the early growth (expected clone size) and how it compares with the observed clone size (Figure 4c in \cite{Fabre2021-uw}).}
 	\label{fig:expected-observed-ratio-representation}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/expected-observed-ratio.pdf}
+	\placefigure{dynamics-2/expected-observed-ratio}
 	\placecaption{Ratio between observed and expected clone size (Figure 4d in \cite{Fabre2021-uw}).}
 	\label{fig:expected-observed-ratio}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/expected-observed-full.pdf}
+	\placefigure{dynamics-2/expected-observed-full}
 	\placecaption{Representation of the extrapolation of early growth and observed growth for all clades in \etal{Mitchell} \cite{Mitchell2021-zl}. Each panel represents an individual clade, identified by the individual (KX003, KX004, KX007 and KX008) and the driver mutation characterizing it (if no driver mutation is identifiable, each trajectory is identified as CladeX, where X represents an arbitrary numerical identifier) (Extended Data Figure 7e in \cite{Fabre2021-uw}).}
 	\label{fig:expected-observed-full}
 \end{figure}
@@ -337,13 +337,13 @@ I then fitted biphasic log-linear models to each phylodynamic trajectory in orde
 Next, and considering that extrapolating the trajectory of 34.4\% of clones leads to age at clone onset times that precede birth (\figref{fig:expected-observed-ratio-representation}, \figref{fig:exceeds-within-lifetime}), I inspect the extent to which this happens when considering genes separately. In other words, I assessed whether there was a specific gene bias associated with clonal deceleration, an effect that causes ages at clonal onset to exceed lifetime. As per \figref{fig:fraction-clones-exceeding-lifetime}, it becomes clear that while some genes such as those involved in splicing (\ac{srsf2}, \ac{u2af1} and \ac{sf3b1}), together with \ac{ptpn11}, \ac{idh1}, \ac{idh2} and \ac{ctcf} are practically unaffected by clonal deceleration, others such as \ac{dnmt3a}, \ac{brcc3} and \ac{tp53} are particularly affected by this, with over 60\% of \ac{dnmt3a} clones exceeding lifetime. Comparatively, \ac{tet2}, the other most prevalently mutated \ac{ch} gene, is remarkably different to \ac{dnmt3a} --- an effect that can be attributable to \ac{tet2} clones growing at higher observed annual growth rates than \ac{dnmt3a} clones, implying that \ac{dnmt3a} clones either grow slower than \ac{tet2} clones or that deceleration has a higher impact on the annual growth rate of \ac{dnmt3a} clones. 
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/exceeds-within-lifetime.pdf}
+	\placefigure{dynamics-2/exceeds-within-lifetime}
 	\placecaption{The relationship between clone size, age and annual growth and its effect on age at clone onset (Figure 4f in \cite{Fabre2021-uw}).}
 	\label{fig:exceeds-within-lifetime}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/fraction-clones-exceeding-lifetime.pdf}
+	\placefigure{dynamics-2/fraction-clones-exceeding-lifetime}
 	\placecaption{Fraction of clones exceeding lifetime stratified by gene (Figure 4g in \cite{Fabre2021-uw}).}
 	\label{fig:fraction-clones-exceeding-lifetime}
 \end{figure}
@@ -353,19 +353,19 @@ This gene bias led me to further quantify deceleration in growth inferred from b
 Similarly to $\mathrm{deceleration}_{\mathrm{long}}$, $\mathrm{deceleration}_{\mathrm{phylo}}$ values closer to 1 represents no deceleration, whereas values below 1 represent an increasing amount of deceleration. To gain a better sense of the distribution of $\mathrm{deceleration}_{\mathrm{phylo}}$, I use the simulations described in Chapter 2 to define two distinct classes of phylodynamic trajectories based on their simulated clonal trajectory --- if the ratio between early and late growth for the simulated clonal trajectory is below 0.8, these trajectories are considered saturating; otherwise, they are considered to be near constant. As per \figref{fig:deceleration-figure-full}, I show that this phenomenon, while not affecting all expansions or genes equally, is remarkably prevalent --- indeed, the real data appears to be a mixture of both near constant and saturating trajectories. Additionally, closer inspection of the differences between historical and observed growth further reveals the remarkable difference between \ac{dnmt3a}, \ac{brcc3} and \ac{tp53} and other genes (\figref{fig:historical-growth-tally}).
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/historical-growth-representation.pdf}
+	\placefigure{dynamics-2/historical-growth-representation}
 	\placecaption{Representation of the difference between observed and (minimal) historical growth (Figure 4h in \cite{Fabre2021-uw}).}
 	\label{fig:historical-growth-representation}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/deceleration-figure-full.pdf}
+	\placefigure{dynamics-2/deceleration-figure-full}
 	\placecaption{Quantification of deceleration from phylodynamic and longitudinal data. "near constant" and "saturating" were obtained from simulated phylogenetic trees ($\mathrm{deceleration}_{\mathrm{phylo}}$), "real data (phyl.)" was obtained from observed phylogenetic trees ($\mathrm{deceleration}_{\mathrm{phylo}}$) and "real data (long.)" was obtained from longitudinal data ($\mathrm{deceleration}_{\mathrm{long}}$) (based on Figure 4i and Extended Data Figure 7f in \cite{Fabre2021-uw}).}
 	\label{fig:deceleration-figure-full}
 \end{figure}
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/historical-growth-tally.pdf}
+	\placefigure{dynamics-2/historical-growth-tally}
 	\placecaption{Observed and historical growth stratified by gene (Figure 4j in \cite{Fabre2021-uw}).}
 	\label{fig:historical-growth-tally}
 \end{figure}
@@ -375,7 +375,7 @@ Similarly to $\mathrm{deceleration}_{\mathrm{long}}$, $\mathrm{deceleration}_{\m
 Knowing that clones decelerate, I have to adjust the age at onset estimates similarly to what was done in Chapter 2 to avoid having estimates precede birth --- more concretely, I consider it to be impossible for clones to have appeared before the age of -1, an arbitrary cut-off representing conception. I show here that mutations in \ac{srsf2}-P95H and \ac{u2af1} appear much later in life than those in other genes, contributing to the previously reported age association of splicing genes \cite{McKerrell2015-rl} (\figref{fig:ages-at-onset}). Mutations in every other gene, considering the pervasive effects of deceleration, is likely to appear consistently through life.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ages-at-onset.pdf}
+	\placefigure{dynamics-2/ages-at-onset}
 	\placecaption{Age at onset intervals for different drivers (Figure 4k in \cite{Fabre2021-uw}).}
 	\label{fig:ages-at-onset}
 \end{figure}
@@ -383,15 +383,15 @@ Knowing that clones decelerate, I have to adjust the age at onset estimates simi
 A key aspect of the age at clonal onset is its close association with the annual growth --- in \figref{fig:age-at-onset-vs-growth} it is clear that clones harbouring mutations which appear later in life grow faster than other mutations; this is especially the case for \ac{srsf2}-P95H and \ac{u2af1}. Additionally, the converse is visible for clones characterized by \ac{dnmt3a} mutations which are projected to appear very early in life, an effect that is impossible to disentangle from the deceleration described in the previous section of the results. Even considering a relative low threshold --- 0.2\%, corresponding to the theoretical threshold for this longitudinal cohort (\autoref{appendix:theoretical-lod}) --- the growth rate of a considerable number of clones cannot have remained constant through life if they reached the observed prevalence.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/age-at-onset-vs-growth.pdf}
-	\placecaption{Association between age at onset and annual growth. Points represent the expected value, whereas the coloured lines represent the 90\% credible intervals. The black line and shaded area represent the theoretical limit of detection at a \ac{vaf} of 0.2\% (Extended Data Figure 9b in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/age-at-onset-vs-growth}
+	\placecaption{Association between age at onset and annual growth. Points represent the expected value, whereas the coloured lines represent the 90\% credible intervals. The black line and shaded area represent the theoretical limit of detection at a variant allele frequency of 0.2\% (Extended Data Figure 9b in \cite{Fabre2021-uw}).}
 	\label{fig:age-at-onset-vs-growth}
 \end{figure}
 
 There was the possibility --- as previously discussed in Chapter 2 --- that age at onset estimates, particularly those associated with \ac{u2af1} and \ac{srsf2}-P95H, could be due to a particularly convenient set of values for the population size and number of generations per year. To better clarify this, I also show that this particular age bias remains for a wide array of possible values for the population size and generation time (\figref{fig:ages-at-onset-benchmark}). Additionally, it is possible that the choice of population size and number of generations per year does not allow the detection of the late clonal onset of other drivers, particularly those in \ac{ptpn11} for which there appears to be a bias for a later age at clone onset; however, further studies will have to be conducted to assess this.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ages-at-onset-benchmark.pdf}
+	\placefigure{dynamics-2/ages-at-onset-benchmark}
 	\placecaption{Age at onset intervals for different drivers given different combinations of values for the population size and number of generations per year (Extended Data Figure 9e in \cite{Fabre2021-uw}).}
 	\label{fig:ages-at-onset-benchmark}
 \end{figure}
@@ -399,7 +399,7 @@ There was the possibility --- as previously discussed in Chapter 2 --- that age 
 While no association was observable between smoking history and clonal dynamics, I attempted to see if an association could be detected between clone onset and smoking, in order to better understand if the association between smoking and \ac{ch} was mediated by an increased mutation rate, rather than by a change in clonal fitness. However, I found no changes in the distributions for the age at clone onset between individuals smoking during the age at clone acquisition and otherwise (\figref{fig:smoking-age-density}).
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/smoking-age-density.pdf}
+	\placefigure{dynamics-2/smoking-age-density}
 	\placecaption{Age at onset distribution stratified by whether the individuals were smoking at the time of clonal acquisiton.}
 	\label{fig:smoking-age-density}
 \end{figure}
@@ -409,8 +409,8 @@ While no association was observable between smoking history and clonal dynamics,
 The final part of this project focused on analysing whether there was a more concrete connection between the observed growth effects during old age. To this effect, I used the risk coefficients for \ac{aml} onset from \cite{Abelson2018-wh} and the dN/dS values calculated for different sites by Margarete Fabre in a \ac{mds} cohort and in an \ac{aml} cohort to verify whether any association was present between these values --- \ac{aml} risk and selection in \ac{mds} and \ac{aml}, respectively --- and the observed growth rate during old age. As shown in \figref{fig:ch-risk-selection}, there is a clear association between \ac{aml} risk and annual growth rate during old age ($\mathrm{adj. R}^2=0.55$, $p=0.0037$) and between selection in \ac{mds} and \ac{aml} and annual growth rate ($\mathrm{adj. R}^2=0.19$, $p=0.0016$).
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/ch-risk-selection.pdf}
-	\placecaption{Association between annual growth and \ac{aml} risk (left) and selection in \ac{mds} and \ac{aml} (right) (based on Figure 5 in \cite{Fabre2021-uw}).}
+	\placefigure{dynamics-2/ch-risk-selection}
+	\placecaption{Association between annual growth and acute myeloid leukaemia (AML) risk (left) and selection in myelodysplastic syndrome (MDS) and AML (right) (based on Figure 5 in \cite{Fabre2021-uw}).}
 	\label{fig:ch-risk-selection}
 \end{figure}
 
@@ -425,8 +425,8 @@ In this work I present a comprehensive study of the dynamics of \ac{ch} by using
 \paragraph{The age-bias of \ac{u2af1} and \ac{srsf2}-P95H.} Mutations in \ac{u2af1} and \ac{srsf2}-P95H were the ones conferring the highest fitness advantage to clones and appearing only at relatively old ages in contrast with other genes which appeared consistently over life, explaining the previously reported later onset of splicing gene mutations \cite{McKerrell2015-rl}. This particular age bias is further highlighted once their prevalence across other myeloid conditions is considered \figref{fig:prevalence-srsf2-p95h-u2af1} --- while mutations in these drivers appear at a relatively low prevalence in this cohort when compared with haematological malignancies, it is considerably higher than that observable in other studies concerning \ac{ch}, which may be attributable to the fact that this cohort is on average older than other cohorts. Mutations in these genes have also been shown to be practically absent from cases of juvenile or paediatric haematological malignancies, appearing only in adult cases \cite{Kar2013-nw,Takita2012-yo}, a possible consequence of the later age at onset. Specifically considering \ac{srsf2}-P95H, it is worth highlighting that other recurring \ac{srsf2} mutations --- P95A and P95L --- confer a considerably smaller fitness advantage when compared with P95H. This is striking because all three mutations affect the same residue, a proline which interacts directly with \ac{rna} and is responsible for exon recognition \cite{Daubner2012-zp,Kim2015-qz}. P95H, however, is responsible for the most striking changes when considering the number of affected sites \cite{Rahman2020-bh,Zhang2015-xu}. A possible factor contributing to the difference between P95H and other P95 mutations is the fact that a change from proline to histidine is much more dramatic in terms of amino acid polarity when compared with changes to alanine or leucine. Mutations in \ac{ptpn11} are also worthy of some attention --- similarly to \ac{u2af1} and \ac{srsf2}-P95H, these mutations confer a considerable fitness advantage and are associated with syndromes which predispose to oncological diseases \cite{Digilio2002-nq,Tartaglia2001-ru,Kratz2005-qh}, making their prevalence in this cohort --- 2.3\% --- quite surprising.
 
 \begin{figure}[!ht]
-	\placefigure{gfx/dynamics-2/prevalence-srsf2-p95h-u2af1.pdf}
-	\placecaption{Prevalence of \textit{SRSF2}-P95H (top) and \textit{U2AF1} across different conditions, in other \ac{ch} studies and in the cohort used in to study clonal dynamics in this dissertation. Data sources were collated from different sources: \textit{U2AF1} prevalence in \ac{aml} \cite{Bamopoulos2020-zx}, in \ac{mds} \cite{Wang2020-dr}, in \ac{cmml} \cite{Kar2013-nw}; \textit{SRSF2} in \ac{mds} \cite{Arbab_Jafari2018-st}, in \ac{aml} \cite{Bamopoulos2020-zx}, \textit{U2AF1} and \textit{SRSF2} prevalence in \ac{ch} \cite{Jaiswal2014-rl,Genovese2014-eu,McKerrell2015-rl,Zink2017-zi,Acuna-Hidalgo2017-ng,Young2016-du,Midic2020-zh,Young2019-rz}. To obtain probability of an individual harbouring a mutation on either \ac{srsf2} or \ac{u2af1} of myeloid origin I marginalize the other probabilities ($P(\mathrm{mut}_{myeloid}) = P(\mathrm{mut}|AML)P(AML) + P(\mathrm{mut}|CMML)P(CMML) + P(\mathrm{mut}|MDS)P(MDS) + P(\mathrm{mut}|CH)P(CH)$).}
+	\placefigure{dynamics-2/prevalence-srsf2-p95h-u2af1}
+	\placecaption{Prevalence of \textit{SRSF2}-P95H (top) and \textit{U2AF1} across different conditions, in other clonal haematopoiesis (CH) studies and in the cohort used in to study clonal dynamics in this dissertation. Data sources were collated from different sources: \textit{U2AF1} prevalence in acute myeloid leukaemia (AML) \cite{Bamopoulos2020-zx}, in myelodysplastic syndrome (MDS) \cite{Wang2020-dr}, in chronic myelomonocytic (CMML) \cite{Kar2013-nw}; \textit{SRSF2} in MDS \cite{Arbab_Jafari2018-st}, in acute myeloid leukaemia (AML) \cite{Bamopoulos2020-zx}, \textit{U2AF1} and \textit{SRSF2} prevalence in CH \cite{Jaiswal2014-rl,Genovese2014-eu,McKerrell2015-rl,Zink2017-zi,Acuna-Hidalgo2017-ng,Young2016-du,Midic2020-zh,Young2019-rz}. To obtain probability of an individual harbouring a mutation on either \textit{SRSF2} or \textit{U2AF1} of myeloid origin I marginalize the other probabilities ($P(\mathrm{mut}_{myeloid}) = P(\mathrm{mut}|AML)P(AML) + P(\mathrm{mut}|CMML)P(CMML) + P(\mathrm{mut}|MDS)P(MDS) + P(\mathrm{mut}|CH)P(CH)$).}
 	\label{fig:prevalence-srsf2-p95h-u2af1}
 \end{figure}
 

@@ -1,4 +1,4 @@
-\chapter{Computational detection of cells in whole blood slides}
+\chapter{Automated computational detection of cells in whole blood slide images}
 
 \section{Contribution and disclaimer}
 
@@ -24,16 +24,14 @@ This work required access to a sufficiently large collection of \ac{wbs}. To thi
 
 For MLLC and AC2 I also had access to blood counts (\ac{wbcc}, haemoglobin concentration and platelet counts) and the age and sex of each individual. Each slide was inspected individually and, if there was a problem covering the entire slide (i.e. cellular density was too high across the whole slide or the digitalization resulted in a consistently blurry slide) this was removed from further analysis.
 
-\section{Computational detection and characterization of blood cells}
-
-\subsection{Quality control of slide tiles}
+\section{Quality control of slide tiles}
 
 Considering that the digitalization \ac{wbs} is automated and that the size of each \ac{wbs} is on the order of gigapixels, I process individual tiles --- small $h \times w$ ($512 \times 512$ in my case) regions of the \ac{wbs} --- individually to determine whether they should be further analysed. This step intends to exclude tiles which are either blurred, have very high cellular density or very low cellular density. While there are relatively simple ways to quantify blurriness, accurately identifying scenarios of very high or very low cellular density is not as trivial as this generally requires contextual information (whether there are cells or other specific objects in the image). Additionally, recent work has shown that \ac{dl} can accurately quantify the blurriness of an image in microscopy settings, outperforming other \textit{ad hoc} metrics devised to quantify blurriness \cite{Yang2018-ve}. Inspired by this work, I trained a classifier based on a densely connected layer network with 121 layers (DenseNet121) \cite{huang2017densely}, an \ac{ann} known for its relatively low parameter count while maintaining good performance and relatively quick prediction. To this effect I labelled 10,000 tiles from MLLC and classified them as either "poor quality" (blurry tiles, poorly illuminated tiles, tiles high or very low cellular density; N=7,775) or "good quality" (clear and sharp tiles, tiles with appropriate cellular density (i.e. at least a few cells which are not in close contact with other cells; N=2,225). This dataset was split into two separate training and testing sets based on the slide of origin, with 75 slides and a total of 8,050 tiles in the training set, and 18 slides and a total of 1,950 for the testing set. I trained this model for 25 epochs with a batch size of 32 and the Adam optimizer with an initial learning rate of 0.00005 that decayed by 90\% every time the training loss stopped decreasing. During training, each image had a 60\% probability of having its brightness, saturation, hue and contrast randomly altered (by 15\%, 10\%, 10\% and 10\%, respectively) or of having random JPEG compression artefacts introduced. This makes the training more robust to alteration of \ac{wbs} preparation and variability in image digitalization.
 
 Using the protocol described in the previous paragraph, I fine-tuned the weights of a DenseNet121 to classify whether individual tiles from slides were of good or poor quality (\figref{fig:slide-quality-examples}). Validation shows good predictive performance with an \ac{auroc} of 93.4\%, recall of 82.2\% and precision of 85.2\%. In other words, this model is slightly better at identifying poor quality slides than good quality slides. This leads to a tolerable excess of false negatives when compared with false positives --- given the problem at hand (the morphologic characterization of \ac{wbc} and \ac{rbc}), it is preferable to avoid false positives as this also avoids the detection of downstream false positives (i.e. objects in the \ac{wbs} which are not blood cells), thus minimizing the detected artefactual morphological signatures.
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/slide-quality-examples.pdf}
+    \placefigure{cytomorphology/slide-quality-examples}
     \placecaption{Examples of good and poor quality tiles used in training and testing with classifications.}
     \label{fig:slide-quality-examples}
 \end{figure}
@@ -41,7 +39,7 @@ Using the protocol described in the previous paragraph, I fine-tuned the weights
 An overview of the slide regions classified as good quality further confirms the quality of the predictions \figref{fig:slide-quality-regions} --- mostly, the regions corresponding to the monolayer, a region of the slide where a good number of non-overlapping cells are observable and that is usually preferred for \ac{wbs} analysis by haematologists \cite{Adewoyin2014-vo}, is the one identified by this approach.
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/slide-quality-regions.pdf}
+    \placefigure{cytomorphology/slide-quality-regions}
     \placecaption{Examples of regions of the slide labelled as being of good or poor quality (brighter regions on the quality map were predicted as being of good quality).}
     \label{fig:slide-quality-regions}
 \end{figure}
@@ -49,97 +47,97 @@ An overview of the slide regions classified as good quality further confirms the
 While there exist simpler measures of blurriness or other ways to assess whether an image is of good quality, I note that these can be too simplistic --- indeed, using the colour histograms of each tile as a measure of colour distribution, together with the variance of the Laplacian operation over the image as a measure of image sharpness \cite{Bansal2016-xm} (blurry images have smaller gradient distribution widths) and training a simple \ac{ml} algorithm (an elastic network regression, which will be further explained in Chapter 5 \cite{Friedman2010-gl}) to predict slide quality, the \ac{auroc} in the testing set is 74.1\%. In comparison with the \ac{auroc} obtained with a \ac{dl} model (93.4\%), this approach would prove much less effective. Additionally, looking at the distribution of the variance of the Laplacian (the sharpness of an image) shows that using such simple features would be insufficient (\figref{fig:sharpness-distribution}) --- while the distributions are different, there is a significant overlap between the sharpness distribution of good and poor quality tiles.
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/sharpness-distribution.pdf}
+    \placefigure{cytomorphology/sharpness-distribution}
     \placecaption{Distribution of sharpness stratified by tile quality. Each point represents a tile and the sharpness was calculated as the variance of the Laplacian for each tile.}
     \label{fig:sharpness-distribution}
 \end{figure}
 
-Finally, looking at how the percentage of good quality tiles are distributed across datasets and conditions, reveals that, on average, MLLC has 3.6\% more good quality tiles than the other two cohorts ($p = 8 \times 10^{-5}$ for a for the association between cohort and the percentage of good quality tiles while controlling for condition), a likely consequence from having used this cohort to train this algorithm (\figref{fig:quality-percentage-distribution}). Additionally, it is worth noting that within \ac{mds} cases, MLLC has 4.8\% more good quality tiles than AC2. For this reason, it is important to note a few aspects of the slide preparation in AC2 --- these slides can be prepared up to 24 hours after the blood was collected, considerably increasing likelihood of artefacts \cite{Bain2005-zg,Narasimha2008-fh} and prepared manually, unlike the rest of the slides in AC2 which are prepared using a Hematek 3000 system, which automatically smears and stains each \ac{wbs}. It is not unlikely that these differences lead to systematic different proportions of good quality slides across slides.
+Finally, looking at how the percentage of good quality tiles are distributed across datasets and conditions, reveals that, on average, MLLC has 3.6\% more good quality tiles than the other two cohorts ($p = 8 \times 10^{-5}$ for t-test of the association between cohort and the percentage of good quality tiles while controlling for condition), a likely consequence from having used this cohort to train this algorithm (\figref{fig:quality-percentage-distribution}). Additionally, it is worth noting that within \ac{mds} cases, MLLC has 4.8\% more good quality tiles than AC2. For this reason, it is important to note a few aspects of the slide preparation in AC2 --- these slides can be prepared up to 24 hours after the blood was collected, considerably increasing likelihood of artefacts \cite{Bain2005-zg,Narasimha2008-fh} and prepared manually, unlike the rest of the slides in AC2 which are prepared using a Hematek 3000 system, which automatically smears and stains each \ac{wbs}. It is not unlikely that these differences lead to systematic different proportions of good quality slides across slides.
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/quality-percentage-distribution.pdf}
+    \placefigure{cytomorphology/quality-percentage-distribution}
     \placecaption{Distribution of sharpness stratified by tile quality. Each point represents a tile and the sharpness was calculated as the variance of the Laplacian for each tile.}
     \label{fig:quality-percentage-distribution}
 \end{figure}
 
 Finally, it is worth noting the scale at which this was applied --- a total of 26,509,520 tiles were predicted as being of poor or good quality. Approximately 10\% (2,781,513) of these tiles are further analysed, with a detection and characterization described below for \ac{rbc} and \ac{wbc}.
 
-\subsection{Detection of red blood cells}
+\section{Detection of red blood cells}
 
-The detection algorithm for \ac{rbc} is relatively simple since the detection of all \ac{rbc} in a \ac{wbs} was not of interest to this project. The reason for this is simple --- a \ac{wbs} typically holds 5 mL of blood, and typically there are, approximately, between 4 and 6 million \ac{rbc} in each microlitre \cite{Bain2004-uq} --- in other words, a \ac{wbs} will have between 20 and 30 billion \ac{rbc}. Additionally, modern diagnostic from a \ac{wbs} analyses, at most, 250 cells, nucleated or otherwise \cite{Bain2005-zg}, and, as mentioned earlier in this Chapter, it is of interest to analyse regions of the slide where an adequate cellular density is observed (the monolayer) \cite{Adewoyin2014-vo}, i.e. when cells are sufficiently distant from one another to prevent the misidentification of irregular morphology. Taking all of this into account, it was more important to detect separate and isolated \ac{rbc} in \ac{wbs}. To do so, I developed a two-step approach for the detection of \ac{rbc} --- the first step involves the segmentation and detection of all objects which are likely to be isolated red blood cells using traditional \ac{cv} and morphological operators. The second step characterizes and classifies each object as "\ac{rbc}" or "not \ac{rbc}", to filter out all false positives.
+The detection algorithm for \ac{rbc} is relatively simple since the detection of \textit{all} \ac{rbc} in a \ac{wbs} was not of interest to this project. The reason for this is simple --- a \ac{wbs} typically holds 5 mL of blood, and typically there are, approximately, between 4 and 6 million \ac{rbc} in each microlitre \cite{Bain2004-uq} --- in other words, a \ac{wbs} will have between 20 and 30 billion \ac{rbc}. Additionally, modern diagnostic from a \ac{wbs} analyses, at most, 250 cells, nucleated or otherwise \cite{Bain2005-zg}, and, as mentioned earlier in this Chapter, it is of interest to analyse regions of the slide where an adequate cellular density is observed (the monolayer) \cite{Adewoyin2014-vo}, i.e. when cells are sufficiently distant from one another to prevent the misidentification of irregular morphology. Taking all of this into account, it was more important to detect separate and isolated \ac{rbc} in \ac{wbs}. To do so, I developed a two-step approach for the detection of \ac{rbc} --- the first step involves the segmentation and detection of all objects which are likely to be isolated red blood cells using traditional \ac{cv} and morphological operators. The second step characterizes and classifies each object as "\ac{rbc}" or "not \ac{rbc}", to filter out all false positives.
 
-\subsubsection{Segmentation and detection algorithm}
+\subsection{Segmentation and detection algorithm}
 
-As mentioned, the protocol for \ac{rbc} segmentation is relatively simple and is best summarized in Algorithm \ref{alg:rbc-detection}. For clarity, $CannyEdgeDetector$ represents the Canny edge detection algorithm \cite{Canny1986-pi}, $getContours$ is a standard routine to detect object contours from a binary image, $drawContours$ is a routine to draw contours on the image and fill them, $getArea$ is a function that calculates the area of a contour or ellipse, $averageColour$ is a function that selects the pixels in an image belonging to a contour and calculates their average value, $fitEllipse$ is a function that fits an ellipse to a contour, $getMajorAndMinorAxis$ is a function that calculates the lengths of the major and minor axes of an ellipse and $isolateObject$ is a function that returns the region of the image containing the \ac{rbc} and its respective mask. 
+As mentioned, the protocol for \ac{rbc} segmentation is relatively simple and is best summarized in Algorithm \ref{alg:rbc-detection}. For clarity, \texttt{CannyEdgeDetector} represents the Canny edge detection algorithm \cite{Canny1986-pi}, \texttt{getContours} is a standard routine to detect object contours from a binary image, $drawContours$ is a routine to draw contours on the image and fill them, \texttt{getArea} is a function that calculates the area of a contour or ellipse, \texttt{averageColour} is a function that selects the pixels in an image belonging to a contour and calculates their average value, \texttt{fitEllipse} is a function that fits an ellipse to a contour, \texttt{getMajorAndMinorAxis} is a function that calculates the lengths of the major and minor axes of an ellipse and \texttt{isolateObject} is a function that returns the region of the image containing the \ac{rbc} and its respective mask. 
 
 \begin{algorithm}[!ht]
     \caption{Red blood cell detection algorithm.}\label{alg:rbc-detection}
-    \KwData{$image$}
+    \KwData{$\mathrm{image}$}
 
     \KwResult{Set of masked RBC images and their contours $S$}
 
     $S \gets \{\}$;
 
-    $edgeImage \gets CannyEdgeDetector(image)$;
+    $\mathrm{edgeImage} \gets \texttt{CannyEdgeDetector}(\mathrm{image})$;
 
-    $contours \gets getContours(image)$;
+    $\mathrm{contours} \gets \texttt{getContours}(\mathrm{edgeImage})$;
 
-    $contourImage \gets drawContours(contours)$;
+    $\mathrm{contourImage} \gets \texttt{drawContours}(\mathrm{contours})$;
 
-    $contourImage \gets contourImage - edgeImage$;
+    $\mathrm{contourImage} \gets \mathrm{contourImage} - \mathrm{edgeImage}$;
 
-    $contours \gets getContours(contourImage)$;
+    $\mathrm{contours} \gets \texttt{getContours}(\mathrm{contourImage})$;
 
-    \For{$contour$ in $contours$} {
-        $area \gets getArea(contour)$;
+    \For{$\mathrm{contour}$ in $\mathrm{contours}$} {
+        $\mathrm{area} \gets \texttt{getArea}(\mathrm{contour})$;
 
-        \If{$area > 300px$ and $area < 2000px$};
+        \If{$\mathrm{area} > 300px$ and $\mathrm{area} < 2000px$};
         {
-            $averageColour \gets getAverageColour(image,contour)$;
+            $\mathrm{averageColour} \gets \texttt{getAverageColour}(\mathrm{image},\mathrm{contour})$;
 
-            \If{$averageColour > 170$ and $averageColour < 220$}
+            \If{$\mathrm{averageColour} > 170$ and $\mathrm{averageColour} < 220$}
             {
-                $ellipse \gets fitEllipse(contour)$;
+                $]\mathrm{ellipse} \gets \texttt{fitEllipse}(\mathrm{contour})$;
 
-                $majorAxis,minorAxis \gets getMajorAndMinorAxis(ellipse)$;
+                $\mathrm{majorAxis},\mathrm{minorAxis} \gets \texttt{getMajorAndMinorAxis}(\mathrm{ellipse})$;
 
-                $areaEllipse \gets getArea(ellipse)$;
+                $\mathrm{areaEllipse} \gets \texttt{getArea}(\mathrm{ellipse})$;
 
-                \If{$areaEllipse < 1500px$ and $areaEllipse > 300px$ and $MajorAxis/MinorAxis < 1.5$}
+                \If{$\mathrm{areaEllipse} < 1500px$ and $\mathrm{areaEllipse} > 300px$ and $\mathrm{majorAxis}/\mathrm{minorAxis} < 1.5$}
                 {
-                    $isolatedCellImage,isolatedCellMask \gets isolateObject(image,contour)$;
+                    $\mathrm{isolatedCellImage},\mathrm{isolatedCellMask} \gets \texttt{isolateObject}(\mathrm{image},\mathrm{contour})$;
 
-                    append $\{isolatedCellImage,isolatedCellMask,contour\}$ to $S$;
+                    append $\{\mathrm{isolatedCellImage},\mathrm{isolatedCellMask},\mathrm{contour}\}$ to $S$;
                 }
             }
         }
     }
 \end{algorithm}    
 
-\subsubsection{Machine-learning-assisted filtering}
+\subsection{Machine-learning-assisted filtering}
 
 While simple, the protocol described above for \ac{rbc} detection can return objects which may not be \ac{rbc}. As such, I filter them out by characterizing them in terms of shape, colour and texture (details below in the "Characterization of blood cells" subsubsection) and use these features to train a classifier that predicts each object as being "\ac{rbc}" (1) or "not \ac{rbc}" (0). For this, I used \ac{xgboost}. \ac{xgboost} is a boosting algorithm which uses decision trees as its base learner, featuring tree penalization and pruning, high parallelization and implicit feature selection \cite{Chen2016-xk}. To train this algorithm, I picked a random set of 158 $2096 \times 2096$ tiles from AC1 and split them into training (109) and testing tiles (48) and, for each tile, I run the \ac{rbc} detection pipeline described above and characterize each \ac{rbc}. I then labelled objects as "\ac{rbc}" (positive class) or "not \ac{rbc}" (negative class), with a total of 2262 objects labelled for training (positive class: 1870; negative class: 392) and 1107 (positive class: 962; negative class: 145) for testing. I train an \ac{xgboost} model with a maximum number of 50 weak estimators and DART boosting (used to ensure that earlier trees do not become considerably more important than later trees through the use of dropout) \cite{Rashmi2015-qe} on the training set and test them on the validation set. Additionally, given the relatively high class imbalance (approximately only 1 out of every 7 objects belongs to the negative class), the objective function of each positive sample was scaled by a factor of 0.1.
 
-\subsubsection{Computational detection of millions of red blood cells}
+\subsection{Computational detection of millions of red blood cells}
 
 Individual \ac{rbc} were detected using a pipeline of relatively simple morphological operations and filtering (\ref{alg:rbc-detection}). However, this approach led to the detection of false positives \figref{fig:rbc-filter-examples}, with objects such as large platelets and small clusters of \ac{rbc} being detected as \ac{rbc}, and oversegmentation of \ac{rbc} with other objects such as small platelets --- using a small subset, I estimate that approximately 17\% of all objects detected as \ac{rbc} were false positives. I trained an \ac{xgboost} algorithm to automatically filter each object detected based on their morphological description. This performs considerably well, with a 98\% precision, 99\% recall and 98\% specificity on an independent test set, implying that very few correctly detected \ac{rbc} are filtered out ($\approx 1\%$) and only $\approx 2\%$ of all wrongly detected \ac{rbc} are kept for downstream analysis, yielding a post-filtering false positive rate of $\approx 0.34\%$. 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/rbc-filter-examples.pdf}
-    \placecaption{Examples of correctly and incorrectly detected red blood cells (RBC) and their classification by an xgboost model.}
+    \placefigure{cytomorphology/rbc-filter-examples}
+    \placecaption{Examples of red blood cells stratified by their classification by an xgboost model (left --- positive class and kept for further analysis; right --- negative class and filtered out from downstream analysis).}
     \label{fig:rbc-filter-examples}
 \end{figure}
 
-A median of 20,277 were detected in each \ac{wbs} across cohorts (range between 70 and 133,916 and a total of 12,042,425), with more \ac{rbc} being detected on AC1, the cohort used to develop the detection algorithms with no obvious biases dependent on condition or condition subtype being detected except when comparing normal \ac{wbs} with those from individuals with a clinically-relevant condition (\figref{fig:rbc-count-coarse} and \figref{fig:rbc-count-fine}). While controlling for the number of good quality tiles (the ones used in \ac{rbc} detection) and dataset, normal \ac{wbs} are expected to have 11944 \ac{rbc} fewer cells ($p=3 \times 10^{-8}$). 
+A median of 20,277 \ac{rbc} were detected in each \ac{wbs} across cohorts (range between 70 and 133,916 and a total of 12,042,425), with more \ac{rbc} being detected on AC1, the cohort used to develop the detection algorithms with no obvious biases dependent on condition or condition subtype being detected except when comparing normal \ac{wbs} with those from individuals with a clinically-relevant condition (\figref{fig:rbc-count-coarse} and \figref{fig:rbc-count-fine}). While controlling for the number of good quality tiles (the ones used in \ac{rbc} detection) and dataset, normal \ac{wbs} are expected to have 11944 \ac{rbc} fewer cells ($p=3 \times 10^{-8}$ for a t-test). 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/rbc-count-coarse.pdf}
-    \placecaption{Detected red blood cells (RBC) stratified by condition (normal, \ac{mds} and anaemia).}
+    \placefigure{cytomorphology/rbc-count-coarse}
+    \placecaption{Detected red blood cells (RBC) stratified by condition (normal, myelodysplastic syndrome (MDS) and anaemia).}
     \label{fig:rbc-count-coarse}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/rbc-count-fine.pdf}
+    \placefigure{cytomorphology/rbc-count-fine}
     \placecaption{Detected red blood cells (RBC) stratified by relevant condition subtype.}
     \label{fig:rbc-count-fine}
 \end{figure}
@@ -147,14 +145,14 @@ A median of 20,277 were detected in each \ac{wbs} across cohorts (range between 
 Lastly, a good level of correlation is observed between the number of detected \ac{rbc} and the number of tiles predict as being of good quality ($\mathrm{robust\ R}^2=0.42\ [0.34,0.49]$; \figref{fig:wbc-quality-tiles}).
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/rbc-quality-tiles.pdf}
-    \placecaption{Association between the number of good quality tiles and detected white blood cell (WBC) for each \ac{wbs} ($\mathrm{robust\ R}^2=0.42$).}
+    \placefigure{cytomorphology/rbc-quality-tiles}
+    \placecaption{Association between the number of good quality tiles and detected white blood cell (WBC) for each whole blood slide ($\mathrm{robust\ R}^2=0.42$).}
     \label{fig:rbc-quality-tiles}
 \end{figure}
 
-\subsection{Detection of white blood cells}
+\section{Detection of white blood cells}
 
-Considering that \ac{wbc} are more variable than \ac{rbc}, I trained a U-Net model \cite{Ronneberger2015-do} to segment \ac{wbc}. To this effect, I annotated all \ac{wbc} in the 158 $2096 \times 2096$ tiles mentioned above, yielding a total of 2853 annotated \ac{wbc}, 2747 of which were completely visible (no pixels on the edge of the image). To assess the performance of U-Net across all cohorts, I also labelled 2 images from MLLC (containing 60 \ac{wbc}) and 30 tiles from AC2 (containing 69 \ac{wbc}). Different architectures were tested to assess whether the depth (the number of retrieved features) of the network (i.e. the richness of the characterization) had a preponderant impact on the output; to this effect, different instances of a U-Net model were trained where the depths of each layer were multiplied by 1.0, 0.5 and 0.25 and rounded to the nearest integer. I trained each U-Net model on randomly rotated $512 \times 512$ tiles extracted from the original tiles and an $L_2$-regularization of 0.005 with a weighted cross-entropy loss and using the Adam optimizer \cite{Kingma2014-zd} over 200 epochs. The learning rate for training was set to 0.0005 for depth multipliers of 0.25 and 0.5 and 0.0001 for the original depth (depth multiplier = 1). The weighted cross-entropy was weighted based on each pixel's relative distance to the nearest cell border --- particularly, the weight of pixels belonging to a cell was 1, whereas that of other pixels was calculated based on their distance to the nearest cell border $d$ as $w = 0.5 \times (1-0.5)e^{-\frac{2d^2}{2 \times 10^2}}$; in other words, pixels belonging to the cell and near the cell were more heavily considered during training as a mechanism to avoid the over-segmentation of cells (i.e. two cells being segmented as a single object) \cite{Ronneberger2015-do}. I also tested whether using \ac{tta} could improve results \cite{Moshkov2020-rc}, and assess the performance of all models at epoch 75 to verify whether early stopping can lead to improved results in my case \cite{Prechelt2012-xf}. 
+Considering that \ac{wbc} are more variable than \ac{rbc}, I trained a U-Net model \cite{Ronneberger2015-do} to segment \ac{wbc}. To this effect, I annotated all \ac{wbc} in the 158 $2096px \times 2096px$ tiles mentioned above, yielding a total of 2853 annotated \ac{wbc}, 2747 of which were completely visible (no pixels on the edge of the image). To assess the performance of U-Net across all cohorts, I also labelled 2 images from MLLC (containing 60 \ac{wbc}) and 30 tiles from AC2 (containing 69 \ac{wbc}). Different architectures were tested to assess whether the depth (the number of retrieved features) of the network (i.e. the richness of the characterization) had a preponderant impact on the output; to this effect, different instances of a U-Net model were trained where the depths of each layer were multiplied by 1.0, 0.5 and 0.25 and rounded to the nearest integer. I trained each U-Net model on randomly rotated $512px \times 512px$ tiles extracted from the original tiles and an $L_2$-regularization of 0.005 with a weighted cross-entropy loss and using the Adam optimizer \cite{Kingma2014-zd} over 200 epochs. The learning rate for training was set to 0.0005 for depth multipliers of 0.25 and 0.5 and 0.0001 for the original depth (depth multiplier = 1). The weighted cross-entropy was weighted based on each pixel's relative distance to the nearest cell border --- particularly, the weight of pixels belonging to a cell was 1, whereas that of other pixels was calculated based on their distance to the nearest cell border $d$ as $w = 0.5 \times (1-0.5)e^{-\frac{2d^2}{2 \times 10^2}}$; in other words, pixels belonging to the cell and near the cell were more heavily considered during training as a mechanism to avoid the over-segmentation of cells (i.e. two cells being segmented as a single object) \cite{Ronneberger2015-do}. I also tested whether using \ac{tta} could improve results \cite{Moshkov2020-rc}, and assess the performance of all models at epoch 75 to verify whether early stopping can lead to improved results in my case \cite{Prechelt2012-xf}. 
 
 Training in any case was performed with real-time data-augmentation --- particularly, random alterations to the brightness, saturation, hue and contrast were introduced to each image (10\%, 10\%, 5\% and 10\%, respectively), random Gaussian noise with a standard deviation of 0.005 was added to the image, each image had the probability of being slightly blurred with a Gaussian filter (probability of 0.1\%; standard deviation of 0.005) and random JPEG compression artefacts were added. Additionally, each image is warped using a random elastic transform as suggested in the original U-Net paper \cite{Ronneberger2015-do} --- this creates small, local warping distortions in the image, increasing the amount of \ac{wbc} shape variability during training. 
 
@@ -164,38 +162,38 @@ In this work I also segment the nucleus of WBC. To this effect, I use the knowle
 
 During inference, I consider only objects with an area greater than 1000px and smaller than 8000px as being \ac{wbc}. These values were calculated from the size distribution of the \ac{wbc} I labelled for segmentation. Additionally, I use \ac{tta} to improve the robustness of the detected objects and to avoid segmenting objects on the edge of an image (which may be incomplete) I use a sliding window of size 640px with a 128px stride and remove objects detected as being on the edge of the sliding window. 
 
-\subsubsection{Computational detection of hundreds of thousands of white blood cells}
+\subsection{Computational detection of hundreds of thousands of white blood cells}
 
 As described above, the detection of \ac{wbc} was performed with a U-Net model \cite{Ronneberger2015-do} trained on tiles from a few slides from AC1 and validated on tiles from other slides from AC1, MLLC and AC2. I tested different network sizes (multiplying the depth of all layers by a factor of 0.25, 0.5 and 1.0), showing that an intermediate (0.5) size yields the best results (mean \ac{iou} across cohorts = 87\%; \figref{fig:u-net-validation}) which generalize well to the other cohorts being studied \figref{fig:wbc-segmentation-good}. Additionally, it is clear that \ac{tta} improves results consistently (mean \ac{iou} improvement for depth multiplier = 0.5 across all datasets = 1.1\%; \figref{fig:u-net-tta}), making it a simple yet effective addition to improve the results of my \ac{wbc} detection pipeline. This improvement stems mostly from the elimination of relatively small spurious and artefactual regions predicted as belonging to \ac{wbs} as visible in \figref{fig:wbc-segmentation-good}. Early stopping has been reported as an effective strategy to potentially improve the performance of \ac{dl} models \cite{Prechelt2012-xf}. However, in my case, using an earlier epoch did not lead to any improvements in the result for the best performing depth multiplier of 0.5 (\figref{fig:u-net-early-stopping}) which, together with the performance in independent validation sets, hints that training for 100 epochs did not lead to overfitting. However, when considering the case for depth multiplier of 1.0, training for fewer epochs could have led to better results, especially on Adden2; this suggests that overfitting is likely in this model.
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/u-net-validation.pdf}
+    \placefigure{cytomorphology/u-net-validation}
     \placecaption{U-Net metrics stratified by network size and dataset.}
     \label{fig:u-net-validation}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/u-net-tta.pdf}
+    \placefigure{cytomorphology/u-net-tta}
     \placecaption{Comparison of U-Net performance with and without test-time augmentation (TTA).}
     \label{fig:u-net-tta}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/u-net-early-stopping.pdf}
+    \placefigure{cytomorphology/u-net-early-stopping}
     \placecaption{Comparison of U-Net performance on epoch 50 and epoch 100.}
     \label{fig:u-net-early-stopping}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-segmentation-good.pdf}
-    \placecaption{Examples of \ac{wbc} segmentation using a U-Net across three different cohorts. The first column for each represents the input, the second the regular  prediction, the third the prediction using test-time augmentation (TTA) and the fourth shows the effect of refining the prediction after filtering small objects and filling large convex defects. The orange circles represent regions of the image where an improvement between the regular prediction and the prediction using TTA is visible.}
+    \placefigure{cytomorphology/wbc-segmentation-good}
+    \placecaption{Examples of white blood cell segmentation using a U-Net across three different cohorts. The first column for each represents the input, the second the regular  prediction, the third the prediction using test-time augmentation (TTA) and the fourth shows the effect of refining the prediction after filtering small objects and filling large convex defects. The orange circles represent regions of the image where an improvement between the regular prediction and the prediction using TTA is visible.}
     \label{fig:wbc-segmentation-good}
 \end{figure}
 
 I further post-processed each prediction by removing objects detected as \ac{wbc} whose size lies outside the expected distribution for \ac{wbc} sizes, and filling small convex hull defects. I note that this leads to a slight improvement in the prediction (mean \ac{iou} improvement for inference with post-processing across all datasets = 1.2\%; \figref{fig:u-net-post-process}; \figref{fig:wbc-segmentation-good}). 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/u-net-post-process.pdf}
+    \placefigure{cytomorphology/u-net-post-process}
     \placecaption{Comparison of U-Net performance before and after segmentation post-processing.}
     \label{fig:u-net-post-process}
 \end{figure}
@@ -203,27 +201,27 @@ I further post-processed each prediction by removing objects detected as \ac{wbc
 Still regarding the performance of this model, it is worth considering a few cases where predictions are of poor quality --- in \figref{fig:wbc-segmentation-bad} I show three examples of this, noting that these are relatively rare as demonstrated by the high predictive performance of this U-Net model. In essence, these can be classified as one of three types of error --- undersegmentation (\figref{fig:wbc-segmentation-bad}, top), where parts of the \ac{wbc} where not segmented, oversegmentation (\figref{fig:wbc-segmentation-bad}, middle), where the segmented object includes more than just the \ac{wbc}, and false positives ((\figref{fig:wbc-segmentation-bad}, bottom), where the detected object is not a \ac{wbc}. 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-segmentation-bad.pdf}
-    \placecaption{Examples of poor \ac{wbc} segmentations.}
+    \placefigure{cytomorphology/wbc-segmentation-bad}
+    \placecaption{Examples of poor white blood cell segmentations.}
     \label{fig:wbc-segmentation-bad}
 \end{figure}
 
 A median of 936 \ac{wbc} were detected in each \ac{wbs} across cohorts (range between 13 and 36,551 and a total of 646,952), with more \ac{wbc} being detected on AC1, the cohort used to develop and train the \ac{wbc} detection algorithms with no obvious biases dependent on condition or condition subtype being detected (\figref{fig:wbc-count-coarse} and \figref{fig:wbc-count-fine}). While controlling for the number of good quality tiles and dataset, no differences were found between conditions. Given that \ac{wbc} counts were available for all individuals in MLLC, I calculate the association between \ac{wbc} counts and the \ac{wbc} density (ratio between the number of detected \ac{wbc} and the number of good quality tiles), showing good association between both ($\mathrm{robust\ R}^2=0.39\ [0.30,0.50]$; \figref{fig:wbc-count-association}).
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-count-coarse.pdf}
-    \placecaption{Detected red blood cells (WBC) stratified by condition (normal, \ac{mds} and anaemia).}
+    \placefigure{cytomorphology/wbc-count-coarse}
+    \placecaption{Detected red blood cells (WBC) stratified by condition (normal, myelodysplastic syndrome (MDS) and anaemia).}
     \label{fig:wbc-count-coarse}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-count-fine.pdf}
+    \placefigure{cytomorphology/wbc-count-fine}
     \placecaption{Detected red blood cells (WBC) stratified by relevant condition subtype.}
     \label{fig:wbc-count-fine}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-count-association.pdf}
+    \placefigure{cytomorphology/wbc-count-association}
     \placecaption{Association between white blood cell (WBC) density in whole blood slides and WBC counts as measured by complete blood counts ($\mathrm{robust\ R}^2=0.39$).}
     \label{fig:wbc-count-association}
 \end{figure}
@@ -231,12 +229,12 @@ A median of 936 \ac{wbc} were detected in each \ac{wbs} across cohorts (range be
 Lastly, it is worth noting that, similarly to \ac{rbc}, a good level of correlation is observed between the number of detected \ac{wbc} and the number of tiles predict as being of good quality ($\mathrm{robust\ R}^2=0.33\ [0.24,0.43]$; \figref{fig:wbc-quality-tiles}). In both cases, this implies that few biases affect the blood cell extraction protocol. 
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/wbc-quality-tiles.pdf}
-    \placecaption{Association between the number of good quality tiles and detected white blood cell (WBC) for each \ac{wbs} ($\mathrm{robust\ R}^2=0.33$).}
+    \placefigure{cytomorphology/wbc-quality-tiles}
+    \placecaption{Association between the number of good quality tiles and detected white blood cell (WBC) for each whole blood slide ($\mathrm{robust\ R}^2=0.33$).}
     \label{fig:wbc-quality-tiles}
 \end{figure}
 
-\subsection{Characterization of blood cells}
+\subsection{Morphological characterization of blood cells}
 
 After detecting and adequately segmenting each cell as detailed in the previous section of the methods, I calculate for each cell a set of morphological descriptors. The descriptors used here were implemented in a custom Python script but the large majority of them are also present in bioimage analysis software programs \cite{Carpenter2006-hy,Sommer2011-ds} or described in publications reviewing morphometry in image analysis \cite{Mingqiang2008-wv} and were selected as characterizing size, shape, texture and colour distribution. Using the features described in \tableref{table:features}, I describe every RBC and WBC. Additionally, for each WBC I characterize its nucleus regarding its size and shape using a reduced set of features, also detailed in \tableref{table:features}. Finally, each \ac{wbc} is described by 53 features (42 for the cellular characterization and 11 for the nuclear characterization) and each \ac{rbc} by 42 features. To account for the different resolutions (0.2517 micrometers/pixel for Hamamatsu NanoZoomer 2.0; 0.2268 micrometers/pixel for Aperio AT2) I rescale each cell image in AC2 by a factor of 1.1098 prior to their characterization.
 
@@ -265,23 +263,23 @@ After detecting and adequately segmenting each cell as detailed in the previous 
 I use this panel of features to capture distinct aspects of cell morphology --- size, shape, colour and intensity distribution and texture. To provide a more concrete understanding of what a few of these features capture, I provide a few nominal examples of the distribution of these features in both \ac{wbc} and \ac{rbc} in \figref{fig:feature-examples-wbc} and \figref{fig:feature-examples-rbc}. For further clarity, in \figref{fig:feature-examples-wbc} I show examples of variation in terms of cell size (perimeter --- length of the cell edge), shape (circle variance --- how close the shape of the cell approximates that of a circle), nuclear shape (nuclear solidity --- the ratio between the areas of the convex hull of the nucleus and of the nucleus) and granularity (\ac{glcm} (textural) energy --- measures the homogeneity of a region of an image. i.e. the maximum value for the energy is 1 and corresponds to a constant image) for \ac{wbc}. In \figref{fig:feature-examples-rbc}, I show examples of variation in terms of the shape of central pallor (maximum curvature of the cell edge) and shape (eccentricity --- ratio between the lengths of the minor and major axis).
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/feature-examples-wbc.pdf}
-    \placecaption{Examples of features and how their characterization relates to \ac{wbc} morphology.}
+    \placefigure{cytomorphology/feature-examples-wbc}
+    \placecaption{Examples of features and how their characterization relates to white blood cell morphology.}
     \label{fig:feature-examples-wbc}
 \end{figure}
 
 \begin{figure}[!ht]
-    \placefigure{gfx/cytomorphology/feature-examples-rbc.pdf}
-    \placecaption{Examples of features and how their characterization relates to \ac{rbc} morphology.}
+    \placefigure{cytomorphology/feature-examples-rbc}
+    \placecaption{Examples of features and how their characterization relates to red blod cell morphology.}
     \label{fig:feature-examples-rbc}
 \end{figure}
 
-\subsection{Pipeline description and method implementation}
+\section{Pipeline description and method implementation}
 
-Summarily, the pipeline for blood cell detection, implemented in Python and managed by Snakemake, is described below, with one point for each script used:
+Summarily, the pipeline for blood cell detection, implemented in Python and managed by Snakemake, is represented in \figref{fig:pipeline-schematic} and described below, with one point for each script used:
 
 \begin{enumerate}
-    \item Each $512 \times 512$ tile is classified as being of poor or good quality and this classification is stored as a comma-separated values files;
+    \item Each $512px \times 512px$ tile is classified as being of poor or good quality and this classification is stored as a comma-separated values files;
     \item Each good quality tile is analysed using the \ac{rbc} and \ac{wbc} detection protocols and tile regions containing cells are stored in separate HDF5 files (one for \ac{rbc}, another for \ac{wbc}), thus enabling quick access;
     \item Each cell on each of the HDF5 files described in the point above is characterized using separate protocols:
     \begin{itemize}
@@ -290,13 +288,13 @@ Summarily, the pipeline for blood cell detection, implemented in Python and mana
     \end{itemize}
 \end{enumerate}
 
+\begin{figure}[!ht]
+    \placefigure{cytomorphology/pipeline-schematic}
+    \placecaption{Schematic representation of the blood cell detection pipeline. The input is a whole blood slide (WBS) in any format comprehended by Openslide \cite{Goode2013-zs}. The WBS is first quality-controlled using a neural network and the regions of the slide that were classified as being of good quality are further analysed using a red and white blood cell detection pipeline.}
+    \label{fig:pipeline-schematic}
+\end{figure}
+
 All \ac{dl} networks are implemented using Tensorflow 2.3 \cite{tensorflow2015-whitepaper} and are available through Github (Code Availability statement is presented at the end of this chapter). \Ac{cv} operations were implemented using both OpenCV2 \cite{opencv_library} and scikit-image \cite{van2014scikit}, and slide I/O operations were handled by OpenSlide \cite{Goode2013-zs}.
-
-\section{Discussion}
-
-In this chapter I outline a methodology capable of detecting and characterizing between hundreds and hundreds of thousands of cells (\ac{rbc} and \ac{wbc}) in \ac{wbs}. In this approach, I first use an accurate and deep-learning-assisted method for quality control, isolating all the regions of an image which could be used downstream in cellular detection. I the detect \ac{rbc} and \ac{wbc} separately, using a combination of traditional \ac{cv} and \ac{ml}-assisted filtering for the former and \ac{dl} for the latter. Each of these cells is then characterized using a relatively small panel of features describing size, shape, colour distribution and texture.
-
-I apply this methodology to three distinct cohorts --- AC1, composed of healthy individuals, and MLLC and AC2, composed of healthy individuals and individuals with either iron deficiency anaemia, megaloblastic anaemia, \ac{sf3b1}-mutant \ac{mds} and other \ac{mds} subtypes. I thus show that this methodology performs similarly well across different cohorts, acting as a powerful tool that can be used for other works looking into the computational cytomorphology of \ac{wbs}. The scale at which this methodology is applied is, to the best of my knowledge, unprecedented --- detecting and characterizing, in total, millions of cells (hundreds to hundreds of thousands of cells on each \ac{wbs}) highlights how computational methods can be applied in clinical imaging to create very large collections of cells. I additionally show that there is good correlation between the number of detected \ac{wbc} and the \ac{wbc} concentration as detected in a \ac{cbc}.
 
 \section{Code availability and statistical analysis}
 
@@ -312,3 +310,9 @@ The code for different sections of this work is available across different repos
 \end{itemize}
 
 All statistical analyses were performed in R 3.6.3 \cite{R-core-team}, with\texttt{MASS} being used to calculate robust $R^2$ values \cite{Venables-2002-mass}. 
+
+\section{Discussion}
+
+In this chapter I outline a methodology capable of detecting and characterizing between hundreds and hundreds of thousands of cells (\ac{rbc} and \ac{wbc}) in \ac{wbs}. In this approach, I first use an accurate and deep-learning-assisted method for quality control, isolating all the regions of an image which could be used downstream in cellular detection. I detect \ac{rbc} and \ac{wbc} separately, using a combination of traditional \ac{cv} and \ac{ml}-assisted filtering for the former and \ac{dl} for the latter. Each of these cells is then characterized using a relatively small panel of features describing size, shape, colour distribution and texture.
+
+I apply this methodology to three distinct cohorts --- AC1, composed of healthy individuals, and MLLC and AC2, composed of healthy individuals and individuals with either iron deficiency anaemia, megaloblastic anaemia, \ac{sf3b1}-mutant \ac{mds} and other \ac{mds} subtypes. I thus show that this methodology performs similarly well across different cohorts, acting as a powerful tool that can be used for other works looking into the computational cytomorphology of \ac{wbs}. The scale at which this methodology is applied is, to the best of my knowledge, unprecedented --- detecting and characterizing, in total, millions of cells (hundreds to hundreds of thousands of cells on each \ac{wbs}) highlights how computational methods can be applied in clinical imaging to create very large collections of cells. I additionally show that there is good correlation between the number of detected \ac{wbc} and the \ac{wbc} concentration as detected in a \ac{cbc}.

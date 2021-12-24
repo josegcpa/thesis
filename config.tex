@@ -22,6 +22,7 @@
 \usepackage{setspace} % one and half spacing as per UCam requirements
 \onehalfspacing
 \usepackage[skip=25pt,labelfont=bf,font=small]{caption}
+\usepackage{amssymb} % enables \mathbb
 
 \setlength{\parskip}{0pt}
 
@@ -57,9 +58,14 @@
 \newcommand*\missing[1]{%
     \textcolor{red}{\textbf{MISSING: #1}}}
 \newcommand*\Beta[1]{$\mathrm{\beta #1}$}
-\newcommand*\Mum[1]{$\mathrm{\mu m #1}$}
+\newcommand*\Mum{$\mathrm{\mu m}$}
 \newcommand*\placefigure[1]{%
-	\includegraphics[center]{#1}\vspace*{-8mm}}
+	%\includegraphics[scale=0.24]{gfx_png/#1.png}\vspace*{-8mm}
+    \includegraphics[center]{gfx/#1.pdf}\vspace*{-8mm}
+    }
+\newcommand*\placefigurepng[1]{%
+    \includegraphics[center,scale=0.24]{gfx_png/#1.png}\vspace*{-8mm}
+    }
 \newcommand*\placecaption[1]{%
 	\caption[#1]{#1}\vspace*{-2mm}}
 \newcommand*\etal[1]{%
@@ -79,3 +85,12 @@ noitemsep,
 itemindent = 0pt}
 \DeclareAcroListStyle{mystyle}{list}{ list = acronyms }
 \acsetup{ list-style = mystyle }
+
+% code to adjust space before \paragraph
+\makeatletter
+\renewcommand\paragraph{
+    \@startsection{paragraph}{4}{\z@}%
+    {\parskip}
+    {-1.2em}
+    {\normalfont\normalsize\bfseries}}
+\makeatother
