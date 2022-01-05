@@ -50,3 +50,4 @@ gfx/cytomorphology/slide-quality-regions-hd.pdf
 .snakemake
 gfx_png
 gfx/cytomorphology/tbca-screenshot.ai
+additional-analyses/.Rhistory
